@@ -53,6 +53,11 @@
       background:linear-gradient(90deg,transparent, rgba(159,209,255,.85), rgba(168,163,255,.85), rgba(143,242,202,.9), transparent);
       box-shadow:0 0 20px rgba(143,242,202,.25);
     }
+    /* Special tighter underline for last sections */
+    #how + .underline,
+    #about + .underline {
+      margin-top:-4px; /* just pull the line up */
+    }
     /* NEW: create a controlled gap between underline and the boxes/content that follow */
     .gap-top{ margin-top:16px; }
     .lede{max-width:900px; margin:0 auto 22px; text-align:center; color:#cfe2ff}
