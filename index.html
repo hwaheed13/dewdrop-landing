@@ -58,6 +58,10 @@
     #about + .underline {
       margin-top:-4px; /* just pull the line up */
     }
+
+    /* Keep the underline tight, but force content gap ONLY for these sections */
+    #how + .underline + .how-wrap { margin-top:16px; }
+    #about + .underline + .card { margin-top:16px; }
     /* NEW: create a controlled gap between underline and the boxes/content that follow */
     .gap-top{ margin-top:16px; }
     .lede{max-width:900px; margin:0 auto 22px; text-align:center; color:#cfe2ff}
