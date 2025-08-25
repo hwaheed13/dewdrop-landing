@@ -43,14 +43,14 @@
     /* SECTION HEADERS */
     .section{padding:36px 0}
     .section h2{
-      margin:0 0 18px; text-align:center;
+      margin:0 0 12px; text-align:center;
       font-size:clamp(18px,3.2vw,26px); letter-spacing:.18em; text-transform:uppercase; font-weight:900;
       background:linear-gradient(90deg,#9fd1ff 0%, #a8a3ff 50%, #8ff2ca 100%);
       -webkit-background-clip:text; background-clip:text; color:transparent;
     }
     .underline{
-      width:min(160px,40%); height:3px; margin:10px auto 0; border-radius:999px;
-      background:linear-gradient(90deg,transparent, rgba(159,209,255,.8), rgba(168,163,255,.8), rgba(143,242,202,.85), transparent);
+      width:min(160px,40%); height:3px; margin:4px auto 0; border-radius:999px;
+      background:linear-gradient(90deg,transparent, rgba(159,209,255,.85), rgba(168,163,255,.85), rgba(143,242,202,.9), transparent);
       box-shadow:0 0 20px rgba(143,242,202,.25);
     }
     .lede{max-width:900px; margin:0 auto 22px; text-align:center; color:#cfe2ff}
@@ -92,11 +92,11 @@
     .note{max-width:980px; margin:18px auto 0; color:#cde2ff; text-align:center}
     .note p{margin:0}
 
-    /* HOW IT WORKS — screenshot style (NO BOX) */
+    /* HOW IT WORKS — NO BOX, smaller & body-toned */
     .how-wrap{max-width:980px; margin:0 auto}
     .how-list{
       list-style:none; margin:0; padding:0;
-      display:grid; gap:24px;
+      display:grid; gap:22px;
     }
     .how-item{
       display:grid; grid-template-columns:18px 1fr; column-gap:18px; align-items:start;
@@ -105,8 +105,18 @@
       width:10px; height:10px; border-radius:50%;
       background:var(--accent); box-shadow:0 0 0 6px rgba(51,232,169,.12); margin-top:.6em;
     }
-    .how-text{font-size:clamp(16px,3.8vw,22px); line-height:1.6; color:#d9e8ff}
-    .how-text b{font-weight:900; font-size:clamp(18px,4.2vw,26px); color:#fff; letter-spacing:.2px}
+    .how-text{
+      font-size:clamp(14px,3.6vw,16px);
+      line-height:1.6;
+      color:#cde2ff;          /* match “About the nowcast” */
+      font-weight:400;
+    }
+    .how-text b{
+      font-weight:700;
+      font-size:clamp(15px,3.8vw,17px);
+      color:#fff;
+      letter-spacing:.2px;
+    }
 
     /* CTA */
     .cta{display:inline-block; padding:20px 32px; border-radius:16px; font-weight:900; font-size:20px; letter-spacing:.02em;
