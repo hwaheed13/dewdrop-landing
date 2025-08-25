@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Daily Dew Point — Forecast Log & Nowcast</title>
   <meta name="description" content="Daily Dew Point: Every NWS forecast update logged and matched to official highs, with a bias-corrected nowcast for today and tomorrow." />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
     :root{
       --bg:#0b1726; --bg-2:#0e2036; --grid:#19324f; --card:#0f1e33;
       --ink:#e8f3ff; --muted:#a6bed9; --brand:#2aa6ff; --brand-2:#7c5cff; --accent:#33e8a9;
       --ring:rgba(122,165,215,.25); --shadow:0 20px 50px rgba(0,0,0,.35);
-      --radius:16px; --radius-sm:12px; --maxw:1080px;
+      --radius:16px; --maxw:1080px;
     }
     *{box-sizing:border-box}
     body{
@@ -40,22 +40,32 @@
     .tagline{margin:6px 0 0; font-weight:800; font-size:clamp(15px,3.6vw,20px); color:#cfe2ff}
     .subhead{max-width:880px; margin:8px auto 0; color:var(--muted); font-size:clamp(14px,3.2vw,17px)}
 
-    /* CTA BUTTON (bottom section) */
-    .cta{display:inline-block; padding:20px 32px; border-radius:16px; font-weight:900; font-size:20px; letter-spacing:.02em; background:linear-gradient(135deg,var(--brand),var(--brand-2)); color:#fff; box-shadow:var(--shadow); border:1px solid rgba(255,255,255,.08)}
-
-    /* SECTIONS */
+    /* SECTION HEADERS */
     .section{padding:36px 0}
-    .section h2{font-size:clamp(16px,2.8vw,22px); text-transform:uppercase; letter-spacing:.12em; color:#cde2ff; text-align:center; margin:0 0 18px}
+    .section h2{
+      margin:0 0 18px; text-align:center;
+      font-size:clamp(18px,3.2vw,26px); letter-spacing:.18em; text-transform:uppercase; font-weight:900;
+      background:linear-gradient(90deg,#9fd1ff 0%, #a8a3ff 50%, #8ff2ca 100%);
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+    }
+    .underline{
+      width:min(160px,40%); height:3px; margin:10px auto 0; border-radius:999px;
+      background:linear-gradient(90deg,transparent, rgba(159,209,255,.8), rgba(168,163,255,.8), rgba(143,242,202,.85), transparent);
+      box-shadow:0 0 20px rgba(143,242,202,.25);
+    }
     .lede{max-width:900px; margin:0 auto 22px; text-align:center; color:#cfe2ff}
 
-    /* CARDS */
+    /* GRID & CARDS */
     .grid{display:grid; gap:18px; grid-template-columns:1fr}
     @media(min-width:900px){.grid-3{grid-template-columns:repeat(3,1fr)} .grid-4{grid-template-columns:repeat(4,1fr)} .grid-2{grid-template-columns:repeat(2,1fr)}}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03)); border:1px solid var(--ring); border-radius:var(--radius); padding:18px; box-shadow:var(--shadow); position:relative}
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      border:1px solid var(--ring); border-radius:var(--radius); padding:18px; box-shadow:var(--shadow); position:relative
+    }
     .card h3{margin:0 0 8px; font-size:clamp(15px,3.2vw,16px); color:#e6f1ff}
     .card p{margin:0; color:#b9cfea; font-size:clamp(14px,3.4vw,15px)}
 
-    /* VALUE / LABELS */
+    /* VALUES + BLUR */
     .value{font-size:clamp(26px,7vw,32px); font-weight:900; color:#fff}
     .muted{color:#b9cfea}
     .members-tag{display:inline-block; font-size:10px; font-weight:800; letter-spacing:.08em; color:#d2e8ff; background:rgba(42,166,255,.14); border:1px solid var(--ring); border-radius:999px; padding:3px 6px; margin-left:6px; vertical-align:middle}
@@ -73,32 +83,50 @@
     .plot-blur{filter:blur(7px)}
     .members-overlay{position:absolute; inset:0; display:grid; place-items:center; color:#d2e8ff; font-weight:900}
 
-    /* STATS UNDER CHART */
+    /* CHART STATS */
     .stats{display:grid; gap:10px; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); margin:8px 0 4px}
     .stat{display:flex; align-items:baseline; gap:8px; justify-content:center}
     .stat label{font-size:12px; color:#cfe2ff; font-weight:800; text-transform:uppercase; letter-spacing:.06em}
     .stat .num{font-size:20px; font-weight:900}
 
-    /* NOTE */
     .note{max-width:980px; margin:18px auto 0; color:#cde2ff; text-align:center}
     .note p{margin:0}
 
-    /* HOW IT WORKS (centered box, left-aligned text) */
-    .how-card{max-width:980px; margin:0 auto}
-    .how-list{list-style:none; padding:0; margin:0; text-align:left}
-    .how-list li{padding:10px 0; font-size:clamp(14px,3.6vw,15px); color:#cfe2ff}
-    .how-list strong{font-size:clamp(16px,4.2vw,17px); color:#fff}
+    /* HOW IT WORKS — screenshot style (NO BOX) */
+    .how-wrap{max-width:980px; margin:0 auto}
+    .how-list{
+      list-style:none; margin:0; padding:0;
+      display:grid; gap:24px;
+    }
+    .how-item{
+      display:grid; grid-template-columns:18px 1fr; column-gap:18px; align-items:start;
+    }
+    .how-dot{
+      width:10px; height:10px; border-radius:50%;
+      background:var(--accent); box-shadow:0 0 0 6px rgba(51,232,169,.12); margin-top:.6em;
+    }
+    .how-text{font-size:clamp(16px,3.8vw,22px); line-height:1.6; color:#d9e8ff}
+    .how-text b{font-weight:900; font-size:clamp(18px,4.2vw,26px); color:#fff; letter-spacing:.2px}
 
-    /* POST-ABOUT CTA BLOCK */
+    /* CTA */
+    .cta{display:inline-block; padding:20px 32px; border-radius:16px; font-weight:900; font-size:20px; letter-spacing:.02em;
+         background:linear-gradient(135deg,var(--brand),var(--brand-2)); color:#fff; box-shadow:var(--shadow); border:1px solid rgba(255,255,255,.08)}
     .cta-block{max-width:780px; margin:34px auto 0; text-align:center}
     .cta-lede{color:#d7e9ff; margin:12px 0 28px; font-weight:800; font-size:clamp(16px,4.2vw,18px)}
     .pricing{color:#b9cfea; margin-top:14px; font-size:clamp(14px,3.8vw,15px)}
+
+    /* BREAKER LINE */
+    .breaker{
+      height:2px; margin:28px auto 6px; max-width:900px; border-radius:999px;
+      background:linear-gradient(90deg,transparent, rgba(159,209,255,.85), rgba(168,163,255,.85), rgba(143,242,202,.9), transparent);
+      box-shadow:0 0 20px rgba(143,242,202,.25);
+    }
 
     /* FOOTER */
     .footer{border-top:1px solid var(--ring); color:#c1d6f1; text-align:center; padding:26px 16px 40px; font-size:13px; margin-top:36px}
     .footer a{color:#9fbeff; text-decoration:underline}
 
-    /* ===== MOBILE TWEAKS (≤540px) ===== */
+    /* MOBILE TWEAKS (≤540px) */
     @media (max-width: 540px){
       .container{padding:18px}
       .topbar{padding:10px 14px}
@@ -110,18 +138,10 @@
       .section{padding:28px 0}
       .grid{gap:12px}
       .card{padding:16px; box-shadow:0 12px 28px rgba(0,0,0,.28)}
-
-      /* force single-column everywhere for clarity */
       .grid-4, .grid-3, .grid-2{grid-template-columns:1fr !important}
-
-      /* live preview title a bit bigger on mobile as requested */
       #teaser{font-size:28px !important}
-
-      /* make CTA full-width for easy tap */
       .cta{display:block; width:100%; padding:18px; font-size:18px; border-radius:14px}
       .cta-block{margin-top:28px}
-
-      /* center meta text under values */
       .muted{font-size:14px}
       .stats{grid-template-columns:1fr 1fr}
       .footer{font-size:12px}
@@ -155,6 +175,7 @@
   <!-- WHAT MAKES US DIFFERENT -->
   <section class="container section" aria-labelledby="different">
     <h2 id="different">What Makes Us Different</h2>
+    <div class="underline"></div>
     <p class="lede">Most sites only show the latest forecast. We log every issuance, tie it to the official outcome, and surface the most accurate update.</p>
     <div class="grid grid-3">
       <article class="card"><h3>Full Intraday Trail</h3><p>Others overwrite forecasts. We timestamp and preserve each change — nothing disappears.</p></article>
@@ -166,6 +187,7 @@
   <!-- WHO IT'S FOR -->
   <section class="container section" style="padding-top:20px" aria-labelledby="who">
     <h2 id="who">Who It’s For</h2>
+    <div class="underline"></div>
     <div class="grid grid-3">
       <article class="card"><h3>Traders</h3><p>Edge on Kalshi/Polymarket with transparent history and accuracy insights.</p></article>
       <article class="card"><h3>Weather Nerds</h3><p>See the evolution arc and validate which issuance actually nailed it.</p></article>
@@ -173,9 +195,13 @@
     </div>
   </section>
 
+  <!-- BREAKER BEFORE LIVE PREVIEW -->
+  <div class="breaker"></div>
+
   <!-- LIVE PREVIEW -->
   <section class="container section" aria-labelledby="teaser">
-    <h2 id="teaser" style="text-align:center; font-size:26px; margin-bottom:16px">Live Preview</h2>
+    <h2 id="teaser">Live Preview</h2>
+    <div class="underline"></div>
 
     <div class="grid grid-4">
       <article class="card">
@@ -231,7 +257,7 @@
         <div class="stat"><label>Avg Best Error</label> <span class="num blurred">0.74°F</span> <span class="members-tag">MEMBERS</span></div>
       </div>
 
-      <!-- SVG chart mocked + blurred -->
+      <!-- Mocked SVG chart (blurred) -->
       <div style="position:relative; overflow:hidden; border:1px dashed rgba(200,220,255,.35); border-radius:12px; margin-top:8px; background:linear-gradient(180deg, #fbfdff0d, #f4f8fc0f)">
         <svg viewBox="0 0 860 220" width="100%" height="220" xmlns="http://www.w3.org/2000/svg" aria-label="Preview chart">
           <g class="axes">
@@ -270,15 +296,16 @@
     </div>
   </section>
 
-  <!-- HOW IT WORKS (after Live Preview) -->
+  <!-- HOW IT WORKS (no box) -->
   <section class="container section" aria-labelledby="how">
     <h2 id="how">How It Works</h2>
-    <div class="card how-card">
+    <div class="underline"></div>
+    <div class="how-wrap">
       <ul class="how-list">
-        <li><strong>Auto-log</strong> every NWS forecasted high throughout the day.</li>
-        <li><strong>Capture</strong> the official daily high once published.</li>
-        <li><strong>Compare</strong> each issuance vs. the outcome and rank accuracy.</li>
-        <li><strong>Predict</strong> (future): corrected daily prediction updates as the day evolves.</li>
+        <li class="how-item"><span class="how-dot" aria-hidden="true"></span><span class="how-text"><b>Auto-log</b> every NWS forecasted high throughout the day.</span></li>
+        <li class="how-item"><span class="how-dot" aria-hidden="true"></span><span class="how-text"><b>Capture</b> the official daily high once published.</span></li>
+        <li class="how-item"><span class="how-dot" aria-hidden="true"></span><span class="how-text"><b>Compare</b> each issuance vs. the outcome and rank accuracy.</span></li>
+        <li class="how-item"><span class="how-dot" aria-hidden="true"></span><span class="how-text"><b>Predict</b> (future): corrected daily prediction updates as the day evolves.</span></li>
       </ul>
     </div>
   </section>
@@ -286,6 +313,7 @@
   <!-- WHO BUILT THIS + CTA -->
   <section class="container section" aria-labelledby="about">
     <h2 id="about">Who Built This?</h2>
+    <div class="underline"></div>
     <div class="card" style="max-width:980px; margin:0 auto">
       <p><strong>Hyder</strong> — data guy who spent months trading Kalshi’s NYC daily high. I wanted to see every update, test accuracy, and (eventually) predict the high in advance. Built for me, shared because it’s useful — and fun.</p>
     </div>
