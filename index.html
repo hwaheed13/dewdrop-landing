@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  />
   <title>Daily Dew Point — Forecast Log & Nowcast</title>
   <meta name="description" content="Daily Dew Point: Every NWS forecast update logged and matched to official highs, with a bias-corrected nowcast for today and tomorrow." />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
@@ -13,15 +16,31 @@
       --ring:rgba(122,165,215,.25); --shadow:0 20px 50px rgba(0,0,0,.35);
       --radius:16px; --maxw:1080px;
     }
+
+    /* --- global layout & anti-shift --- */
     *{box-sizing:border-box}
+    html{
+      overflow-x:hidden;
+      scrollbar-gutter: stable both-edges; /* prevents layout jump when scrollbars appear/disappear */
+      -webkit-text-size-adjust:100%;
+      text-size-adjust:100%;
+    }
     body{
       margin:0; color:var(--ink); font-family:"Inter",system-ui,sans-serif; line-height:1.6;
-      background: radial-gradient(1200px 600px at 20% -10%, #11325d 0%, transparent 70%),
-                  radial-gradient(800px 500px at 90% 10%, #1a2e4f 0%, transparent 70%),
-                  linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+      background:
+        radial-gradient(1200px 600px at 20% -10%, #11325d 0%, transparent 70%),
+        radial-gradient(800px 500px at 90% 10%, #1a2e4f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
       font-feature-settings:"tnum" 1, "lnum" 1; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      overflow-x:hidden;
     }
-    .grid-bg{position:fixed; inset:0; pointer-events:none; z-index:-1}
+
+    /* fixed grid background anchored to visual viewport */
+    .grid-bg{
+      position:fixed; top:0; left:50%;
+      width:100vw; height:100vh; transform:translateX(-50%);
+      pointer-events:none; z-index:-1;
+    }
     .grid-bg svg{width:100%; height:100%; display:block; opacity:.25}
 
     .container{max-width:var(--maxw); margin:0 auto; padding:24px}
@@ -36,7 +55,11 @@
 
     /* HERO */
     .hero{padding:36px 20px 24px; text-align:center}
-    .hero h1{margin:0; font-size:clamp(30px,7vw,56px); letter-spacing:-.02em}
+    .hero h1{
+      margin:0; font-size:clamp(30px,7vw,56px); letter-spacing:-.02em;
+      position:sticky; top:56px; z-index:4; padding-bottom:6px; /* sticks under topbar */
+      background:transparent;
+    }
     .tagline{margin:6px 0 0; font-weight:800; font-size:clamp(15px,3.6vw,20px); color:#cfe2ff}
     .subhead{max-width:880px; margin:8px auto 0; color:var(--muted); font-size:clamp(14px,3.2vw,17px)}
 
@@ -53,17 +76,11 @@
       background:linear-gradient(90deg,transparent, rgba(159,209,255,.85), rgba(168,163,255,.85), rgba(143,242,202,.9), transparent);
       box-shadow:0 0 20px rgba(143,242,202,.25);
     }
-    /* Special tighter underline for last sections */
     #how + .underline,
-    #about + .underline {
-      margin-top:-4px; /* just pull the line up */
-    }
-    
-    /* Push the content boxes down a smidge */
+    #about + .underline { margin-top:-4px; }
     #how + .underline + .how-wrap { margin-top:24px; }
     #about + .underline + .card { margin-top:24px; }
-   
-   /* NEW: create a controlled gap between underline and the boxes/content that follow */
+
     .gap-top{ margin-top:16px; }
     .lede{max-width:900px; margin:0 auto 22px; text-align:center; color:#cfe2ff}
 
@@ -93,11 +110,16 @@
     .dot-best{background:#7c5cff}
     .axes{font-size:11px; fill:#9fb6d4}
     .plot-blur{filter:blur(7px)}
-    .members-overlay{position:absolute; inset:0; display:grid; place-items:center; color:#d2e8ff; font-weight:900}
+    /* center MEMBERS overlay perfectly even after zoom */
+    .members-overlay{
+      position:absolute; inset:0;
+      display:flex; align-items:center; justify-content:center; text-align:center;
+      color:#d2e8ff; font-weight:900;
+    }
 
     /* CHART STATS */
     .stats{display:grid; gap:10px; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); margin:8px 0 4px}
-    .stat{display:flex; align-items:baseline; gap:8px; justify-content:center}
+    .stat{display:flex; align-items:baseline; gap:8px; justify-content:center; text-align:center}
     .stat label{font-size:12px; color:#cfe2ff; font-weight:800; text-transform:uppercase; letter-spacing:.06em}
     .stat .num{font-size:20px; font-weight:900}
 
@@ -120,7 +142,7 @@
     .how-text{
       font-size:clamp(14px,3.6vw,16px);
       line-height:1.6;
-      color:#cde2ff;          /* match “About the nowcast” */
+      color:#cde2ff;
       font-weight:400;
     }
     .how-text b{
@@ -129,7 +151,6 @@
       color:#fff;
       letter-spacing:.2px;
     }
-    
 
     /* CTA */
     .cta{display:inline-block; padding:20px 32px; border-radius:16px; font-weight:900; font-size:20px; letter-spacing:.02em;
@@ -168,14 +189,27 @@
       .muted{font-size:14px}
       .stats{grid-template-columns:1fr 1fr}
       .footer{font-size:12px}
+
+      /* tone down oversized bits on small screens */
+      .note{ font-size:13px; }
+      .note p{ line-height:1.45; }
+      .value{ font-size:clamp(22px,7vw,28px); }
+      .chart-title{ font-size:16px; }
+      .stat .num{ font-size:18px; }
+      .tagline{ font-size:clamp(14px,3.8vw,18px); }
+      .subhead{ font-size:clamp(13px,3.4vw,15px); }
     }
   </style>
 </head>
 <body>
   <!-- grid background -->
   <div class="grid-bg" aria-hidden="true">
-    <svg xmlns="http://www.w3.org/2000/svg">
-      <defs><pattern id="p" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" fill="none" stroke="var(--grid)" stroke-width="1"/></pattern></defs>
+    <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" width="100%" height="100%">
+      <defs>
+        <pattern id="p" width="48" height="48" patternUnits="userSpaceOnUse">
+          <path d="M48 0H0V48" fill="none" stroke="var(--grid)" stroke-width="1"/>
+        </pattern>
+      </defs>
       <rect width="100%" height="100%" fill="url(#p)"/>
     </svg>
   </div>
@@ -333,7 +367,7 @@
     </div>
   </section>
 
-   <!-- CTA -->
+  <!-- CTA -->
   <div class="cta-block">
     <p class="cta-lede">Unlock the full, intraday forecast trail — accuracy rankings, nowcasts, and more.</p>
     <p><a class="cta" href="https://waheedweather.dewdropventures.com/" rel="noopener">Explore the Live Forecast Log</a></p>
