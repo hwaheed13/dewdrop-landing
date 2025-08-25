@@ -40,8 +40,8 @@
     .tagline{margin:6px 0 0; font-weight:800; font-size:clamp(16px,3vw,20px); color:#cfe2ff}
     .subhead{max-width:880px; margin:8px auto 0; color:var(--muted); font-size:clamp(14px,2.4vw,17px)}
 
-    /* CTA BUTTON (reused later) */
-    .cta{display:inline-block; padding:12px 18px; border-radius:12px; font-weight:800; letter-spacing:.02em; background:linear-gradient(135deg,var(--brand),var(--brand-2)); color:#fff; box-shadow:var(--shadow); border:1px solid rgba(255,255,255,.08)}
+    /* CTA BUTTON (bottom section) */
+    .cta{display:inline-block; padding:20px 32px; border-radius:16px; font-weight:900; font-size:20px; letter-spacing:.02em; background:linear-gradient(135deg,var(--brand),var(--brand-2)); color:#fff; box-shadow:var(--shadow); border:1px solid rgba(255,255,255,.08)}
 
     /* SECTIONS */
     .section{padding:36px 0}
@@ -55,7 +55,7 @@
     .card h3{margin:0 0 8px; font-size:16px; color:#e6f1ff}
     .card p{margin:0; color:#b9cfea}
 
-    /* VALUE CARDS */
+    /* VALUE / LABELS */
     .value{font-size:32px; font-weight:900; color:#fff}
     .muted{color:#b9cfea}
     .members-tag{display:inline-block; font-size:10px; font-weight:800; letter-spacing:.08em; color:#d2e8ff; background:rgba(42,166,255,.14); border:1px solid var(--ring); border-radius:999px; padding:3px 6px; margin-left:6px; vertical-align:middle}
@@ -63,8 +63,8 @@
 
     /* CHART */
     .chart-section{background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03)); border:1px solid var(--ring); border-radius:16px; padding:18px; box-shadow:var(--shadow); margin-top:18px; position:relative}
-    .chart-title{margin:0 0 8px; font-size:16px; font-weight:900}
-    .legend{display:flex; gap:10px; flex-wrap:wrap; margin:6px 0 10px}
+    .chart-title{margin:0 0 12px; font-size:20px; font-weight:900; text-align:center}
+    .legend{display:flex; gap:10px; flex-wrap:wrap; margin:6px 0 10px; justify-content:center}
     .chip{display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px; background:rgba(255,255,255,.06); border:1px solid var(--ring); font-size:12px; font-weight:700; color:#cfe2ff}
     .chip .dot{width:10px; height:10px; border-radius:50%}
     .dot-actual{background:#2aa6ff}
@@ -73,18 +73,26 @@
     .plot-blur{filter:blur(7px)}
     .members-overlay{position:absolute; inset:0; display:grid; place-items:center; color:#d2e8ff; font-weight:900}
 
+    /* STATS UNDER CHART */
     .stats{display:grid; gap:10px; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); margin:8px 0 4px}
-    .stat{display:flex; align-items:baseline; gap:8px}
+    .stat{display:flex; align-items:baseline; gap:8px; justify-content:center}
     .stat label{font-size:12px; color:#cfe2ff; font-weight:800; text-transform:uppercase; letter-spacing:.06em}
     .stat .num{font-size:20px; font-weight:900}
 
+    /* NOTE */
     .note{max-width:980px; margin:18px auto 0; color:#cde2ff; text-align:center}
     .note p{margin:0}
 
+    /* HOW IT WORKS (centered box, left-aligned text) */
+    .how-card{max-width:980px; margin:0 auto}
+    .how-list{list-style:none; padding:0; margin:0; text-align:left}
+    .how-list li{padding:10px 0; font-size:15px; color:#cfe2ff}
+    .how-list strong{font-size:17px; color:#fff}
+
     /* POST-ABOUT CTA BLOCK */
-    .cta-block{max-width:780px; margin:6px auto 0; text-align:center}
-    .cta-lede{color:#d7e9ff; margin:0 0 12px; font-weight:700}
-    .pricing{color:#b9cfea; margin-top:12px; font-size:14px}
+    .cta-block{max-width:780px; margin:34px auto 0; text-align:center}
+    .cta-lede{color:#d7e9ff; margin:12px 0 28px; font-weight:800; font-size:18px}
+    .pricing{color:#b9cfea; margin-top:14px; font-size:15px}
 
     /* FOOTER */
     .footer{border-top:1px solid var(--ring); color:#c1d6f1; text-align:center; padding:26px 16px 40px; font-size:13px; margin-top:36px}
@@ -95,27 +103,21 @@
   <!-- grid background -->
   <div class="grid-bg" aria-hidden="true">
     <svg xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <pattern id="p" width="48" height="48" patternUnits="userSpaceOnUse">
-          <path d="M48 0H0V48" fill="none" stroke="var(--grid)" stroke-width="1"/>
-        </pattern>
-      </defs>
+      <defs><pattern id="p" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" fill="none" stroke="var(--grid)" stroke-width="1"/></pattern></defs>
       <rect width="100%" height="100%" fill="url(#p)"/>
     </svg>
   </div>
 
-  <!-- topbar with logo and badge -->
+  <!-- topbar -->
   <div class="topbar">
     <div class="brand">
-      <div class="drop" aria-hidden="true">
-        <svg viewBox="0 0 64 64"><path d="M32 6c6 10 16 18 16 30 0 9.94-8.06 18-18 18s-18-8.06-18-18C12 24 26 16 32 6z"/></svg>
-      </div>
+      <div class="drop" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 6c6 10 16 18 16 30 0 9.94-8.06 18-18 18s-18-8.06-18-18C12 24 26 16 32 6z"/></svg></div>
       <div class="wordmark">Daily Dew Point</div>
     </div>
     <span class="nws-badge">Built on official NWS data</span>
   </div>
 
-  <header class="hero" role="banner">
+  <header class="hero">
     <h1>Daily Dew Point</h1>
     <p class="tagline">The Forecast Log NWS Doesn’t Keep</p>
     <p class="subhead">We capture every NWS forecast update, preserve the intraday trail, match it to the official daily high, and offer a bias-corrected <strong>nowcast</strong> for today.</p>
@@ -132,8 +134,8 @@
     </div>
   </section>
 
-  <!-- WHO IT'S FOR -->
-  <section class="container section" aria-labelledby="who">
+  <!-- WHO IT'S FOR (moved slightly up via smaller top padding in previous section) -->
+  <section class="container section" style="padding-top:20px" aria-labelledby="who">
     <h2 id="who">Who It’s For</h2>
     <div class="grid grid-3">
       <article class="card"><h3>Traders</h3><p>Edge on Kalshi/Polymarket with transparent history and accuracy insights.</p></article>
@@ -142,22 +144,10 @@
     </div>
   </section>
 
-  <!-- HOW IT WORKS -->
-  <section class="container section" aria-labelledby="how">
-    <h2 id="how">How It Works</h2>
-    <div class="card" style="max-width:980px; margin:0 auto">
-      <ul style="list-style:none; padding:0; margin:0">
-        <li style="padding:8px 0"><strong>Auto-log</strong> every NWS forecasted high throughout the day.</li>
-        <li style="padding:8px 0"><strong>Capture</strong> the official daily high once published.</li>
-        <li style="padding:8px 0"><strong>Compare</strong> each issuance vs. the outcome and rank accuracy.</li>
-        <li style="padding:8px 0"><strong>Predict</strong> (future): corrected daily prediction updates as the day evolves.</li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- TEASER CARDS -->
+  <!-- LIVE PREVIEW (restored, with selective blurs) -->
   <section class="container section" aria-labelledby="teaser">
-    <h2 id="teaser" style="text-align:center; margin-bottom:12px">Live Preview</h2>
+    <h2 id="teaser" style="text-align:center; font-size:26px; margin-bottom:16px">Live Preview</h2>
+
     <div class="grid grid-4">
       <article class="card">
         <h3>Today's Latest Forecast</h3>
@@ -165,17 +155,20 @@
         <div class="muted"><strong>Today's Forecasts</strong><span class="members-tag">MEMBERS</span></div>
         <div class="muted blurred">04:40 84° • 04:54 85° • 06:12 85°</div>
       </article>
+
       <article class="card">
         <h3>Today's Actual High</h3>
         <div class="value">—</div>
         <div class="muted">NWS daily cli report</div>
       </article>
+
       <article class="card">
         <h3>Today's High So Far / Current Temp</h3>
         <div class="value">82.9°F</div>
         <div class="muted">as of 12:51 PM ET • station KNYC</div>
         <div class="muted" style="margin-top:8px">Current: 82.9°F</div>
       </article>
+
       <article class="card">
         <h3>Tomorrow's Forecast</h3>
         <div class="value">80.0°F</div>
@@ -201,12 +194,15 @@
         <span class="chip"><span class="dot dot-actual"></span>Actual High</span>
         <span class="chip"><span class="dot dot-best"></span>Best Forecast (pre-high)</span>
       </div>
+
       <div class="stats">
         <div class="stat"><label>Days Tracked</label> <span class="num blurred">123</span> <span class="members-tag">MEMBERS</span></div>
         <div class="stat"><label>Days With Actual</label> <span class="num blurred">97</span> <span class="members-tag">MEMBERS</span></div>
         <div class="stat"><label>Avg Absolute Error</label> <span class="num blurred">1.28°F</span> <span class="members-tag">MEMBERS</span></div>
         <div class="stat"><label>Avg Best Error</label> <span class="num blurred">0.74°F</span> <span class="members-tag">MEMBERS</span></div>
       </div>
+
+      <!-- SVG chart mocked + blurred -->
       <div style="position:relative; overflow:hidden; border:1px dashed rgba(200,220,255,.35); border-radius:12px; margin-top:8px; background:linear-gradient(180deg, #fbfdff0d, #f4f8fc0f)">
         <svg viewBox="0 0 860 220" width="100%" height="220" xmlns="http://www.w3.org/2000/svg" aria-label="Preview chart">
           <g class="axes">
@@ -245,14 +241,26 @@
     </div>
   </section>
 
-  <!-- WHO BUILT THIS -->
+  <!-- HOW IT WORKS (after Live Preview) -->
+  <section class="container section" aria-labelledby="how">
+    <h2 id="how">How It Works</h2>
+    <div class="card how-card">
+      <ul class="how-list">
+        <li><strong>Auto-log</strong> every NWS forecasted high throughout the day.</li>
+        <li><strong>Capture</strong> the official daily high once published.</li>
+        <li><strong>Compare</strong> each issuance vs. the outcome and rank accuracy.</li>
+        <li><strong>Predict</strong> (future): corrected daily prediction updates as the day evolves.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- WHO BUILT THIS + CTA -->
   <section class="container section" aria-labelledby="about">
     <h2 id="about">Who Built This?</h2>
     <div class="card" style="max-width:980px; margin:0 auto">
       <p><strong>Hyder</strong> — data guy who spent months trading Kalshi’s NYC daily high. I wanted to see every update, test accuracy, and (eventually) predict the high in advance. Built for me, shared because it’s useful — and fun.</p>
     </div>
 
-    <!-- CTA moved here -->
     <div class="cta-block">
       <p class="cta-lede">Unlock the full, intraday forecast trail — accuracy rankings, nowcasts, and more.</p>
       <p><a class="cta" href="https://waheedweather.dewdropventures.com/" rel="noopener">Explore the Live Forecast Log</a></p>
