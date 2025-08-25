@@ -2,10 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1"
-  />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Daily Dew Point — Forecast Log & Nowcast</title>
   <meta name="description" content="Daily Dew Point: Every NWS forecast update logged and matched to official highs, with a bias-corrected nowcast for today and tomorrow." />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
@@ -21,7 +18,7 @@
     *{box-sizing:border-box}
     html{
       overflow-x:hidden;
-      scrollbar-gutter: stable both-edges; /* prevents layout jump when scrollbars appear/disappear */
+      scrollbar-gutter: stable both-edges;
       -webkit-text-size-adjust:100%;
       text-size-adjust:100%;
     }
@@ -45,13 +42,16 @@
 
     .container{max-width:var(--maxw); margin:0 auto; padding:24px}
 
-    /* TOP BAR (sticky on all devices) */
+    /* TOP BAR: sticky wrapper + inner with blur (fixes iOS sticky+backdrop bug) */
     .topbar{
+      position:sticky; position:-webkit-sticky; top:0; z-index:1000; width:100%;
+    }
+    .topbar-inner{
       display:flex; align-items:center; justify-content:space-between; gap:12px;
       padding:12px 18px; border-bottom:1px solid var(--ring);
-      background:rgba(10,20,34,.65); backdrop-filter:blur(8px);
-      position:sticky; position:-webkit-sticky; top:0; z-index:1000; /* re-sticky + high z-index */
-      width:100%;
+      background:rgba(10,20,34,.65);
+      -webkit-backdrop-filter:blur(8px);
+      backdrop-filter:blur(8px);
     }
     .brand{display:flex; align-items:center; gap:10px}
     .drop{display:grid; place-items:center; width:36px; height:36px; border-radius:10px; background:linear-gradient(135deg,var(--brand),var(--brand-2)); box-shadow:0 6px 16px rgba(0,0,0,.25)}
@@ -61,11 +61,7 @@
 
     /* HERO */
     .hero{padding:36px 20px 24px; text-align:center}
-    .hero h1{
-      margin:0; font-size:clamp(30px,7vw,56px); letter-spacing:-.02em;
-      position:sticky; top:56px; z-index:4; padding-bottom:6px; /* sticks under topbar */
-      background:transparent;
-    }
+    .hero h1{margin:0; font-size:clamp(30px,7vw,56px); letter-spacing:-.02em}
     .tagline{margin:6px 0 0; font-weight:800; font-size:clamp(15px,3.6vw,20px); color:#cfe2ff}
     .subhead{max-width:880px; margin:8px auto 0; color:var(--muted); font-size:clamp(14px,3.2vw,17px)}
 
@@ -82,8 +78,7 @@
       background:linear-gradient(90deg,transparent, rgba(159,209,255,.85), rgba(168,163,255,.85), rgba(143,242,202,.9), transparent);
       box-shadow:0 0 20px rgba(143,242,202,.25);
     }
-    #how + .underline,
-    #about + .underline { margin-top:-4px; }
+    #how + .underline, #about + .underline { margin-top:-4px; }
     #how + .underline + .how-wrap { margin-top:24px; }
     #about + .underline + .card { margin-top:24px; }
 
@@ -116,7 +111,6 @@
     .dot-best{background:#7c5cff}
     .axes{font-size:11px; fill:#9fb6d4}
     .plot-blur{filter:blur(7px)}
-    /* center MEMBERS overlay perfectly even after zoom */
     .members-overlay{
       position:absolute; inset:0;
       display:flex; align-items:center; justify-content:center; text-align:center;
@@ -132,28 +126,13 @@
     .note{max-width:980px; margin:18px auto 0; color:#cde2ff; text-align:center}
     .note p{margin:0}
 
-    /* HOW IT WORKS — NO BOX, smaller & body-toned */
+    /* HOW IT WORKS — NO BOX */
     .how-wrap{max-width:980px; margin:0 auto}
-    .how-list{
-      list-style:none; margin:0; padding:0;
-      display:grid; gap:22px;
-    }
-    .how-item{
-      display:grid; grid-template-columns:18px 1fr; column-gap:18px; align-items:start;
-    }
-    .how-dot{
-      width:10px; height:10px; border-radius:50%;
-      background:var(--accent); box-shadow:0 0 0 6px rgba(51,232,169,.12); margin-top:.6em;
-    }
-    .how-text{
-      font-size:clamp(14px,3.6vw,16px);
-      line-height:1.6;
-      color:#cde2ff;
-      font-weight:400;
-    }
-    .how-text b{
-      font-weight:700; font-size:clamp(15px,3.8vw,17px); color:#fff; letter-spacing:.2px;
-    }
+    .how-list{ list-style:none; margin:0; padding:0; display:grid; gap:22px; }
+    .how-item{ display:grid; grid-template-columns:18px 1fr; column-gap:18px; align-items:start; }
+    .how-dot{ width:10px; height:10px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 6px rgba(51,232,169,.12); margin-top:.6em; }
+    .how-text{ font-size:clamp(14px,3.6vw,16px); line-height:1.6; color:#cde2ff; font-weight:400; }
+    .how-text b{ font-weight:700; font-size:clamp(15px,3.8vw,17px); color:#fff; letter-spacing:.2px; }
 
     /* CTA */
     .cta{display:inline-block; padding:20px 32px; border-radius:16px; font-weight:900; font-size:20px; letter-spacing:.02em;
@@ -173,14 +152,15 @@
     .footer{border-top:1px solid var(--ring); color:#c1d6f1; text-align:center; padding:26px 16px 40px; font-size:13px; margin-top:36px}
     .footer a{color:#9fbeff; text-decoration:underline}
 
-    /* MOBILE TWEAKS (≤540px) */
+    /* MOBILE (≤540px) */
     @media (max-width: 540px){
       .container{padding:18px}
-      .topbar{
-        position:sticky; position:-webkit-sticky; top:0; z-index:1000;
-        background:rgba(10,20,34,.8); /* a touch more opaque on mobile */
+      .topbar-inner{
+        padding:10px 14px;
+        background:rgba(10,20,34,.82);
+        -webkit-backdrop-filter:blur(8px);
+        backdrop-filter:blur(8px);
       }
-      .topbar{padding:10px 14px}
       .drop{width:32px; height:32px; border-radius:9px}
       .drop svg{width:20px; height:20px}
       .wordmark{font-size:14px}
@@ -221,13 +201,15 @@
     </svg>
   </div>
 
-  <!-- topbar -->
+  <!-- topbar (sticky) -->
   <div class="topbar">
-    <div class="brand">
-      <div class="drop" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 6c6 10 16 18 16 30 0 9.94-8.06 18-18 18s-18-8.06-18-18C12 24 26 16 32 6z"/></svg></div>
-      <div class="wordmark">Daily Dew Point</div>
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="drop" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 6c6 10 16 18 16 30 0 9.94-8.06 18-18 18s-18-8.06-18-18C12 24 26 16 32 6z"/></svg></div>
+        <div class="wordmark">Daily Dew Point</div>
+      </div>
+      <span class="nws-badge">Built on official NWS data</span>
     </div>
-    <span class="nws-badge">Built on official NWS data</span>
   </div>
 
   <header class="hero">
