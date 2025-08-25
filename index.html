@@ -53,6 +53,8 @@
       background:linear-gradient(90deg,transparent, rgba(159,209,255,.85), rgba(168,163,255,.85), rgba(143,242,202,.9), transparent);
       box-shadow:0 0 20px rgba(143,242,202,.25);
     }
+    /* NEW: create a controlled gap between underline and the boxes/content that follow */
+    .gap-top{ margin-top:16px; }
     .lede{max-width:900px; margin:0 auto 22px; text-align:center; color:#cfe2ff}
 
     /* GRID & CARDS */
@@ -186,8 +188,8 @@
   <section class="container section" aria-labelledby="different">
     <h2 id="different">What Makes Us Different</h2>
     <div class="underline"></div>
-    <p class="lede">Most sites only show the latest forecast. We log every issuance, tie it to the official outcome, and surface the most accurate update.</p>
-    <div class="grid grid-3">
+    <p class="lede gap-top">Most sites only show the latest forecast. We log every issuance, tie it to the official outcome, and surface the most accurate update.</p>
+    <div class="grid grid-3 gap-top">
       <article class="card"><h3>Full Intraday Trail</h3><p>Others overwrite forecasts. We timestamp and preserve each change — nothing disappears.</p></article>
       <article class="card"><h3>Outcome-Based</h3><p>Every forecast is compared to the official daily high to see which update was closest.</p></article>
       <article class="card"><h3>Bias-Corrected Nowcast</h3><p>Bias-aware nowcast (future state) that learns from intraday forecast evolution.</p></article>
@@ -198,7 +200,7 @@
   <section class="container section" style="padding-top:20px" aria-labelledby="who">
     <h2 id="who">Who It’s For</h2>
     <div class="underline"></div>
-    <div class="grid grid-3">
+    <div class="grid grid-3 gap-top">
       <article class="card"><h3>Traders</h3><p>Edge on Kalshi/Polymarket with transparent history and accuracy insights.</p></article>
       <article class="card"><h3>Weather Nerds</h3><p>See the evolution arc and validate which issuance actually nailed it.</p></article>
       <article class="card"><h3>Curious Minds</h3><p>Skip monitoring temps all day — check the corrected daily prediction.</p></article>
@@ -213,7 +215,7 @@
     <h2 id="teaser">Live Preview</h2>
     <div class="underline"></div>
 
-    <div class="grid grid-4">
+    <div class="grid grid-4 gap-top">
       <article class="card">
         <h3>Today's Latest Forecast</h3>
         <div class="value">85.0°F</div>
@@ -240,7 +242,7 @@
       </article>
     </div>
 
-    <div class="grid grid-2" style="margin-top:18px">
+    <div class="grid grid-2 gap-top">
       <article class="card">
         <h3>Today's Bias-Corrected Nowcast <span class="members-tag">MEMBERS</span></h3>
         <div class="value blurred">85.4°F</div>
@@ -253,7 +255,7 @@
       </article>
     </div>
 
-    <div class="chart-section">
+    <div class="chart-section gap-top">
       <h3 class="chart-title">Temperature Trends: Actual vs Best Forecast (pre-high)</h3>
       <div class="legend">
         <span class="chip"><span class="dot dot-actual"></span>Actual High</span>
@@ -310,7 +312,7 @@
   <section class="container section" aria-labelledby="how">
     <h2 id="how">How It Works</h2>
     <div class="underline"></div>
-    <div class="how-wrap">
+    <div class="how-wrap gap-top">
       <ul class="how-list">
         <li class="how-item"><span class="how-dot" aria-hidden="true"></span><span class="how-text"><b>Auto-log</b> every NWS forecasted high throughout the day.</span></li>
         <li class="how-item"><span class="how-dot" aria-hidden="true"></span><span class="how-text"><b>Capture</b> the official daily high once published.</span></li>
@@ -324,7 +326,7 @@
   <section class="container section" aria-labelledby="about">
     <h2 id="about">Who Built This?</h2>
     <div class="underline"></div>
-    <div class="card" style="max-width:980px; margin:0 auto">
+    <div class="card gap-top" style="max-width:980px; margin:0 auto">
       <p><strong>Hyder</strong> — data guy who spent months trading Kalshi’s NYC daily high. I wanted to see every update, test accuracy, and (eventually) predict the high in advance. Built for me, shared because it’s useful — and fun.</p>
     </div>
 
