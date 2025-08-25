@@ -3,25 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Daily Dew Point — Forecast Log & Predictions</title>
-  <meta name="description" content="Daily Dew Point: Every NWS forecast update logged, matched against the official daily high, with bias-corrected predictions." />
+  <title>Daily Dew Point — Forecast Log & Nowcast</title>
+  <meta name="description" content="Daily Dew Point: Every NWS forecast update logged and matched to official highs, with a bias-corrected nowcast for today and tomorrow." />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <style>
     :root{
-      --bg:#0b1726;           /* deep navy */
-      --bg-2:#0e2036;         /* slightly lighter navy */
-      --grid:#19324f;         /* grid lines */
-      --card:#0f1e33;         /* card surface */
-      --ink:#e8f3ff;          /* primary text */
-      --muted:#a6bed9;        /* secondary text */
-      --brand:#2aa6ff;        /* bright cyan */
-      --brand-2:#7c5cff;      /* violet */
-      --accent:#33e8a9;       /* mint */
-      --ring:rgba(122,165,215,.25);
-      --shadow:0 20px 50px rgba(0,0,0,.35);
-      --radius:16px;
-      --radius-sm:12px;
-      --maxw:1080px;
+      --bg:#0b1726; --bg-2:#0e2036; --grid:#19324f; --card:#0f1e33;
+      --ink:#e8f3ff; --muted:#a6bed9; --brand:#2aa6ff; --brand-2:#7c5cff; --accent:#33e8a9;
+      --ring:rgba(122,165,215,.25); --shadow:0 20px 50px rgba(0,0,0,.35);
+      --radius:16px; --radius-sm:12px; --maxw:1080px;
     }
     *{box-sizing:border-box}
     body{
@@ -29,65 +19,72 @@
       background: radial-gradient(1200px 600px at 20% -10%, #11325d 0%, transparent 70%),
                   radial-gradient(800px 500px at 90% 10%, #1a2e4f 0%, transparent 70%),
                   linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
-      font-feature-settings:"tnum" 1, "lnum" 1;
-      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      font-feature-settings:"tnum" 1, "lnum" 1; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
     }
-    /* subtle grid */
     .grid-bg{position:fixed; inset:0; pointer-events:none; z-index:-1}
     .grid-bg svg{width:100%; height:100%; display:block; opacity:.25}
-    .grid-bg line{stroke:var(--grid); stroke-width:1}
 
     .container{max-width:var(--maxw); margin:0 auto; padding:24px}
 
+    /* TOP BAR */
+    .topbar{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 18px; border-bottom:1px solid var(--ring); background:rgba(10,20,34,.45); backdrop-filter:blur(8px); position:sticky; top:0; z-index:5}
+    .brand{display:flex; align-items:center; gap:10px}
+    .drop{display:grid; place-items:center; width:36px; height:36px; border-radius:10px; background:linear-gradient(135deg,var(--brand),var(--brand-2)); box-shadow:0 6px 16px rgba(0,0,0,.25)}
+    .drop svg{width:22px; height:22px; fill:#fff}
+    .wordmark{font-weight:900; letter-spacing:.2px}
+    .nws-badge{font-size:12px; font-weight:800; color:#d2e8ff; background:rgba(42,166,255,.12); border:1px solid var(--ring); border-radius:999px; padding:6px 10px}
+
     /* HERO */
-    .hero{padding:88px 20px 48px; text-align:center; position:relative}
-    .badge{display:inline-flex; gap:8px; align-items:center; font-weight:700; font-size:12px; padding:8px 12px; border:1px solid var(--ring); border-radius:999px; color:#bfe6ff; background:rgba(42,166,255,.08)}
-    .badge .dot{width:6px; height:6px; border-radius:999px; background:var(--accent); box-shadow:0 0 10px var(--accent)}
-    h1{margin:16px 0 8px; font-size:clamp(34px,7vw,60px); letter-spacing:-.02em}
-    .tagline{font-weight:800; font-size:clamp(16px,3vw,20px); color:#c9ddff; margin:0 0 8px}
-    .subhead{max-width:880px; margin:0 auto 26px; color:var(--muted); font-size:clamp(15px,2.6vw,18px)}
-    .cta{display:inline-block; padding:14px 22px; border-radius:12px; font-weight:800; letter-spacing:.02em; background:linear-gradient(135deg,var(--brand),var(--brand-2)); color:#fff; box-shadow:var(--shadow); border:1px solid rgba(255,255,255,.08)}
-    .cta:hover{transform:translateY(-1px)}
+    .hero{padding:36px 20px 24px; text-align:center}
+    .hero h1{margin:0; font-size:clamp(34px,7vw,56px); letter-spacing:-.02em}
+    .tagline{margin:6px 0 0; font-weight:800; font-size:clamp(16px,3vw,20px); color:#cfe2ff}
+    .subhead{max-width:880px; margin:8px auto 0; color:var(--muted); font-size:clamp(14px,2.4vw,17px)}
+
+    /* CTA BUTTON (reused later) */
+    .cta{display:inline-block; padding:12px 18px; border-radius:12px; font-weight:800; letter-spacing:.02em; background:linear-gradient(135deg,var(--brand),var(--brand-2)); color:#fff; box-shadow:var(--shadow); border:1px solid rgba(255,255,255,.08)}
 
     /* SECTIONS */
-    .section{padding:42px 0}
+    .section{padding:36px 0}
     .section h2{font-size:22px; text-transform:uppercase; letter-spacing:.12em; color:#cde2ff; text-align:center; margin:0 0 18px}
-    .lede{max-width:900px; margin:0 auto 22px; text-align:center; color:var(--muted)}
+    .lede{max-width:900px; margin:0 auto 22px; text-align:center; color:#cfe2ff}
 
     /* CARDS */
     .grid{display:grid; gap:18px; grid-template-columns:1fr}
-    @media(min-width:860px){.grid-3{grid-template-columns:repeat(3,1fr)}.grid-2{grid-template-columns:repeat(2,1fr)}}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid var(--ring); border-radius:var(--radius); padding:22px; box-shadow:var(--shadow)}
-    .card h3{margin:0 0 8px; font-size:18px}
-    .card p{margin:0; color:var(--muted)}
+    @media(min-width:900px){.grid-3{grid-template-columns:repeat(3,1fr)} .grid-4{grid-template-columns:repeat(4,1fr)} .grid-2{grid-template-columns:repeat(2,1fr)}}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03)); border:1px solid var(--ring); border-radius:var(--radius); padding:18px; box-shadow:var(--shadow); position:relative}
+    .card h3{margin:0 0 8px; font-size:16px; color:#e6f1ff}
+    .card p{margin:0; color:#b9cfea}
 
-    /* HOW IT WORKS LIST */
-    ul.clean{list-style:none; padding:0; margin:0 auto; max-width:880px}
-    ul.clean li{display:grid; grid-template-columns:22px 1fr; gap:12px; padding:10px 0; align-items:start}
-    .dotline{width:10px; height:10px; border-radius:999px; margin-top:6px; background:linear-gradient(135deg,var(--accent),var(--brand))}
+    /* VALUE CARDS */
+    .value{font-size:32px; font-weight:900; color:#fff}
+    .muted{color:#b9cfea}
+    .members-tag{display:inline-block; font-size:10px; font-weight:800; letter-spacing:.08em; color:#d2e8ff; background:rgba(42,166,255,.14); border:1px solid var(--ring); border-radius:999px; padding:3px 6px; margin-left:6px; vertical-align:middle}
+    .blurred{filter:blur(6px); pointer-events:none; user-select:none}
 
-    /* PREVIEW TEASER */
-    .teaser{max-width:980px; margin:22px auto 0}
-    .teaser-grid{display:grid; gap:16px; grid-template-columns:1fr}
-    @media(min-width:900px){.teaser-grid{grid-template-columns:repeat(4,1fr)}}
-    .tcard{background:#f6fbff0f; border:1px solid var(--ring); border-radius:18px; padding:18px; color:var(--ink); position:relative; overflow:hidden}
-    .t-title{font-size:14px; font-weight:800; color:#cfe2ff; margin:0 0 8px}
-    .t-value{font-size:28px; font-weight:900}
-    .t-sub{font-size:12px; color:#b8cae3}
-    .blur-block::after{content:"Members"; position:absolute; inset:0; display:grid; place-items:center; color:#e8f3ff; font-weight:800; letter-spacing:.06em; background:linear-gradient(180deg, rgba(11,23,38,.15), rgba(11,23,38,.55)); backdrop-filter:blur(6px)}
-
-    .chart-wrap{margin-top:18px; border:1px dashed rgba(200,220,255,.35); border-radius:16px; overflow:hidden; position:relative}
-    .chart-legend{display:flex; gap:12px; padding:10px 12px; font-size:12px; color:#cfe2ff; align-items:center}
-    .chip{display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px; background:rgba(255,255,255,.06); border:1px solid var(--ring); font-weight:700}
+    /* CHART */
+    .chart-section{background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03)); border:1px solid var(--ring); border-radius:16px; padding:18px; box-shadow:var(--shadow); margin-top:18px; position:relative}
+    .chart-title{margin:0 0 8px; font-size:16px; font-weight:900}
+    .legend{display:flex; gap:10px; flex-wrap:wrap; margin:6px 0 10px}
+    .chip{display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px; background:rgba(255,255,255,.06); border:1px solid var(--ring); font-size:12px; font-weight:700; color:#cfe2ff}
     .chip .dot{width:10px; height:10px; border-radius:50%}
     .dot-actual{background:#2aa6ff}
     .dot-best{background:#7c5cff}
-    .chart-svg{display:block; width:100%; height:200px}
-    .chart-blur{position:absolute; inset:32px 0 0 0; backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); background:linear-gradient(180deg, rgba(11,23,38,.10), rgba(11,23,38,.55))}
+    .axes{font-size:11px; fill:#9fb6d4}
+    .plot-blur{filter:blur(7px)}
+    .members-overlay{position:absolute; inset:0; display:grid; place-items:center; color:#d2e8ff; font-weight:900}
 
-    /* METHOD NOTE */
+    .stats{display:grid; gap:10px; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); margin:8px 0 4px}
+    .stat{display:flex; align-items:baseline; gap:8px}
+    .stat label{font-size:12px; color:#cfe2ff; font-weight:800; text-transform:uppercase; letter-spacing:.06em}
+    .stat .num{font-size:20px; font-weight:900}
+
     .note{max-width:980px; margin:18px auto 0; color:#cde2ff; text-align:center}
     .note p{margin:0}
+
+    /* POST-ABOUT CTA BLOCK */
+    .cta-block{max-width:780px; margin:6px auto 0; text-align:center}
+    .cta-lede{color:#d7e9ff; margin:0 0 12px; font-weight:700}
+    .pricing{color:#b9cfea; margin-top:12px; font-size:14px}
 
     /* FOOTER */
     .footer{border-top:1px solid var(--ring); color:#c1d6f1; text-align:center; padding:26px 16px 40px; font-size:13px; margin-top:36px}
@@ -107,85 +104,122 @@
     </svg>
   </div>
 
+  <!-- topbar with logo and badge -->
+  <div class="topbar">
+    <div class="brand">
+      <div class="drop" aria-hidden="true">
+        <svg viewBox="0 0 64 64"><path d="M32 6c6 10 16 18 16 30 0 9.94-8.06 18-18 18s-18-8.06-18-18C12 24 26 16 32 6z"/></svg>
+      </div>
+      <div class="wordmark">Daily Dew Point</div>
+    </div>
+    <span class="nws-badge">Built on official NWS data</span>
+  </div>
+
   <header class="hero" role="banner">
-    <span class="badge"><span class="dot"></span> Built on official NWS data</span>
     <h1>Daily Dew Point</h1>
     <p class="tagline">The Forecast Log NWS Doesn’t Keep</p>
-    <p class="subhead">We capture every NWS forecast update, preserve the intraday trail, match it to the official daily high, and offer a bias‑corrected <strong>nowcast</strong> for today.</p>
-    <p><a class="cta" href="https://waheedweather.dewdropventures.com/" rel="noopener">Explore the Live Forecast Log</a></p>
+    <p class="subhead">We capture every NWS forecast update, preserve the intraday trail, match it to the official daily high, and offer a bias-corrected <strong>nowcast</strong> for today.</p>
   </header>
 
-  <main class="container" role="main">
-    <section class="section" aria-labelledby="different">
-      <h2 id="different">What Makes Us Different</h2>
-      <p class="lede">Most sites only show the latest forecast. We log every issuance, tie it to the official outcome, and surface the most accurate update.</p>
-      <div class="grid grid-3">
-        <article class="card"><h3>Full Intraday Trail</h3><p>Others overwrite forecasts. We timestamp and preserve each change — nothing disappears.</p></article>
-        <article class="card"><h3>Outcome‑Based</h3><p>Every forecast is compared to the official daily high to see which update was closest.</p></article>
-        <article class="card"><h3>Bias‑Corrected Nowcast</h3><p>Bias‑corrected **nowcast** that learns from intraday forecast evolution; full predictive model as the dataset matures.</p></article>
-      </div>
-    </section>
+  <!-- WHAT MAKES US DIFFERENT -->
+  <section class="container section" aria-labelledby="different">
+    <h2 id="different">What Makes Us Different</h2>
+    <p class="lede">Most sites only show the latest forecast. We log every issuance, tie it to the official outcome, and surface the most accurate update.</p>
+    <div class="grid grid-3">
+      <article class="card"><h3>Full Intraday Trail</h3><p>Others overwrite forecasts. We timestamp and preserve each change — nothing disappears.</p></article>
+      <article class="card"><h3>Outcome-Based</h3><p>Every forecast is compared to the official daily high to see which update was closest.</p></article>
+      <article class="card"><h3>Bias-Corrected Nowcast</h3><p>Bias-aware nowcast (future state) that learns from intraday forecast evolution.</p></article>
+    </div>
+  </section>
 
-    <section class="section" aria-labelledby="who">
-      <h2 id="who">Who It’s For</h2>
-      <div class="grid grid-3">
-        <article class="card"><h3>Traders</h3><p>Edge on Kalshi/Polymarket with transparent history and accuracy insights.</p></article>
-        <article class="card"><h3>Weather Nerds</h3><p>See the evolution arc and validate which issuance actually nailed it.</p></article>
-        <article class="card"><h3>Curious Minds</h3><p>Skip monitoring temps all day — check the corrected daily prediction.</p></article>
-      </div>
-    </section>
+  <!-- WHO IT'S FOR -->
+  <section class="container section" aria-labelledby="who">
+    <h2 id="who">Who It’s For</h2>
+    <div class="grid grid-3">
+      <article class="card"><h3>Traders</h3><p>Edge on Kalshi/Polymarket with transparent history and accuracy insights.</p></article>
+      <article class="card"><h3>Weather Nerds</h3><p>See the evolution arc and validate which issuance actually nailed it.</p></article>
+      <article class="card"><h3>Curious Minds</h3><p>Skip monitoring temps all day — check the corrected daily prediction.</p></article>
+    </div>
+  </section>
 
-    <section class="section" aria-labelledby="how">
-      <h2 id="how">How It Works</h2>
-      <ul class="clean">
-        <li><span class="dotline" aria-hidden="true"></span><span><strong>Auto‑log</strong> every NWS forecasted high throughout the day.</span></li>
-        <li><span class="dotline" aria-hidden="true"></span><span><strong>Capture</strong> the official daily high once published.</span></li>
-        <li><span class="dotline" aria-hidden="true"></span><span><strong>Compare</strong> each issuance vs. the outcome and rank accuracy.</span></li>
-        <li><span class="dotline" aria-hidden="true"></span><span><strong>Predict</strong> (future): corrected daily prediction updates as the day evolves.</span></li>
+  <!-- HOW IT WORKS -->
+  <section class="container section" aria-labelledby="how">
+    <h2 id="how">How It Works</h2>
+    <div class="card" style="max-width:980px; margin:0 auto">
+      <ul style="list-style:none; padding:0; margin:0">
+        <li style="padding:8px 0"><strong>Auto-log</strong> every NWS forecasted high throughout the day.</li>
+        <li style="padding:8px 0"><strong>Capture</strong> the official daily high once published.</li>
+        <li style="padding:8px 0"><strong>Compare</strong> each issuance vs. the outcome and rank accuracy.</li>
+        <li style="padding:8px 0"><strong>Predict</strong> (future): corrected daily prediction updates as the day evolves.</li>
       </ul>
+    </div>
+  </section>
 
-      <!-- LIVE-STYLE TEASER CARDS -->
-      <div class="teaser">
-        <div class="teaser-grid">
-          <!-- visible card: Today's Latest Forecast -->
-          <div class="tcard">
-            <div class="t-title">Today's Latest Forecast</div>
-            <div class="t-value">85.0°F</div>
-            <div class="t-sub">Today's Forecasts
-              <span class="chip" style="margin-left:8px"><span class="dot" style="width:6px;height:6px;border-radius:50%;background:#7da7ff"></span>04:40 84°</span>
-              <span class="chip"><span class="dot" style="width:6px;height:6px;border-radius:50%;background:#7da7ff"></span>04:54 85°</span>
-            </div>
-          </div>
-          <!-- blurred: Today's Actual High -->
-          <div class="tcard blur-block">
-            <div class="t-title">Today's Actual High</div>
-            <div class="t-value">—</div>
-            <div class="t-sub">NWS daily cli report</div>
-          </div>
-          <!-- visible: Today's High So Far + Current Temp (stacked) -->
-          <div class="tcard">
-            <div class="t-title">Today's High So Far</div>
-            <div class="t-value">82.9°F</div>
-            <div class="t-sub">as of 12:51 PM ET • station KNYC</div>
-            <hr style="border:none;border-top:1px solid rgba(200,220,255,.25); margin:12px 0">
-            <div class="t-title">Current Temperature</div>
-            <div class="t-value">82.9°F</div>
-            <div class="t-sub">as of 12:51 PM ET • station KNYC</div>
-          </div>
-          <!-- blurred: Tomorrow's Forecast -->
-          <div class="tcard blur-block">
-            <div class="t-title">Tomorrow's Forecast</div>
-            <div class="t-value">80.0°F</div>
-          </div>
-        </div>
+  <!-- TEASER CARDS -->
+  <section class="container section" aria-labelledby="teaser">
+    <h2 id="teaser" style="text-align:center; margin-bottom:12px">Live Preview</h2>
+    <div class="grid grid-4">
+      <article class="card">
+        <h3>Today's Latest Forecast</h3>
+        <div class="value">85.0°F</div>
+        <div class="muted"><strong>Today's Forecasts</strong><span class="members-tag">MEMBERS</span></div>
+        <div class="muted blurred">04:40 84° • 04:54 85° • 06:12 85°</div>
+      </article>
+      <article class="card">
+        <h3>Today's Actual High</h3>
+        <div class="value">—</div>
+        <div class="muted">NWS daily cli report</div>
+      </article>
+      <article class="card">
+        <h3>Today's High So Far / Current Temp</h3>
+        <div class="value">82.9°F</div>
+        <div class="muted">as of 12:51 PM ET • station KNYC</div>
+        <div class="muted" style="margin-top:8px">Current: 82.9°F</div>
+      </article>
+      <article class="card">
+        <h3>Tomorrow's Forecast</h3>
+        <div class="value">80.0°F</div>
+      </article>
+    </div>
 
-        <!-- CHART PREVIEW (legend visible, plot blurred) -->
-        <div class="chart-wrap">
-          <div class="chart-legend">
-            <span class="chip"><span class="dot dot-actual"></span>Actual High</span>
-            <span class="chip"><span class="dot dot-best"></span>Best Forecast (pre‑high)</span>
-          </div>
-          <svg class="chart-svg" viewBox="0 0 860 200" xmlns="http://www.w3.org/2000/svg" aria-label="Chart preview">
+    <div class="grid grid-2" style="margin-top:18px">
+      <article class="card">
+        <h3>Today's Bias-Corrected Nowcast <span class="members-tag">MEMBERS</span></h3>
+        <div class="value blurred">85.4°F</div>
+        <div class="muted blurred">For 2025-08-25 • Historical bias: +0.89°F (36 days)</div>
+      </article>
+      <article class="card">
+        <h3>Tomorrow's Bias-Corrected Nowcast <span class="members-tag">MEMBERS</span></h3>
+        <div class="value blurred">80.9°F</div>
+        <div class="muted blurred">For 2025-08-26 • Historical bias: +0.89°F (36 days)</div>
+      </article>
+    </div>
+
+    <div class="chart-section">
+      <h3 class="chart-title">Temperature Trends: Actual vs Best Forecast (pre-high)</h3>
+      <div class="legend">
+        <span class="chip"><span class="dot dot-actual"></span>Actual High</span>
+        <span class="chip"><span class="dot dot-best"></span>Best Forecast (pre-high)</span>
+      </div>
+      <div class="stats">
+        <div class="stat"><label>Days Tracked</label> <span class="num blurred">123</span> <span class="members-tag">MEMBERS</span></div>
+        <div class="stat"><label>Days With Actual</label> <span class="num blurred">97</span> <span class="members-tag">MEMBERS</span></div>
+        <div class="stat"><label>Avg Absolute Error</label> <span class="num blurred">1.28°F</span> <span class="members-tag">MEMBERS</span></div>
+        <div class="stat"><label>Avg Best Error</label> <span class="num blurred">0.74°F</span> <span class="members-tag">MEMBERS</span></div>
+      </div>
+      <div style="position:relative; overflow:hidden; border:1px dashed rgba(200,220,255,.35); border-radius:12px; margin-top:8px; background:linear-gradient(180deg, #fbfdff0d, #f4f8fc0f)">
+        <svg viewBox="0 0 860 220" width="100%" height="220" xmlns="http://www.w3.org/2000/svg" aria-label="Preview chart">
+          <g class="axes">
+            <path d="M40 190H830" stroke="#3b5372"/>
+            <path d="M40 30V190" stroke="#3b5372"/>
+            <text x="36" y="205">Mon</text>
+            <text x="176" y="205">Tue</text>
+            <text x="316" y="205">Wed</text>
+            <text x="456" y="205">Thu</text>
+            <text x="596" y="205">Fri</text>
+            <text x="736" y="205">Sat</text>
+          </g>
+          <g class="plot-blur">
             <defs>
               <linearGradient id="ga" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stop-color="#2aa6ff" stop-opacity=".35"/>
@@ -196,36 +230,38 @@
                 <stop offset="100%" stop-color="#7c5cff" stop-opacity="0"/>
               </linearGradient>
             </defs>
-            <path d="M40 180H830" stroke="#2b4364" stroke-width="1"/>
-            <path d="M40 20V180" stroke="#2b4364" stroke-width="1"/>
-            <!-- actual -->
-            <path d="M40 160L160 160L280 156L400 138L520 141L640 145L760 146L830 148L830 180L40 180Z" fill="url(#ga)"/>
-            <path d="M40 160L160 160L280 156L400 138L520 141L640 145L760 146L830 148" stroke="#2aa6ff" stroke-width="3" fill="none"/>
-            <!-- best forecast -->
-            <path d="M40 148L160 128L280 126L400 118L520 120L640 124L760 126L830 128L830 180L40 180Z" fill="url(#gb)"/>
-            <path d="M40 148L160 128L280 126L400 118L520 120L640 124L760 126L830 128" stroke="#7c5cff" stroke-width="3" fill="none"/>
-          </svg>
-          <div class="chart-blur" aria-hidden="true"></div>
-        </div>
+            <path d="M40 170L160 170L280 165L400 140L520 148L640 155L760 160L830 162L830 190L40 190Z" fill="url(#ga)"/>
+            <path d="M40 170L160 170L280 165L400 140L520 148L640 155L760 160L830 162" stroke="#2aa6ff" stroke-width="3" fill="none"/>
+            <path d="M40 160L160 140L280 138L400 125L520 130L640 136L760 140L830 142L830 190L40 190Z" fill="url(#gb)"/>
+            <path d="M40 160L160 140L280 138L400 125L520 130L640 136L760 140L830 142" stroke="#7c5cff" stroke-width="3" fill="none"/>
+          </g>
+        </svg>
+        <div class="members-overlay">MEMBERS</div>
       </div>
-      <!-- /teaser -->
+    </div>
 
-      <div class="note">
-        <p><strong>About the nowcast:</strong> Today we adjust for historical bias between pre‑high forecasts and the official daily high to produce a practical, bias‑corrected <em>nowcast</em>. As we log more days, this approach will be folded into a comprehensive, data‑driven predictive model. It’s already a meaningful step forward—and useful in its own right.</p>
-      </div>
+    <div class="note">
+      <p><strong>About the nowcast:</strong> We adjust for historical bias between intraday forecasts and the official daily high to produce a practical bias-corrected <em>nowcast</em>. As the dataset grows, this will evolve into a comprehensive predictive model. It already adds real value.</p>
+    </div>
+  </section>
 
-    </section>
+  <!-- WHO BUILT THIS -->
+  <section class="container section" aria-labelledby="about">
+    <h2 id="about">Who Built This?</h2>
+    <div class="card" style="max-width:980px; margin:0 auto">
+      <p><strong>Hyder</strong> — data guy who spent months trading Kalshi’s NYC daily high. I wanted to see every update, test accuracy, and (eventually) predict the high in advance. Built for me, shared because it’s useful — and fun.</p>
+    </div>
 
-    <section class="section" aria-labelledby="about">
-      <h2 id="about">Who Built This?</h2>
-      <div class="card">
-        <p><strong>Hyder</strong> — data guy who spent months trading Kalshi’s NYC daily high. I wanted to see every update, test accuracy, and (eventually) predict the high in advance. Built for me, shared because it’s useful — and fun.</p>
-      </div>
-    </section>
-  </main>
+    <!-- CTA moved here -->
+    <div class="cta-block">
+      <p class="cta-lede">Unlock the full, intraday forecast trail — accuracy rankings, nowcasts, and more.</p>
+      <p><a class="cta" href="https://waheedweather.dewdropventures.com/" rel="noopener">Explore the Live Forecast Log</a></p>
+      <p class="pricing">Only <strong>$3/month</strong> or <strong>$30/year</strong>. Get in early.</p>
+    </div>
+  </section>
 
   <footer class="footer" role="contentinfo">
-    © 2025 Dewdrop Ventures, LLC · <a href="/terms.html">Terms</a> · <a href="/privacy.html">Privacy</a> · Informational only — not financial advice. Do your own due diligence before placing any bets or making financial decisions. Not affiliated with, endorsed by, or sponsored by the National Weather Service (NWS), Kalshi, Polymarket, The Weather Channel, AccuWeather, or any other third‑party organizations.
+    © 2025 Dewdrop Ventures, LLC · <a href="/terms.html">Terms</a> · <a href="/privacy.html">Privacy</a> · Informational only — not financial advice. Do your own due diligence before placing any bets or making financial decisions. Not affiliated with, endorsed by, or sponsored by the National Weather Service (NWS), Kalshi, Polymarket, The Weather Channel, AccuWeather, or any other third-party organizations.
   </footer>
 </body>
 </html>
