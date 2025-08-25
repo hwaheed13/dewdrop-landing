@@ -12,6 +12,7 @@
       --ink:#e8f3ff; --muted:#a6bed9; --brand:#2aa6ff; --brand-2:#7c5cff; --accent:#33e8a9;
       --ring:rgba(122,165,215,.25); --shadow:0 20px 50px rgba(0,0,0,.35);
       --radius:16px; --maxw:1080px;
+      --topbar-h:56px;
     }
 
     /* --- global layout & anti-shift --- */
@@ -30,6 +31,7 @@
         linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
       font-feature-settings:"tnum" 1, "lnum" 1; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
       overflow-x:hidden;
+      padding-top:var(--topbar-h); /* make room for fixed header */
     }
 
     /* fixed grid background anchored to visual viewport */
@@ -42,9 +44,9 @@
 
     .container{max-width:var(--maxw); margin:0 auto; padding:24px}
 
-    /* TOP BAR: sticky wrapper + inner with blur (fixes iOS sticky+backdrop bug) */
+    /* TOP BAR (fixed everywhere) */
     .topbar{
-      position:sticky; position:-webkit-sticky; top:0; z-index:1000; width:100%;
+      position:fixed; left:0; right:0; top:0; z-index:1000; width:100%;
     }
     .topbar-inner{
       display:flex; align-items:center; justify-content:space-between; gap:12px;
@@ -154,6 +156,7 @@
 
     /* MOBILE (≤540px) */
     @media (max-width: 540px){
+      :root{ --topbar-h:52px; } /* slightly smaller header on mobile */
       .container{padding:18px}
       .topbar-inner{
         padding:10px 14px;
@@ -201,7 +204,7 @@
     </svg>
   </div>
 
-  <!-- topbar (sticky) -->
+  <!-- topbar (fixed) -->
   <div class="topbar">
     <div class="topbar-inner">
       <div class="brand">
