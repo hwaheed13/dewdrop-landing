@@ -473,11 +473,24 @@
       <p style="margin:0; font-weight:800; font-size:clamp(16px,3.6vw,18px)" id="cta-title">Unlock the full intraday trail — accuracy rankings, nowcasts, and more.</p>
       <p style="color:#cfe2ff; margin-top:8px">Only <b>$3/month</b> or <b>$30/year</b>. Get in early.</p>
       <div class="cta-row" style="justify-content:center">
-        <!-- Pricing CTAs: prevent default + call Memberstack; no page jump -->
-        <a class="btn btn-primary" href="#" id="cta-monthly" role="button" aria-label="Start monthly plan"
-           data-ms-price:add="prc_monthly-plan-wbc030k">Start for $3/month</a>
-        <a class="btn btn-primary" href="#" id="cta-yearly" role="button" aria-label="Start yearly plan"
-           data-ms-price:add="prc_yearly-qfd03vv">Start for $30/year</a>
+    
+        <!-- Pricing CTAs: Memberstack signup + checkout -->
+            <button class="btn btn-primary"
+            id="cta-monthly"
+            aria-label="Start monthly plan"
+            data-ms-action="signup"
+            data-ms-price:add="prc_monthly-plan-wbc030k">
+      Start for $3/month
+        </button>
+    
+      <button class="btn btn-primary"
+            id="cta-yearly"
+            aria-label="Start yearly plan"
+            data-ms-action="signup"
+            data-ms-price:add="prc_yearly-qfd03vv">
+            Start for $30/year
+        </button>
+
       </div>
     </div>
   </section>
