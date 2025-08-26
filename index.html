@@ -16,18 +16,15 @@
     /* Brand */
     --brand:#2aa6ff; --brand-2:#7c5cff; --accent:#33e8a9; --warn:#ff8a34;
 
-    /* Light card */
+    /* Light card (used in outcomes band) */
     --card:#f7fbff; --card-ink:#0f2236; --card-muted:#3b516b; --card-border:rgba(160,190,230,.5);
 
-    /* Chart palette (screenshot vibe) */
-    --green:#1e9b40;      /* actual line */
-    --green-dot:#13752f;
-    --purple:#7a3df2;     /* best forecast line */
-    --grid:#dfe7f3;
-    --axis:#9db2cc;
+    /* Chart palette (dark) */
+    --green:#3dd06e; --green-dot:#208c45;
+    --purple:#a88cff;
+    --grid-dark:#24425f; --axis-dark:#7fa4cd;
   }
 
-  /* Reset / base */
   *{box-sizing:border-box}
   html{scrollbar-gutter:stable both-edges}
   body{
@@ -48,7 +45,6 @@
   .blob{width:520px; height:520px; left:-140px; top:-140px; background:radial-gradient(closest-side,#2aa6ff 30%, #7c5cff 60%, transparent 75%)}
   .blob2{width:420px; height:420px; right:-120px; top:18vh; background:radial-gradient(closest-side,#7c5cff 30%, #33e8a9 70%, transparent 75%)}
   .blob3{width:360px; height:360px; left:55vw; bottom:-140px; background:radial-gradient(closest-side,#2aa6ff 30%, #33e8a9 70%, transparent 75%)}
-
   @media (prefers-reduced-motion:no-preference){
     @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
     .blob,.blob2,.blob3{animation:float 20s ease-in-out infinite}
@@ -71,11 +67,10 @@
   .chip{font-size:12px; font-weight:800; color:#d2e8ff; padding:7px 10px; border-radius:999px;
         border:1px solid var(--ring); background:rgba(42,166,255,.12)}
 
-  /* Hero (split) */
+  /* Hero */
   .hero{padding:48px 0}
   .hero-grid{display:grid; gap:28px; grid-template-columns:1fr}
   @media (min-width:980px){ .hero-grid{grid-template-columns:1.2fr .9fr; align-items:center} }
-
   .h-eyebrow{display:inline-flex; align-items:center; gap:8px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#cfe2ff}
   .h-eyebrow .tick{width:8px; height:8px; border-radius:50%; background:var(--warn)}
   .h-title{margin:.1em 0 .2em; font-weight:900; letter-spacing:-.02em; line-height:1.15; font-size:clamp(32px,6.6vw,56px)}
@@ -108,7 +103,7 @@
     background:linear-gradient(90deg,#9fd1ff, #a8a3ff 50%, #8ff2ca); -webkit-background-clip:text; background-clip:text; color:transparent;
   }
 
-  /* Outcomes */
+  /* Outcomes (light) */
   .out-grid{display:grid; gap:22px; grid-template-columns:1fr}
   @media(min-width:900px){ .out-grid{grid-template-columns:1fr 1fr} }
   .out-card{
@@ -122,9 +117,9 @@
   .ico{width:28px; height:28px; stroke:#2b3f57; stroke-width:1.8; fill:none}
   .tick{fill:var(--warn); stroke:none}
   .out-card h3{margin:0 0 6px; font-size:18px; font-weight:800}
-  .out-card p{margin:0; color:var(--card-muted); font-size:15px}
+  .out-card p{margin:0; color:#3b516b; font-size:15px}
 
-  /* Live preview (dark cards) */
+  /* Live preview cards (dark) */
   .cards{display:grid; gap:16px; grid-template-columns:1fr}
   @media(min-width:900px){ .cards{grid-template-columns:repeat(4,1fr)} }
   .card{
@@ -136,35 +131,32 @@
   .muted{color:var(--muted)}
   .blurred{filter:blur(6px); pointer-events:none; user-select:none}
 
-  /* Stats (blurred numbers) */
   .stats{display:grid; gap:16px; grid-template-columns:1fr}
   @media(min-width:900px){ .stats{grid-template-columns:repeat(4,1fr)} }
 
-  /* Chart card (screenshot vibe) */
+  /* Chart (dark + smaller; blurred plot only) */
   .chart-card{
     margin-top:16px;
-    background:linear-gradient(180deg,#f7fbff,#f4f8fe);
-    border:1px solid var(--card-border);
-    border-radius:18px; box-shadow:0 16px 34px rgba(5,16,34,.16);
-    color:var(--card-ink);
-    padding:18px;
+    background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+    border:1px solid var(--ring);
+    border-radius:18px; box-shadow:var(--shadow);
+    color:var(--ink);
+    padding:16px;
   }
-  .chart-title{margin:0 0 10px; font-size:20px; font-weight:900; color:#1c2a3d}
-  .chart-legend{display:flex; gap:18px; align-items:center; flex-wrap:wrap; margin:6px 0 12px}
-  .legend-item{display:inline-flex; align-items:center; gap:8px; font-weight:800; color:#1c2a3d}
+  .chart-title{margin:0 0 6px; font-size:18px; font-weight:900; color:#e9f2ff}
+  .chart-legend{display:flex; gap:18px; align-items:center; flex-wrap:wrap; margin:4px 0 8px}
+  .legend-item{display:inline-flex; align-items:center; gap:8px; font-weight:800; color:#e9f2ff}
   .legend-dot{width:12px; height:12px; border-radius:50%}
   .dot-green{background:var(--green)}
   .dot-purple{background:var(--purple)}
-  .chart-inner{position:relative; border-radius:12px; overflow:hidden;}
-  /* blur ONLY the plot */
+  .chart-inner{position:relative; border-radius:12px; overflow:hidden; background:linear-gradient(180deg, #0f1f35, #0c1a2c)}
   .chart-blur{filter:blur(6px)}
-  .members-overlay{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#1c2a3d; font-weight:900; mix-blend-mode:multiply}
+  .members-overlay{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#bfd7f6; font-weight:900; mix-blend-mode:screen}
 
   /* Footer */
   footer{border-top:1px solid var(--ring); color:#c1d6f1; text-align:center; padding:28px 16px 40px; font-size:13px; margin-top:48px}
   footer a{color:#9fbeff; text-decoration:underline}
 
-  /* Mobile tweaks */
   @media (max-width:560px){
     :root{--topbar-h:62px}
     .hero{padding:32px 0}
@@ -214,18 +206,17 @@
           <div class="kpis">
             <div class="kpi">
               <h5>Latest forecast</h5>
-              <div class="val" id="v-latest">85.0°F</div>
+              <div class="val" id="v-latest">—</div>
               <div class="muted"><b>Today’s Forecasts</b> <span class="badge-members">MEMBERS</span></div>
-              <div class="muted blurred" id="list-today-issuances">04:40 84° • 04:54 85° • 06:12 85°</div>
+              <div class="muted blurred" id="list-today-issuances">—</div>
             </div>
             <div class="kpi">
               <h5>Nowcast <span class="badge-members">MEMBERS</span></h5>
-              <div class="val blurred" id="v-nowcast-today">85.4°F</div>
-              <div class="muted blurred" id="v-nowcast-today-meta">Bias adj. from 36 days</div>
+              <div class="val blurred" id="v-nowcast-today">—</div>
+              <div class="muted blurred" id="v-nowcast-today-meta">—</div>
             </div>
           </div>
-          <!-- tiny sparkline illustration -->
-          <svg class="spark" viewBox="0 0 320 80">
+          <svg class="spark" viewBox="0 0 320 80" aria-hidden="true">
             <defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stop-color="#2aa6ff" stop-opacity=".28"/><stop offset="100%" stop-color="#2aa6ff" stop-opacity="0"/></linearGradient></defs>
             <path d="M8 60L48 58L88 50L128 36L168 42L208 48L248 52L288 54" stroke="#2aa6ff" stroke-width="3" fill="none"/>
@@ -298,9 +289,9 @@
     <div class="cards">
       <article class="card">
         <h5>Today's Latest Forecast</h5>
-        <div class="val" id="v-latest-2">85.0°F</div>
+        <div class="val" id="v-latest-2">—</div>
         <div class="muted"><strong>Today's Forecasts</strong> <span class="badge-members">MEMBERS</span></div>
-        <div class="muted blurred" id="list-today-issuances-2">04:40 84° • 04:54 85° • 06:12 85°</div>
+        <div class="muted blurred" id="list-today-issuances-2">—</div>
       </article>
       <article class="card">
         <h5>Today's Actual High</h5>
@@ -309,13 +300,13 @@
       </article>
       <article class="card">
         <h5>Today's High So Far / Current</h5>
-        <div class="val" id="v-highsofar">82.9°F</div>
-        <div class="muted">as of <span id="v-highsofar-time">12:51 PM</span> ET • station <span id="v-station">KNYC</span></div>
-        <div class="muted" style="margin-top:8px">Current: <span id="v-current">82.9°F</span></div>
+        <div class="val" id="v-highsofar">—</div>
+        <div class="muted">as of <span id="v-highsofar-time">—</span> ET • station <span id="v-station">—</span></div>
+        <div class="muted" style="margin-top:8px">Current: <span id="v-current">—</span></div>
       </article>
       <article class="card">
         <h5>Tomorrow's Forecast</h5>
-        <div class="val" id="v-tomorrow">80.0°F</div>
+        <div class="val" id="v-tomorrow">—</div>
       </article>
     </div>
 
@@ -323,23 +314,23 @@
     <div class="stats" style="margin-top:16px">
       <article class="card" style="text-align:center">
         <h5>Days Tracked</h5>
-        <div class="val blurred" id="v-days-tracked">55</div>
+        <div class="val blurred" id="v-days-tracked">—</div>
       </article>
       <article class="card" style="text-align:center">
         <h5>Days With Actual</h5>
-        <div class="val blurred" id="v-days-actual">46</div>
+        <div class="val blurred" id="v-days-actual">—</div>
       </article>
       <article class="card" style="text-align:center">
         <h5>Average Absolute Error</h5>
-        <div class="val blurred" id="v-aae">2.12°F</div>
+        <div class="val blurred" id="v-aae">—</div>
       </article>
       <article class="card" style="text-align:center">
         <h5>Average Best Error</h5>
-        <div class="val blurred" id="v-abe">1.05°F</div>
+        <div class="val blurred" id="v-abe">—</div>
       </article>
     </div>
 
-    <!-- CHART: title + legend readable; plot blurred -->
+    <!-- CHART: dark + smaller; title/legend clear, plot blurred -->
     <div class="chart-card" id="chart-card">
       <h3 class="chart-title">Temperature Trends: Actual vs Predicted</h3>
       <div class="chart-legend">
@@ -347,24 +338,22 @@
         <span class="legend-item"><span class="legend-dot dot-purple"></span>Best Forecast (pre-high)</span>
       </div>
       <div class="chart-inner">
-        <div class="chart-blur" id="chart-plot">
-          <!-- JS will inject an SVG here -->
-        </div>
+        <div class="chart-blur" id="chart-plot" style="height:280px"><!-- SVG injected here --></div>
         <div class="members-overlay">MEMBERS</div>
       </div>
     </div>
 
-    <!-- Optional: Nowcasts band (kept blurred) -->
+    <!-- Nowcasts (kept blurred) -->
     <div class="cards" style="grid-template-columns:repeat(2,1fr); margin-top:16px">
       <article class="card">
         <h5>Today's Bias-Corrected Nowcast <span class="badge-members">MEMBERS</span></h5>
-        <div class="val blurred" id="v-nowcast-today-2">85.4°F</div>
-        <div class="muted blurred" id="v-nowcast-today-meta-2">For 2025-08-25 • Historical bias: +0.89°F (36 days)</div>
+        <div class="val blurred" id="v-nowcast-today-2">—</div>
+        <div class="muted blurred" id="v-nowcast-today-meta-2">—</div>
       </article>
       <article class="card">
         <h5>Tomorrow's Bias-Corrected Nowcast <span class="badge-members">MEMBERS</span></h5>
-        <div class="val blurred" id="v-nowcast-tomorrow">80.9°F</div>
-        <div class="muted blurred" id="v-nowcast-tomorrow-meta">For 2025-08-26 • Historical bias: +0.89°F (36 days)</div>
+        <div class="val blurred" id="v-nowcast-tomorrow">—</div>
+        <div class="muted blurred" id="v-nowcast-tomorrow-meta">—</div>
       </article>
     </div>
   </section>
@@ -372,21 +361,21 @@
   <!-- how it works -->
   <section class="section container">
     <h2 class="sh">How it works</h2>
-    <div class="how" style="max-width:980px; margin:0 auto">
-      <ul class="steps" style="list-style:none; margin:0; padding:0; display:grid; gap:18px">
-        <li class="step" style="display:grid; grid-template-columns:18px 1fr; gap:16px"><span class="dot"></span><span><b>Auto-log</b> every NWS forecasted high throughout the day.</span></li>
-        <li class="step" style="display:grid; grid-template-columns:18px 1fr; gap:16px"><span class="dot"></span><span><b>Capture</b> the official daily high once published.</span></li>
-        <li class="step" style="display:grid; grid-template-columns:18px 1fr; gap:16px"><span class="dot"></span><span><b>Compare</b> each issuance vs the outcome and rank accuracy.</span></li>
-        <li class="step" style="display:grid; grid-template-columns:18px 1fr; gap:16px"><span class="dot"></span><span><b>Predict</b> (future): bias-corrected daily prediction that updates as the day evolves.</span></li>
+    <div class="card" style="max-width:980px; margin:0 auto">
+      <ul style="list-style:none; margin:0; padding:0; display:grid; gap:18px">
+        <li><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 6px rgba(51,232,169,.12);margin-right:12px;vertical-align:middle"></span><b>Auto-log</b> every NWS forecasted high throughout the day.</li>
+        <li><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 6px rgba(51,232,169,.12);margin-right:12px;vertical-align:middle"></span><b>Capture</b> the official daily high once published.</li>
+        <li><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 6px rgba(51,232,169,.12);margin-right:12px;vertical-align:middle"></span><b>Compare</b> each issuance vs the outcome and rank accuracy.</li>
+        <li><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 6px rgba(51,232,169,.12);margin-right:12px;vertical-align:middle"></span><b>Predict</b> (future): bias-corrected daily prediction that updates as the day evolves.</li>
       </ul>
     </div>
   </section>
 
   <!-- CTA ribbon -->
   <section class="container">
-    <div class="ribbon" style="margin:40px 0 0; border:1px solid var(--ring); border-radius:18px; background:linear-gradient(90deg,rgba(255,255,255,.04),rgba(255,255,255,.02)); padding:22px; text-align:center; box-shadow:var(--shadow)">
+    <div class="card" style="margin:40px 0 0; text-align:center">
       <p style="margin:0; font-weight:800; font-size:clamp(16px,3.6vw,18px)">Unlock the full intraday trail — accuracy rankings, nowcasts, and more.</p>
-      <p class="price" style="color:#cfe2ff; margin-top:8px">Only <b>$3/month</b> or <b>$30/year</b>. Get in early.</p>
+      <p style="color:#cfe2ff; margin-top:8px">Only <b>$3/month</b> or <b>$30/year</b>. Get in early.</p>
       <div class="cta-row" style="justify-content:center">
         <a class="btn btn-primary" href="https://waheedweather.dewdropventures.com/">Start with the live log</a>
         <a class="btn btn-ghost" href="#outcomes">See outcomes</a>
@@ -394,7 +383,6 @@
     </div>
   </section>
 
-  <!-- about -->
   <section class="section container">
     <h2 class="sh">Who built this?</h2>
     <div class="card" style="max-width:980px; margin:0 auto">
@@ -406,77 +394,61 @@
     © 2025 Dewdrop Ventures, LLC · <a href="/terms.html">Terms</a> · <a href="/privacy.html">Privacy</a> · Informational only — not financial advice. Not affiliated with NWS, Kalshi, or Polymarket.
   </footer>
 
-  <!-- ===== Public JS API: wire live data without unblurring members ===== -->
+  <!-- ===== JS API + Auto-Fetch bootstrap ===== -->
   <script>
   (function () {
+    const AUTOFETCH_URL = null; // e.g. '/api/summary' -> see expected JSON shape below
+
     const $ = (id) => document.getElementById(id);
     const setText = (id, v) => { const el = $(id); if (el) el.textContent = v; };
 
-    // ---------- SVG CHART RENDERER (green vs purple, plot blurred) ----------
-    function renderChart({dates, actual, best}, {w=1100, h=420} = {}) {
-      // Basic guards
+    /* -------- DARK SVG chart (smaller) with blurred plot -------- */
+    function renderChart({dates, actual, best}, {w=1000, h=280} = {}) {
       if (!dates || !actual || !best || !dates.length) return '';
-
-      // Dimensions
-      const pad = {l:60, r:20, t:6, b:40};
+      const pad = {l:56, r:20, t:8, b:34};
       const iw = w - pad.l - pad.r, ih = h - pad.t - pad.b;
+      const n = dates.length, x = (i) => pad.l + (iw * i) / Math.max(1, n - 1);
 
-      // X scale (even spacing; dates are for tick labels only)
-      const n = dates.length;
-      const x = (i) => pad.l + (iw * i) / Math.max(1, n - 1);
-
-      // Y scale
       const vals = actual.concat(best).map(v => +v).filter(Number.isFinite);
-      const min = Math.floor(Math.min(...vals) - 2);
-      const max = Math.ceil(Math.max(...vals) + 2);
+      const min = Math.floor(Math.min(...vals) - 2), max = Math.ceil(Math.max(...vals) + 2);
       const y = (v) => pad.t + ih - ((v - min) / (max - min)) * ih;
 
-      // Helpers
       const line = (arr) => arr.map((v,i)=>`${i===0?'M':'L'}${x(i)},${y(v)}`).join(' ');
-      const dots = (arr, color) => arr.map((v,i)=>`<circle cx="${x(i)}" cy="${y(v)}" r="4" fill="${color}" stroke="white" stroke-width="2"/>`).join('');
+      const dot = (cx,cy,c,s=2)=>`<circle cx="${cx}" cy="${cy}" r="4.5" fill="${c}" stroke="${s? 'white':''}" stroke-width="${s}"/>`;
 
-      // Grid (y ticks at 6 steps)
-      const steps = 6, gy = [];
-      for (let k=0;k<=steps;k++){
-        const vv = min + (k*(max-min))/steps;
-        const yy = y(vv);
-        gy.push(`<path d="M${pad.l} ${yy} H ${w-pad.r}" stroke="var(--grid)"/>`);
-        gy.push(`<text x="${pad.l-8}" y="${yy+4}" text-anchor="end" fill="var(--axis)" font-size="12">${Math.round(vv)}</text>`);
+      // grid + ticks
+      const ySteps = 5, gy=[];
+      for(let k=0;k<=ySteps;k++){ const vv=min+(k*(max-min))/ySteps, yy=y(vv);
+        gy.push(`<path d="M${pad.l} ${yy} H ${w-pad.r}" stroke="var(--grid-dark)"/>`);
+        gy.push(`<text x="${pad.l-8}" y="${yy+4}" text-anchor="end" fill="var(--axis-dark)" font-size="12">${Math.round(vv)}</text>`);
       }
+      const xt=[], labelCount=Math.min(6,n), step=Math.max(1,Math.floor(n/labelCount));
+      for(let i=0;i<n;i+=step){ xt.push(`<text x="${x(i)}" y="${h-10}" text-anchor="middle" fill="var(--axis-dark)" font-size="12">${dates[i]}</text>`); }
 
-      // X ticks (roughly 6 labels)
-      const xt = [];
-      const labelCount = Math.min(6, n);
-      const step = Math.max(1, Math.floor(n / labelCount));
-      for (let i=0;i<n;i+=step){
-        xt.push(`<text x="${x(i)}" y="${h-12}" text-anchor="middle" fill="var(--axis)" font-size="12">${dates[i]}</text>`);
-      }
+      const actualPath = `<path d="${line(actual)}" fill="none" stroke="var(--green)" stroke-width="3"/>`;
+      const bestPath   = `<path d="${line(best)}"   fill="none" stroke="var(--purple)" stroke-width="3"/>`;
 
-      // Paths
-      const actualLine = `<path d="${line(actual)}" fill="none" stroke="var(--green)" stroke-width="3" />`;
-      const bestLine   = `<path d="${line(best)}"   fill="none" stroke="var(--purple)" stroke-width="3" />`;
-
-      const actualDots = dots(actual, 'var(--green)');
+      const actualDots = actual.map((v,i)=>dot(x(i),y(v),'var(--green)')).join('');
       const bestDots   = best.map((v,i)=>`<circle cx="${x(i)}" cy="${y(v)}" r="4.5" fill="white" stroke="var(--purple)" stroke-width="3"/>`).join('');
 
       return `
         <svg viewBox="0 0 ${w} ${h}" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-label="Actual vs Predicted (blurred)">
           <g>
             ${gy.join('')}
-            <path d="M${pad.l} ${pad.t} V ${h-pad.b}" stroke="var(--axis)"/>
-            <path d="M${pad.l} ${h-pad.b} H ${w-pad.r}" stroke="var(--axis)"/>
+            <path d="M${pad.l} ${pad.t} V ${h-pad.b}" stroke="var(--axis-dark)"/>
+            <path d="M${pad.l} ${h-pad.b} H ${w-pad.r}" stroke="var(--axis-dark)"/>
             ${xt.join('')}
           </g>
           <g>
-            ${actualLine}
-            ${bestLine}
+            ${actualPath}
+            ${bestPath}
             ${actualDots}
             ${bestDots}
           </g>
         </svg>`;
     }
 
-    // ---------- Public hooks ----------
+    /* -------- Public hooks (do not unblur members) -------- */
     window.DDP = {
       // forecasts
       setLatestForecast(v){ setText('v-latest', v); setText('v-latest-2', v); },
@@ -503,7 +475,7 @@
         if(avgBestError!=null) setText('v-abe', avgBestError);
       },
 
-      // chart (plot is blurred via CSS class on container)
+      // chart (plot is blurred via CSS)
       setChartData({dates, actual, best}){
         const html = renderChart({dates, actual, best});
         const box = $('chart-plot'); if (!box) return;
@@ -511,17 +483,70 @@
       }
     };
 
-    // ---------- Demo placeholder (remove in prod) ----------
-    // Create a sample series that resembles your screenshot
-    const demoDates = Array.from({length: 26}, (_,i)=> {
-      const d = new Date(); d.setDate(d.getDate() - (25-i));
-      return d.toLocaleDateString(undefined,{month:'short', day:'numeric'});
-    });
-    const demoActual = [84,88,83,84,87,93,90,83,86,87,80,80,87,96,85,83,80,81,85,90,91,89,88,74,83,87];
-    const demoBest   = [   89,    85,86,87,92,   ,   ,   ,   ,   ,82,   ,   ,   ,86,81,   ,   ,87,89,90,88,87,   ,82,86]
-                        .map((v,i)=> v ?? (demoActual[i] - (Math.random()*2-1)));
-    // Initial paint
-    DDP.setChartData({dates: demoDates, actual: demoActual, best: demoBest});
+    /* -------- Bootstrap: fetch latest (non-blurred cards) --------
+       Set AUTOFETCH_URL to your endpoint that returns JSON like:
+       {
+         "latestForecast":"85°F",
+         "issuancesInline":"04:40 84° • 04:54 85° • 06:12 85°",
+         "actualHigh":"—",
+         "highSoFar":"82.9°F","highSoFarTimeET":"12:51 PM","station":"KNYC","currentTemp":"82.9°F",
+         "tomorrowForecast":"80°F",
+         "nowcastToday":"85.4°F","nowcastTodayMeta":"Historical bias: +0.89°F (36 days)",
+         "nowcastTomorrow":"80.9°F","nowcastTomorrowMeta":"For 2025-08-26 • Historical bias: +0.89°F (36 days)",
+         "stats":{"daysTracked":55,"daysWithActual":46,"avgAbsError":"2.12°F","avgBestError":"1.05°F"},
+         "series":{"dates":[...],"actual":[...],"best":[...]}
+       }
+    */
+    async function bootstrap() {
+      try{
+        if (AUTOFETCH_URL){
+          const res = await fetch(AUTOFETCH_URL, {cache:'no-store'});
+          if(!res.ok) throw new Error('Bad status');
+          const d = await res.json();
+          if (d.latestForecast) DDP.setLatestForecast(d.latestForecast);
+          if (d.issuancesInline) DDP.setIssuancesInline(d.issuancesInline);
+          DDP.setActualHigh(d.actualHigh ?? '—');
+          DDP.setHighSoFar(d.highSoFar ?? '—', d.highSoFarTimeET ?? '—', d.station ?? '—');
+          if (d.currentTemp) DDP.setCurrentTemp(d.currentTemp);
+          if (d.tomorrowForecast) DDP.setTomorrowForecast(d.tomorrowForecast);
+          if (d.nowcastToday) DDP.setNowcastToday(d.nowcastToday, d.nowcastTodayMeta);
+          if (d.nowcastTomorrow) DDP.setNowcastTomorrow(d.nowcastTomorrow, d.nowcastTomorrowMeta);
+          if (d.stats) DDP.setStats(d.stats);
+          if (d.series) DDP.setChartData(d.series);
+          return;
+        }
+      } catch(e){ console.warn('DDP bootstrap failed, using demo data.', e); }
+
+      // --- Demo fallback so non-blurred cards aren’t empty ---
+      const demo = {
+        latestForecast: '85.0°F',
+        issuancesInline: '04:40 84° • 04:54 85° • 06:12 85°',
+        actualHigh: '—',
+        highSoFar: '82.9°F', highSoFarTimeET:'12:51 PM', station:'KNYC', currentTemp:'82.9°F',
+        tomorrowForecast:'80.0°F',
+        nowcastToday:'85.4°F', nowcastTodayMeta:'Historical bias: +0.89°F (36 days)',
+        nowcastTomorrow:'80.9°F', nowcastTomorrowMeta:'For 2025-08-26 • Historical bias: +0.89°F (36 days)',
+        stats:{daysTracked:55, daysWithActual:46, avgAbsError:'2.12°F', avgBestError:'1.05°F'},
+      };
+      const dates = Array.from({length: 26}, (_,i)=>{const d=new Date(); d.setDate(d.getDate()-(25-i)); return d.toLocaleDateString(undefined,{month:'short',day:'numeric'});});
+      const actual = [84,88,83,84,87,93,90,83,86,87,80,80,87,96,85,83,80,81,85,90,91,89,88,74,83,87];
+      const best   = actual.map((v,i)=> +(v + (Math.random()*2-1)).toFixed(1));
+
+      DDP.setLatestForecast(demo.latestForecast);
+      DDP.setIssuancesInline(demo.issuancesInline);
+      DDP.setActualHigh(demo.actualHigh);
+      DDP.setHighSoFar(demo.highSoFar, demo.highSoFarTimeET, demo.station);
+      DDP.setCurrentTemp(demo.currentTemp);
+      DDP.setTomorrowForecast(demo.tomorrowForecast);
+      DDP.setNowcastToday(demo.nowcastToday, demo.nowcastTodayMeta);
+      DDP.setNowcastTomorrow(demo.nowcastTomorrow, demo.nowcastTomorrowMeta);
+      DDP.setStats(demo.stats);
+      DDP.setChartData({dates, actual, best});
+    }
+
+    bootstrap();
+    // optional auto-refresh every 5 minutes:
+    // setInterval(bootstrap, 5*60*1000);
   })();
   </script>
 </body>
