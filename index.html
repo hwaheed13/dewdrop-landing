@@ -271,7 +271,7 @@ html, body { max-width:100%; overflow-x:hidden; -webkit-text-size-adjust:100%; }
         <h1 class="h-title">The intraday forecast log NWS doesn’t keep.</h1>
         <p class="h-sub">We capture every issuance, match to the official daily high, and surface a bias-corrected <b>nowcast</b> that improves as the day evolves.</p>
         <div class="cta-row">
-        <a class="btn btn-primary" href="#" id="cta-explore">
+          <a class="btn btn-primary" href="#" id="cta-explore">
             <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             Explore the live log
           </a>
@@ -462,7 +462,8 @@ html, body { max-width:100%; overflow-x:hidden; -webkit-text-size-adjust:100%; }
       <p style="margin:0; font-weight:800; font-size:clamp(16px,3.6vw,18px)">Unlock the full intraday trail — accuracy rankings, nowcasts, and more.</p>
       <p style="color:#cfe2ff; margin-top:8px">Only <b>$3/month</b> or <b>$30/year</b>. Get in early.</p>
       <div class="cta-row" style="justify-content:center">
-        <a class="btn btn-primary" href="https://waheedweather.dewdropventures.com/">Start with the live log</a>
+        <!-- changed: href="#" + id -->
+        <a class="btn btn-primary" href="#" id="cta-explore-2">Start with the live log</a>
         <a class="btn btn-ghost" href="#outcomes">See outcomes</a>
       </div>
     </div>
@@ -496,7 +497,6 @@ html, body { max-width:100%; overflow-x:hidden; -webkit-text-size-adjust:100%; }
     /* -------- DARK SVG chart (now responsive) -------- */
     function renderChart({dates, actual, best}, {w, h=280} = {}) {
       if (!dates || !actual || !best || !dates.length) return '';
-      // Width now passed in from container for responsiveness
       const pad = {l:56, r:20, t:8, b:34};
       const iw = w - pad.l - pad.r, ih = h - pad.t - pad.b;
       const n = dates.length, x = (i) => pad.l + (iw * i) / Math.max(1, n - 1);
@@ -508,7 +508,6 @@ html, body { max-width:100%; overflow-x:hidden; -webkit-text-size-adjust:100%; }
       const line = (arr) => arr.map((v,i)=>`${i===0?'M':'L'}${x(i)},${y(v)}`).join(' ');
       const dot = (cx,cy,c,s=2)=>`<circle cx="${cx}" cy="${cy}" r="4.5" fill="${c}" stroke="${s? 'white':''}" stroke-width="${s}"/>`;
 
-      // grid + ticks
       const ySteps = 5, gy=[];
       for(let k=0;k<=ySteps;k++){ const vv=min+(k*(max-min))/ySteps, yy=y(vv);
         gy.push(`<path d="M${pad.l} ${yy} H ${w-pad.r}" stroke="var(--grid-dark)"/>`);
@@ -542,32 +541,21 @@ html, body { max-width:100%; overflow-x:hidden; -webkit-text-size-adjust:100%; }
 
     /* -------- Public hooks (do not unblur members) -------- */
     window.DDP = {
-      // forecasts
       setLatestForecast(v){ setText('v-latest', v); setText('v-latest-2', v); },
       setIssuancesInline(text){ setText('list-today-issuances', text); setText('list-today-issuances-2', text); },
-
-      // actuals / obs
       setActualHigh(v){ setText('v-actual', v ?? '—'); },
       setHighSoFar(v, timeET, station){ setText('v-highsofar', v); setText('v-highsofar-time', timeET); setText('v-station', station); },
       setCurrentTemp(v){ setText('v-current', v); },
-
-      // tomorrow forecast
       setTomorrowForecast(v){ setText('v-tomorrow', v); },
-
-      // nowcasts (remain blurred)
       setNowcastToday(v, meta){ setText('v-nowcast-today', v); setText('v-nowcast-today-2', v);
         if(meta){ setText('v-nowcast-today-meta', meta); setText('v-nowcast-today-meta-2', meta); } },
       setNowcastTomorrow(v, meta){ setText('v-nowcast-tomorrow', v); if(meta) setText('v-nowcast-tomorrow-meta', meta); },
-
-      // stats (remain blurred)
       setStats({daysTracked, daysWithActual, avgAbsError, avgBestError}={}){
         if(daysTracked!=null) setText('v-days-tracked', daysTracked);
         if(daysWithActual!=null) setText('v-days-actual', daysWithActual);
         if(avgAbsError!=null) setText('v-aae', avgAbsError);
         if(avgBestError!=null) setText('v-abe', avgBestError);
       },
-
-      // chart (plot is blurred via CSS)
       setChartData(series){
         lastSeries = series;
         renderChartIntoBox();
@@ -577,12 +565,11 @@ html, body { max-width:100%; overflow-x:hidden; -webkit-text-size-adjust:100%; }
     let lastSeries = null;
     function renderChartIntoBox(){
       const box = $('chart-plot'); if (!box || !lastSeries) return;
-      // measure container width for true responsiveness
       const w = Math.max(320, box.clientWidth || 1000);
       box.innerHTML = renderChart(lastSeries, {w, h:280});
     }
 
-    /* -------- Live pull from your site -------- */
+    /* -------- Live pull -------- */
     async function tryFetch(url){
       const res = await fetch(url, {cache:'no-store', credentials:'omit', mode:'cors'});
       const ct = res.headers.get('content-type') || '';
@@ -596,7 +583,6 @@ html, body { max-width:100%; overflow-x:hidden; -webkit-text-size-adjust:100%; }
         try{ data = await tryFetch(url); break; } catch(e){ /* keep trying */ }
       }
       if (!data){
-        // demo fallback
         const dates = Array.from({length: 26}, (_,i)=>{const d=new Date(); d.setDate(d.getDate()-(25-i)); return d.toLocaleDateString(undefined,{month:'short',day:'numeric'});});
         const actual = [84,88,83,84,87,93,90,83,86,87,80,80,87,96,85,83,80,81,85,90,91,89,88,74,83,87];
         const best   = actual.map((v)=> +(v + (Math.random()*2-1)).toFixed(1));
@@ -611,7 +597,6 @@ html, body { max-width:100%; overflow-x:hidden; -webkit-text-size-adjust:100%; }
         DDP.setStats({daysTracked:55, daysWithActual:46, avgAbsError:'2.12°F', avgBestError:'1.05°F'});
         DDP.setChartData({dates, actual, best});
       } else {
-        // Map whatever fields are present
         if (data.latestForecast) DDP.setLatestForecast(data.latestForecast);
         if (data.issuancesInline) DDP.setIssuancesInline(data.issuancesInline);
         if (data.actualHigh != null) DDP.setActualHigh(data.actualHigh);
@@ -625,12 +610,9 @@ html, body { max-width:100%; overflow-x:hidden; -webkit-text-size-adjust:100%; }
         if (data.stats) DDP.setStats(data.stats);
         if (data.series) DDP.setChartData(data.series);
       }
-
-      // initial responsive chart render
       renderChartIntoBox();
     }
 
-    // re-render chart on resize/orientation change
     let resizeTO=null;
     window.addEventListener('resize', () => {
       clearTimeout(resizeTO);
@@ -641,36 +623,51 @@ html, body { max-width:100%; overflow-x:hidden; -webkit-text-size-adjust:100%; }
     });
 
     bootstrap();
-    // Optional auto-refresh:
     // setInterval(bootstrap, 5*60*1000);
   })();
   </script>
+
+  <!-- ===== Robust CTA wiring (top + bottom) ===== -->
   <script>
-(function(){
-  const DASHBOARD = "https://waheedweather.dewdropventures.com/";
-  function initWhenReady(retries=50){
-    if (window.Memberstack?.onReady) {
-      window.Memberstack.onReady.then(async (ms)=>{
-        const btn = document.getElementById("cta-explore");
-        if (!btn) return;
-        btn.addEventListener("click", async (e)=>{
-          e.preventDefault();
+  (function(){
+    const DASHBOARD = "https://waheedweather.dewdropventures.com/";
+
+    // attach immediately so buttons always work
+    ["cta-explore", "cta-explore-2"].forEach(id=>{
+      const btn = document.getElementById(id);
+      if(!btn) return;
+      btn.addEventListener("click", async (e)=>{
+        e.preventDefault();
+        const ms = await waitForMS(15, 100); // ~1.5s
+        if (!ms) {
+          // fallback: let dashboard enforce auth
+          window.location.href = DASHBOARD;
+          return;
+        }
+        try {
           const { data: member } = await ms.getCurrentMember();
-          if (member) {
-            // already logged in → send straight in
-            window.location.href = DASHBOARD;
-          } else {
-            // not logged in → open Memberstack modal
-            ms.openModal("SIGNUP");  // or "LOGIN"
-          }
-        });
+          if (member) window.location.href = DASHBOARD;
+          else ms.openModal("SIGNUP");
+        } catch {
+          window.location.href = DASHBOARD;
+        }
       });
-    } else if (retries > 0) {
-      setTimeout(()=>initWhenReady(retries-1), 100);
+    });
+
+    function waitForMS(tries=15, delay=100){
+      return new Promise(resolve=>{
+        (function loop(n){
+          if (window.Memberstack?.onReady) {
+            window.Memberstack.onReady.then(resolve).catch(()=>resolve(null));
+          } else if (n>0) {
+            setTimeout(()=>loop(n-1), delay);
+          } else {
+            resolve(null);
+          }
+        })(tries);
+      });
     }
-  }
-  initWhenReady();
-})();
-</script>
+  })();
+  </script>
 </body>
 </html>
