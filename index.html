@@ -638,46 +638,43 @@ html, body { max-width:100%; overflow-x:hidden; -webkit-text-size-adjust:100%; }
   </script>
 
   <!-- ===== Robust CTA wiring (top + bottom) ===== -->
-  <script>
-  (function(){
-    const DASHBOARD = "https://waheedweather.dewdropventures.com/";
+<script>
+(function(){
+  const DASHBOARD = "https://waheedweather.dewdropventures.com/";
 
-    // attach immediately so buttons always work
-    ["cta-explore", "cta-explore-2"].forEach(id=>{
-      const btn = document.getElementById(id);
-      if(!btn) return;
-      btn.addEventListener("click", async (e)=>{
-        e.preventDefault();
-        const ms = await waitForMS(15, 100); // ~1.5s
-        if (!ms) {
-          // fallback: let dashboard enforce auth
-          window.location.href = DASHBOARD;
-          return;
-        }
-        try {
-          const { data: member } = await ms.getCurrentMember();
-          if (member) window.location.href = DASHBOARD;
-          else ms.openModal("SIGNUP");
-        } catch {
-          window.location.href = DASHBOARD;
-        }
-      });
+  function waitForMS(tries=60, delay=100){
+    return new Promise(resolve=>{
+      (function loop(n){
+        const ms = window.$memberstackDom;
+        if (ms && typeof ms.getCurrentMember==="function") return resolve(ms);
+        if (n<=0) return resolve(null);
+        setTimeout(()=>loop(n-1), delay);
+      })(tries);
     });
+  }
 
-    function waitForMS(tries=15, delay=100){
-      return new Promise(resolve=>{
-        (function loop(n){
-          if (window.Memberstack?.onReady) {
-            window.Memberstack.onReady.then(resolve).catch(()=>resolve(null));
-          } else if (n>0) {
-            setTimeout(()=>loop(n-1), delay);
-          } else {
-            resolve(null);
-          }
-        })(tries);
-      });
-    }
-  })();
-  </script>
+  ["cta-explore","cta-explore-2"].forEach((id)=>{
+    const btn = document.getElementById(id);
+    if(!btn) return;
+
+    btn.addEventListener("click", async (e)=>{
+      e.preventDefault();
+      const ms = await waitForMS();
+      if(!ms){
+        // If Memberstack didn't load, show the signup modal via attribute fallback:
+        // (Add data-ms-modal="SIGNUP" on the anchor as a backup)
+        return;
+      }
+      try{
+        const { data: member } = await ms.getCurrentMember();
+        if(member){ location.href = DASHBOARD; }
+        else{ await ms.openModal("SIGNUP"); }
+      }catch{
+        // Don't redirect blindly; let the modal try.
+      }
+    });
+  });
+})();
+</script>
 </body>
 </html>
