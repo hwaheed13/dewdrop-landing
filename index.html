@@ -158,27 +158,80 @@
   footer{border-top:1px solid var(--ring); color:#c1d6f1; text-align:center; padding:28px 16px 40px; font-size:13px; margin-top:48px}
   footer a{color:#9fbeff; text-decoration:underline}
 
-  /* ======== MOBILE TWEAKS ======== */
-  @media (max-width:900px){
-    .kpis{grid-template-columns:1fr}
+
+/* ===== MOBILE POLISH (drop in at end of your <style>) ===== */
+
+/* Prevent iOS auto-zoom/font bloat + kill side-scroll */
+html, body { max-width:100%; overflow-x:hidden; -webkit-text-size-adjust:100%; }
+
+/* Tablet and down */
+@media (max-width: 900px){
+  .kpis{grid-template-columns:1fr}
+}
+
+/* Phones */
+@media (max-width: 700px){
+  .container{padding:0 16px}
+  .topbar{--topbar-h:60px}
+  .topbar .inner{padding:0 12px}
+  .chip{display:none}
+  .drop{width:34px; height:34px}
+  .drop svg{width:18px; height:18px}
+
+  .hero{padding:26px 0 10px}
+  .hero-grid{gap:20px}
+
+  /* Headline & copy scale like the screenshot, no wrap overflow */
+  .h-title{
+    font-size:clamp(26px, 8.5vw, 40px);
+    line-height:1.12;
+    letter-spacing:-.02em;
+    margin:.05em 0 .15em;
+    word-break:break-word;
   }
-  @media (max-width:700px){
-    .container{padding:0 16px}
-    .topbar{--topbar-h:62px}
-    .topbar .inner{padding:0 12px}
-    .drop{width:36px; height:36px}
-    .drop svg{width:20px; height:20px}
-    .chip{display:none}
-    .hero{padding:28px 0}
-    .cta-row .btn{flex:1 1 100%; justify-content:center}
-    .card{padding:16px}
+  .h-sub{
+    font-size:clamp(14px, 3.9vw, 16px);
+    max-width:36ch;
   }
-  @media (max-width:560px){
-    /* hide heavy backgrounds on very small screens */
-    .blob,.blob2,.blob3{display:none}
-    .val{font-size:clamp(22px,8vw,28px)}
-    .chart-card{padding:12px}
-  }
+
+  /* CTAs: full-width, tidy touch targets */
+  .cta-row .btn{flex:1 1 100%; justify-content:center; padding:14px 16px}
+  .btn svg{width:16px; height:16px}
+
+  /* Product mock: breathe + never overflow */
+  .mock{padding:14px; border-radius:18px}
+  .mock .frame{padding:12px; border-radius:14px}
+  .frame h4{font-size:13px}
+  .spark{height:64px}
+
+  /* KPI tiles inside mock */
+  .kpi{padding:10px}
+  .kpi .val{font-size:20px}
+  .kpi .muted{font-size:11.5px}
+
+  /* Cards/metrics */
+  .card{padding:16px}
+  .val{font-size:clamp(22px, 7.8vw, 28px)}
+}
+
+/* Small phones */
+@media (max-width: 560px){
+  /* Hide heavy decorative blobs for clarity & perf */
+  .blob,.blob2,.blob3{display:none}
+
+  .chart-card{padding:12px}
+  .chart-title{font-size:16px}
+  .legend-item{font-size:12px}
+}
+
+/* Ultra small (older iPhones in zoomed mode) */
+@media (max-width: 380px){
+  .h-title{font-size:clamp(24px, 8.8vw, 34px)}
+  .h-sub{font-size:14px}
+  .kpi .val{font-size:19px}
+}
+
+
 </style>
 </head>
 <body>
