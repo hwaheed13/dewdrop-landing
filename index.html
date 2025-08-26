@@ -461,11 +461,19 @@ html, body { max-width:100%; overflow-x:hidden; -webkit-text-size-adjust:100%; }
     <div class="card" style="margin:40px 0 0; text-align:center">
       <p style="margin:0; font-weight:800; font-size:clamp(16px,3.6vw,18px)">Unlock the full intraday trail — accuracy rankings, nowcasts, and more.</p>
       <p style="color:#cfe2ff; margin-top:8px">Only <b>$3/month</b> or <b>$30/year</b>. Get in early.</p>
-      <div class="cta-row" style="justify-content:center">
-        <!-- changed: href="#" + id -->
-        <a class="btn btn-primary" href="#" id="cta-explore-2">Start with the live log</a>
-        <a class="btn btn-ghost" href="#outcomes">See outcomes</a>
-      </div>
+     <div class="cta-row" style="justify-content:center">
+  <!-- Monthly plan -->
+  <button class="btn btn-primary"
+          data-ms-price:add="prc_monthly-plan-wbc030k">
+    Start for $3/month
+  </button>
+
+  <!-- Yearly plan -->
+  <button class="btn btn-ghost"
+          data-ms-price:add="prc_yearly-qfd03vv">
+    Start for $30/year
+  </button>
+</div>
     </div>
   </section>
 
