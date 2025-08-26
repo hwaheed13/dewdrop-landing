@@ -456,6 +456,12 @@
     }
 
     /* -------- Public hooks (do not unblur members) -------- */
+       function setText(id, v) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (v == null || v === '') return;   // don't clobber demo value
+      el.textContent = v;
+    }
     window.DDP = {
       // forecasts
       setLatestForecast(v){ setText('v-latest', v); setText('v-latest-2', v); },
