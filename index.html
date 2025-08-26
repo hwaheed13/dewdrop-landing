@@ -230,7 +230,21 @@ html, body { max-width:100%; overflow-x:hidden; -webkit-text-size-adjust:100%; }
   .h-sub{font-size:14px}
   .kpi .val{font-size:19px}
 }
+/* Tighten ONLY the hero side-margins on phones */
+@media (max-width: 700px){
+  .hero.container{
+    padding-left: 24px;   /* was 16px via .container */
+    padding-right: 24px;
+  }
+}
 
+/* (optional) a touch more on very small phones */
+@media (max-width: 560px){
+  .hero.container{
+    padding-left: 26px;
+    padding-right: 26px;
+  }
+}
 
 </style>
 </head>
