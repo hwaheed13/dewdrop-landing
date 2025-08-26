@@ -394,13 +394,20 @@
     © 2025 Dewdrop Ventures, LLC · <a href="/terms.html">Terms</a> · <a href="/privacy.html">Privacy</a> · Informational only — not financial advice. Not affiliated with NWS, Kalshi, or Polymarket.
   </footer>
 
-  <!-- ===== JS API + Auto-Fetch bootstrap ===== -->
+  <!-- ===== JS API + Live pull from waheedweather.dewdropventures.com ===== -->
   <script>
   (function () {
-    const AUTOFETCH_URL = null; // e.g. '/api/summary' -> see expected JSON shape below
+    const API_BASE = 'https://waheedweather.dewdropventures.com';
+    // Try these endpoints in order. Change/extend to match your backend.
+    const AUTOFETCH_CANDIDATES = [
+      `${API_BASE}/api/summary`,
+      `${API_BASE}/api/live`,
+      `${API_BASE}/api/today`,
+      `${API_BASE}/api/status`
+    ];
 
     const $ = (id) => document.getElementById(id);
-    const setText = (id, v) => { const el = $(id); if (el) el.textContent = v; };
+    const setText = (id, v) => { const el = $(id); if (el && v!=null && v!=='') el.textContent = v; };
 
     /* -------- DARK SVG chart (smaller) with blurred plot -------- */
     function renderChart({dates, actual, best}, {w=1000, h=280} = {}) {
@@ -483,69 +490,65 @@
       }
     };
 
-    /* -------- Bootstrap: fetch latest (non-blurred cards) --------
-       Set AUTOFETCH_URL to your endpoint that returns JSON like:
+    /* -------- Live pull from your site --------
+       Expected JSON fields (any subset ok):
        {
-         "latestForecast":"85°F",
-         "issuancesInline":"04:40 84° • 04:54 85° • 06:12 85°",
-         "actualHigh":"—",
-         "highSoFar":"82.9°F","highSoFarTimeET":"12:51 PM","station":"KNYC","currentTemp":"82.9°F",
-         "tomorrowForecast":"80°F",
-         "nowcastToday":"85.4°F","nowcastTodayMeta":"Historical bias: +0.89°F (36 days)",
-         "nowcastTomorrow":"80.9°F","nowcastTomorrowMeta":"For 2025-08-26 • Historical bias: +0.89°F (36 days)",
-         "stats":{"daysTracked":55,"daysWithActual":46,"avgAbsError":"2.12°F","avgBestError":"1.05°F"},
-         "series":{"dates":[...],"actual":[...],"best":[...]}
+         latestForecast, issuancesInline,
+         actualHigh, highSoFar, highSoFarTimeET, station, currentTemp,
+         tomorrowForecast,
+         nowcastToday, nowcastTodayMeta,
+         nowcastTomorrow, nowcastTomorrowMeta,
+         stats: {daysTracked, daysWithActual, avgAbsError, avgBestError},
+         series: {dates:[], actual:[], best:[]}
        }
     */
+    async function tryFetch(url){
+      const res = await fetch(url, {cache:'no-store', credentials:'omit', mode:'cors'});
+      const ct = res.headers.get('content-type') || '';
+      if(!res.ok || !ct.includes('application/json')) throw new Error('No JSON at ' + url);
+      return res.json();
+    }
+
     async function bootstrap() {
-      try{
-        if (AUTOFETCH_URL){
-          const res = await fetch(AUTOFETCH_URL, {cache:'no-store'});
-          if(!res.ok) throw new Error('Bad status');
-          const d = await res.json();
-          if (d.latestForecast) DDP.setLatestForecast(d.latestForecast);
-          if (d.issuancesInline) DDP.setIssuancesInline(d.issuancesInline);
-          DDP.setActualHigh(d.actualHigh ?? '—');
-          DDP.setHighSoFar(d.highSoFar ?? '—', d.highSoFarTimeET ?? '—', d.station ?? '—');
-          if (d.currentTemp) DDP.setCurrentTemp(d.currentTemp);
-          if (d.tomorrowForecast) DDP.setTomorrowForecast(d.tomorrowForecast);
-          if (d.nowcastToday) DDP.setNowcastToday(d.nowcastToday, d.nowcastTodayMeta);
-          if (d.nowcastTomorrow) DDP.setNowcastTomorrow(d.nowcastTomorrow, d.nowcastTomorrowMeta);
-          if (d.stats) DDP.setStats(d.stats);
-          if (d.series) DDP.setChartData(d.series);
-          return;
-        }
-      } catch(e){ console.warn('DDP bootstrap failed, using demo data.', e); }
+      let data = null;
+      for (const url of AUTOFETCH_CANDIDATES){
+        try{ data = await tryFetch(url); break; } catch(e){ /* keep trying */ }
+      }
+      if (!data){
+        // demo fallback
+        const dates = Array.from({length: 26}, (_,i)=>{const d=new Date(); d.setDate(d.getDate()-(25-i)); return d.toLocaleDateString(undefined,{month:'short',day:'numeric'});});
+        const actual = [84,88,83,84,87,93,90,83,86,87,80,80,87,96,85,83,80,81,85,90,91,89,88,74,83,87];
+        const best   = actual.map((v,i)=> +(v + (Math.random()*2-1)).toFixed(1));
+        DDP.setLatestForecast('85.0°F');
+        DDP.setIssuancesInline('04:40 84° • 04:54 85° • 06:12 85°');
+        DDP.setActualHigh('—');
+        DDP.setHighSoFar('82.9°F', '12:51 PM', 'KNYC');
+        DDP.setCurrentTemp('82.9°F');
+        DDP.setTomorrowForecast('80.0°F');
+        DDP.setNowcastToday('85.4°F','Historical bias: +0.89°F (36 days)');
+        DDP.setNowcastTomorrow('80.9°F','For 2025-08-26 • Historical bias: +0.89°F (36 days)');
+        DDP.setStats({daysTracked:55, daysWithActual:46, avgAbsError:'2.12°F', avgBestError:'1.05°F'});
+        DDP.setChartData({dates, actual, best});
+        return;
+      }
 
-      // --- Demo fallback so non-blurred cards aren’t empty ---
-      const demo = {
-        latestForecast: '85.0°F',
-        issuancesInline: '04:40 84° • 04:54 85° • 06:12 85°',
-        actualHigh: '—',
-        highSoFar: '82.9°F', highSoFarTimeET:'12:51 PM', station:'KNYC', currentTemp:'82.9°F',
-        tomorrowForecast:'80.0°F',
-        nowcastToday:'85.4°F', nowcastTodayMeta:'Historical bias: +0.89°F (36 days)',
-        nowcastTomorrow:'80.9°F', nowcastTomorrowMeta:'For 2025-08-26 • Historical bias: +0.89°F (36 days)',
-        stats:{daysTracked:55, daysWithActual:46, avgAbsError:'2.12°F', avgBestError:'1.05°F'},
-      };
-      const dates = Array.from({length: 26}, (_,i)=>{const d=new Date(); d.setDate(d.getDate()-(25-i)); return d.toLocaleDateString(undefined,{month:'short',day:'numeric'});});
-      const actual = [84,88,83,84,87,93,90,83,86,87,80,80,87,96,85,83,80,81,85,90,91,89,88,74,83,87];
-      const best   = actual.map((v,i)=> +(v + (Math.random()*2-1)).toFixed(1));
-
-      DDP.setLatestForecast(demo.latestForecast);
-      DDP.setIssuancesInline(demo.issuancesInline);
-      DDP.setActualHigh(demo.actualHigh);
-      DDP.setHighSoFar(demo.highSoFar, demo.highSoFarTimeET, demo.station);
-      DDP.setCurrentTemp(demo.currentTemp);
-      DDP.setTomorrowForecast(demo.tomorrowForecast);
-      DDP.setNowcastToday(demo.nowcastToday, demo.nowcastTodayMeta);
-      DDP.setNowcastTomorrow(demo.nowcastTomorrow, demo.nowcastTomorrowMeta);
-      DDP.setStats(demo.stats);
-      DDP.setChartData({dates, actual, best});
+      // Map whatever fields are present
+      if (data.latestForecast) DDP.setLatestForecast(data.latestForecast);
+      if (data.issuancesInline) DDP.setIssuancesInline(data.issuancesInline);
+      if (data.actualHigh != null) DDP.setActualHigh(data.actualHigh);
+      if (data.highSoFar || data.highSoFarTimeET || data.station) {
+        DDP.setHighSoFar(data.highSoFar ?? '—', data.highSoFarTimeET ?? '—', data.station ?? '—');
+      }
+      if (data.currentTemp) DDP.setCurrentTemp(data.currentTemp);
+      if (data.tomorrowForecast) DDP.setTomorrowForecast(data.tomorrowForecast);
+      if (data.nowcastToday) DDP.setNowcastToday(data.nowcastToday, data.nowcastTodayMeta);
+      if (data.nowcastTomorrow) DDP.setNowcastTomorrow(data.nowcastTomorrow, data.nowcastTomorrowMeta);
+      if (data.stats) DDP.setStats(data.stats);
+      if (data.series) DDP.setChartData(data.series);
     }
 
     bootstrap();
-    // optional auto-refresh every 5 minutes:
+    // Optional auto-refresh:
     // setInterval(bootstrap, 5*60*1000);
   })();
   </script>
