@@ -271,7 +271,7 @@ html, body { max-width:100%; overflow-x:hidden; -webkit-text-size-adjust:100%; }
         <h1 class="h-title">The intraday forecast log NWS doesn’t keep.</h1>
         <p class="h-sub">We capture every issuance, match to the official daily high, and surface a bias-corrected <b>nowcast</b> that improves as the day evolves.</p>
         <div class="cta-row">
-          <a class="btn btn-primary" href="https://waheedweather.dewdropventures.com/">
+        <a class="btn btn-primary" href="#" id="cta-explore">
             <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             Explore the live log
           </a>
@@ -645,5 +645,32 @@ html, body { max-width:100%; overflow-x:hidden; -webkit-text-size-adjust:100%; }
     // setInterval(bootstrap, 5*60*1000);
   })();
   </script>
+  <script>
+(function(){
+  const DASHBOARD = "https://waheedweather.dewdropventures.com/";
+  function initWhenReady(retries=50){
+    if (window.Memberstack?.onReady) {
+      window.Memberstack.onReady.then(async (ms)=>{
+        const btn = document.getElementById("cta-explore");
+        if (!btn) return;
+        btn.addEventListener("click", async (e)=>{
+          e.preventDefault();
+          const { data: member } = await ms.getCurrentMember();
+          if (member) {
+            // already logged in → send straight in
+            window.location.href = DASHBOARD;
+          } else {
+            // not logged in → open Memberstack modal
+            ms.openModal("SIGNUP");  // or "LOGIN"
+          }
+        });
+      });
+    } else if (retries > 0) {
+      setTimeout(()=>initWhenReady(retries-1), 100);
+    }
+  }
+  initWhenReady();
+})();
+</script>
 </body>
 </html>
