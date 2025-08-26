@@ -273,7 +273,7 @@ html, body { max-width:100%; overflow-x:hidden; -webkit-text-size-adjust:100%; }
         <h1 class="h-title">The intraday forecast log NWS doesn’t keep.</h1>
         <p class="h-sub">We capture every issuance, match to the official daily high, and surface a bias-corrected <b>nowcast</b> that improves as the day evolves.</p>
         <div class="cta-row">
-          <a class="btn btn-primary" href="#" id="cta-explore">
+         <a class="btn btn-primary" href="#" id="cta-explore" data-ms-modal="SIGNUP">
             <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             Explore the live log
           </a>
@@ -463,18 +463,13 @@ html, body { max-width:100%; overflow-x:hidden; -webkit-text-size-adjust:100%; }
     <div class="card" style="margin:40px 0 0; text-align:center">
       <p style="margin:0; font-weight:800; font-size:clamp(16px,3.6vw,18px)">Unlock the full intraday trail — accuracy rankings, nowcasts, and more.</p>
       <p style="color:#cfe2ff; margin-top:8px">Only <b>$3/month</b> or <b>$30/year</b>. Get in early.</p>
-     <div class="cta-row" style="justify-content:center">
-  <!-- Monthly plan -->
-  <button class="btn btn-primary"
-          data-ms-price:add="prc_monthly-plan-wbc030k">
+ <div class="cta-row" style="justify-content:center">
+  <a class="btn btn-primary" href="#" data-ms-price:add="prc_monthly-plan-wbc030k">
     Start for $3/month
-  </button>
-
-  <!-- Yearly plan -->
-  <button class="btn btn-primary"
-          data-ms-price:add="prc_yearly-qfd03vv">
+  </a>
+  <a class="btn btn-primary" href="#" data-ms-price:add="prc_yearly-qfd03vv">
     Start for $30/year
-  </button>
+  </a>
 </div>
     </div>
   </section>
@@ -661,20 +656,21 @@ html, body { max-width:100%; overflow-x:hidden; -webkit-text-size-adjust:100%; }
       e.preventDefault();
       const ms = await waitForMS();
       if(!ms){
-        // If Memberstack didn't load, show the signup modal via attribute fallback:
-        // (Add data-ms-modal="SIGNUP" on the anchor as a backup)
+        // Fallback: let dashboard enforce auth instead of doing nothing
+        location.href = DASHBOARD;
         return;
       }
       try{
         const { data: member } = await ms.getCurrentMember();
-        if(member){ location.href = DASHBOARD; }
-        else{ await ms.openModal("SIGNUP"); }
+        if(member) location.href = DASHBOARD;
+        else await ms.openModal("SIGNUP");
       }catch{
-        // Don't redirect blindly; let the modal try.
+        location.href = DASHBOARD;
       }
     });
   });
 })();
 </script>
+
 </body>
 </html>
