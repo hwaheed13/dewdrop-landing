@@ -20,8 +20,7 @@
     --card:#f7fbff; --card-ink:#0f2236; --card-muted:#3b516b; --card-border:rgba(160,190,230,.5);
 
     /* Chart palette (dark) */
-    --green:#3dd06e; --green-dot:#208c45;
-    --purple:#a88cff;
+    --green:#3dd06e; --purple:#a88cff;
     --grid-dark:#24425f; --axis-dark:#7fa4cd;
   }
 
@@ -198,7 +197,7 @@
         </div>
       </div>
 
-      <!-- product mock (with IDs) -->
+      <!-- product mock (static demo values where visible) -->
       <div class="mock">
         <div class="frame">
           <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
@@ -206,14 +205,14 @@
           <div class="kpis">
             <div class="kpi">
               <h5>Latest forecast</h5>
-              <div class="val" id="v-latest">—</div>
+              <div class="val">85.0°F</div>
               <div class="muted"><b>Today’s Forecasts</b> <span class="badge-members">MEMBERS</span></div>
-              <div class="muted blurred" id="list-today-issuances">—</div>
+              <div class="muted blurred">04:40 84° • 04:54 85° • 06:12 85°</div>
             </div>
             <div class="kpi">
               <h5>Nowcast <span class="badge-members">MEMBERS</span></h5>
-              <div class="val blurred" id="v-nowcast-today">—</div>
-              <div class="muted blurred" id="v-nowcast-today-meta">—</div>
+              <div class="val blurred">85.4°F</div>
+              <div class="muted blurred">Historical bias: +0.89°F (36 days)</div>
             </div>
           </div>
           <svg class="spark" viewBox="0 0 320 80" aria-hidden="true">
@@ -282,51 +281,51 @@
     </div>
   </section>
 
-  <!-- live preview cards -->
+  <!-- live preview cards (non-blurred hard-coded) -->
   <section class="section container">
-    <h2 class="sh">Demo Preview</h2>
+    <h2 class="sh">Live preview</h2>
 
     <div class="cards">
       <article class="card">
         <h5>Today's Latest Forecast</h5>
-        <div class="val" id="v-latest-2">—</div>
+        <div class="val">85.0°F</div>
         <div class="muted"><strong>Today's Forecasts</strong> <span class="badge-members">MEMBERS</span></div>
-        <div class="muted blurred" id="list-today-issuances-2">—</div>
+        <div class="muted blurred">04:40 84° • 04:54 85° • 06:12 85°</div>
       </article>
       <article class="card">
         <h5>Today's Actual High</h5>
-        <div class="val" id="v-actual">86</div>
+        <div class="val">86°F</div>
         <div class="muted">NWS daily CLI report</div>
       </article>
       <article class="card">
         <h5>Today's High So Far / Current</h5>
-        <div class="val" id="v-highsofar">—</div>
-        <div class="muted">as of <span id="v-highsofar-time">—</span> ET • station <span id="v-station">—</span></div>
-        <div class="muted" style="margin-top:8px">Current: <span id="v-current">—</span></div>
+        <div class="val">83.1°F</div>
+        <div class="muted">as of 12:51 PM ET • station KNYC</div>
+        <div class="muted" style="margin-top:8px">Current: 83.1°F</div>
       </article>
       <article class="card">
         <h5>Tomorrow's Forecast</h5>
-        <div class="val" id="v-tomorrow">—</div>
+        <div class="val">80.0°F</div>
       </article>
     </div>
 
-    <!-- stats row (blurred numbers) -->
+    <!-- stats row (kept blurred) -->
     <div class="stats" style="margin-top:16px">
       <article class="card" style="text-align:center">
         <h5>Days Tracked</h5>
-        <div class="val blurred" id="v-days-tracked">—</div>
+        <div class="val blurred">123</div>
       </article>
       <article class="card" style="text-align:center">
         <h5>Days With Actual</h5>
-        <div class="val blurred" id="v-days-actual">—</div>
+        <div class="val blurred">97</div>
       </article>
       <article class="card" style="text-align:center">
         <h5>Average Absolute Error</h5>
-        <div class="val blurred" id="v-aae">—</div>
+        <div class="val blurred">1.28°F</div>
       </article>
       <article class="card" style="text-align:center">
         <h5>Average Best Error</h5>
-        <div class="val blurred" id="v-abe">—</div>
+        <div class="val blurred">0.74°F</div>
       </article>
     </div>
 
@@ -338,7 +337,61 @@
         <span class="legend-item"><span class="legend-dot dot-purple"></span>Best Forecast (pre-high)</span>
       </div>
       <div class="chart-inner">
-        <div class="chart-blur" id="chart-plot" style="height:280px"><!-- SVG injected here --></div>
+        <!-- blurred plot SVG -->
+        <div class="chart-blur" style="height:280px">
+          <svg viewBox="0 0 1000 280" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-label="Actual vs Predicted (blurred)">
+            <!-- axes + grid -->
+            <g>
+              <path d="M56 8 V 246" stroke="var(--axis-dark)"/>
+              <path d="M56 246 H 980" stroke="var(--axis-dark)"/>
+              <!-- Y grid -->
+              <g>
+                <path d="M56 50 H 980" stroke="var(--grid-dark)"/>
+                <path d="M56 92 H 980" stroke="var(--grid-dark)"/>
+                <path d="M56 134 H 980" stroke="var(--grid-dark)"/>
+                <path d="M56 176 H 980" stroke="var(--grid-dark)"/>
+                <path d="M56 218 H 980" stroke="var(--grid-dark)"/>
+              </g>
+              <!-- X labels (light) -->
+              <g font-size="12" fill="var(--axis-dark)">
+                <text x="100" y="270" text-anchor="middle">Mon</text>
+                <text x="260" y="270" text-anchor="middle">Tue</text>
+                <text x="420" y="270" text-anchor="middle">Wed</text>
+                <text x="580" y="270" text-anchor="middle">Thu</text>
+                <text x="740" y="270" text-anchor="middle">Fri</text>
+                <text x="900" y="270" text-anchor="middle">Sat</text>
+              </g>
+            </g>
+
+            <!-- series (blurred by parent) -->
+            <g>
+              <!-- Actual -->
+              <path d="M56 210 L 200 208 L 344 190 L 488 156 L 632 168 L 776 186 L 920 196"
+                    stroke="var(--green)" stroke-width="3" fill="none"/>
+              <!-- Best -->
+              <path d="M56 200 L 200 176 L 344 170 L 488 150 L 632 160 L 776 170 L 920 178"
+                    stroke="var(--purple)" stroke-width="3" fill="none"/>
+              <!-- dots -->
+              <g>
+                <circle cx="56" cy="210" r="4.5" fill="var(--green)" stroke="white" stroke-width="2"/>
+                <circle cx="200" cy="208" r="4.5" fill="var(--green)" stroke="white" stroke-width="2"/>
+                <circle cx="344" cy="190" r="4.5" fill="var(--green)" stroke="white" stroke-width="2"/>
+                <circle cx="488" cy="156" r="4.5" fill="var(--green)" stroke="white" stroke-width="2"/>
+                <circle cx="632" cy="168" r="4.5" fill="var(--green)" stroke="white" stroke-width="2"/>
+                <circle cx="776" cy="186" r="4.5" fill="var(--green)" stroke="white" stroke-width="2"/>
+                <circle cx="920" cy="196" r="4.5" fill="var(--green)" stroke="white" stroke-width="2"/>
+
+                <circle cx="56" cy="200" r="4.5" fill="white" stroke="var(--purple)" stroke-width="3"/>
+                <circle cx="200" cy="176" r="4.5" fill="white" stroke="var(--purple)" stroke-width="3"/>
+                <circle cx="344" cy="170" r="4.5" fill="white" stroke="var(--purple)" stroke-width="3"/>
+                <circle cx="488" cy="150" r="4.5" fill="white" stroke="var(--purple)" stroke-width="3"/>
+                <circle cx="632" cy="160" r="4.5" fill="white" stroke="var(--purple)" stroke-width="3"/>
+                <circle cx="776" cy="170" r="4.5" fill="white" stroke="var(--purple)" stroke-width="3"/>
+                <circle cx="920" cy="178" r="4.5" fill="white" stroke="var(--purple)" stroke-width="3"/>
+              </g>
+            </g>
+          </svg>
+        </div>
         <div class="members-overlay">MEMBERS</div>
       </div>
     </div>
@@ -347,13 +400,13 @@
     <div class="cards" style="grid-template-columns:repeat(2,1fr); margin-top:16px">
       <article class="card">
         <h5>Today's Bias-Corrected Nowcast <span class="badge-members">MEMBERS</span></h5>
-        <div class="val blurred" id="v-nowcast-today-2">—</div>
-        <div class="muted blurred" id="v-nowcast-today-meta-2">—</div>
+        <div class="val blurred">85.4°F</div>
+        <div class="muted blurred">For 2025-08-25 • Historical bias: +0.89°F (36 days)</div>
       </article>
       <article class="card">
         <h5>Tomorrow's Bias-Corrected Nowcast <span class="badge-members">MEMBERS</span></h5>
-        <div class="val blurred" id="v-nowcast-tomorrow">—</div>
-        <div class="muted blurred" id="v-nowcast-tomorrow-meta">—</div>
+        <div class="val blurred">80.9°F</div>
+        <div class="muted blurred">For 2025-08-26 • Historical bias: +0.89°F (36 days)</div>
       </article>
     </div>
   </section>
@@ -393,170 +446,5 @@
   <footer>
     © 2025 Dewdrop Ventures, LLC · <a href="/terms.html">Terms</a> · <a href="/privacy.html">Privacy</a> · Informational only — not financial advice. Not affiliated with NWS, Kalshi, or Polymarket.
   </footer>
-
-  <!-- ===== JS API + Live pull from waheedweather.dewdropventures.com ===== -->
-  <script>
-  (function () {
-    const API_BASE = 'https://waheedweather.dewdropventures.com';
-    // Try these endpoints in order. Change/extend to match your backend.
-    const AUTOFETCH_CANDIDATES = [
-      `${API_BASE}/api/summary`,
-      `${API_BASE}/api/live`,
-      `${API_BASE}/api/today`,
-      `${API_BASE}/api/status`
-    ];
-
-    const $ = (id) => document.getElementById(id);
-    const setText = (id, v) => { const el = $(id); if (el && v!=null && v!=='') el.textContent = v; };
-
-    /* -------- DARK SVG chart (smaller) with blurred plot -------- */
-    function renderChart({dates, actual, best}, {w=1000, h=280} = {}) {
-      if (!dates || !actual || !best || !dates.length) return '';
-      const pad = {l:56, r:20, t:8, b:34};
-      const iw = w - pad.l - pad.r, ih = h - pad.t - pad.b;
-      const n = dates.length, x = (i) => pad.l + (iw * i) / Math.max(1, n - 1);
-
-      const vals = actual.concat(best).map(v => +v).filter(Number.isFinite);
-      const min = Math.floor(Math.min(...vals) - 2), max = Math.ceil(Math.max(...vals) + 2);
-      const y = (v) => pad.t + ih - ((v - min) / (max - min)) * ih;
-
-      const line = (arr) => arr.map((v,i)=>`${i===0?'M':'L'}${x(i)},${y(v)}`).join(' ');
-      const dot = (cx,cy,c,s=2)=>`<circle cx="${cx}" cy="${cy}" r="4.5" fill="${c}" stroke="${s? 'white':''}" stroke-width="${s}"/>`;
-
-      // grid + ticks
-      const ySteps = 5, gy=[];
-      for(let k=0;k<=ySteps;k++){ const vv=min+(k*(max-min))/ySteps, yy=y(vv);
-        gy.push(`<path d="M${pad.l} ${yy} H ${w-pad.r}" stroke="var(--grid-dark)"/>`);
-        gy.push(`<text x="${pad.l-8}" y="${yy+4}" text-anchor="end" fill="var(--axis-dark)" font-size="12">${Math.round(vv)}</text>`);
-      }
-      const xt=[], labelCount=Math.min(6,n), step=Math.max(1,Math.floor(n/labelCount));
-      for(let i=0;i<n;i+=step){ xt.push(`<text x="${x(i)}" y="${h-10}" text-anchor="middle" fill="var(--axis-dark)" font-size="12">${dates[i]}</text>`); }
-
-      const actualPath = `<path d="${line(actual)}" fill="none" stroke="var(--green)" stroke-width="3"/>`;
-      const bestPath   = `<path d="${line(best)}"   fill="none" stroke="var(--purple)" stroke-width="3"/>`;
-
-      const actualDots = actual.map((v,i)=>dot(x(i),y(v),'var(--green)')).join('');
-      const bestDots   = best.map((v,i)=>`<circle cx="${x(i)}" cy="${y(v)}" r="4.5" fill="white" stroke="var(--purple)" stroke-width="3"/>`).join('');
-
-      return `
-        <svg viewBox="0 0 ${w} ${h}" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-label="Actual vs Predicted (blurred)">
-          <g>
-            ${gy.join('')}
-            <path d="M${pad.l} ${pad.t} V ${h-pad.b}" stroke="var(--axis-dark)"/>
-            <path d="M${pad.l} ${h-pad.b} H ${w-pad.r}" stroke="var(--axis-dark)"/>
-            ${xt.join('')}
-          </g>
-          <g>
-            ${actualPath}
-            ${bestPath}
-            ${actualDots}
-            ${bestDots}
-          </g>
-        </svg>`;
-    }
-
-    /* -------- Public hooks (do not unblur members) -------- */
-       function setText(id, v) {
-      const el = document.getElementById(id);
-      if (!el) return;
-      if (v == null || v === '') return;   // don't clobber demo value
-      el.textContent = v;
-    }
-    window.DDP = {
-      // forecasts
-      setLatestForecast(v){ setText('v-latest', v); setText('v-latest-2', v); },
-      setIssuancesInline(text){ setText('list-today-issuances', text); setText('list-today-issuances-2', text); },
-
-      // actuals / obs
-      setActualHigh(v){ setText('v-actual', v ?? '—'); },
-      setHighSoFar(v, timeET, station){ setText('v-highsofar', v); setText('v-highsofar-time', timeET); setText('v-station', station); },
-      setCurrentTemp(v){ setText('v-current', v); },
-
-      // tomorrow forecast
-      setTomorrowForecast(v){ setText('v-tomorrow', v); },
-
-      // nowcasts (remain blurred)
-      setNowcastToday(v, meta){ setText('v-nowcast-today', v); setText('v-nowcast-today-2', v);
-        if(meta){ setText('v-nowcast-today-meta', meta); setText('v-nowcast-today-meta-2', meta); } },
-      setNowcastTomorrow(v, meta){ setText('v-nowcast-tomorrow', v); if(meta) setText('v-nowcast-tomorrow-meta', meta); },
-
-      // stats (remain blurred)
-      setStats({daysTracked, daysWithActual, avgAbsError, avgBestError}={}){
-        if(daysTracked!=null) setText('v-days-tracked', daysTracked);
-        if(daysWithActual!=null) setText('v-days-actual', daysWithActual);
-        if(avgAbsError!=null) setText('v-aae', avgAbsError);
-        if(avgBestError!=null) setText('v-abe', avgBestError);
-      },
-
-      // chart (plot is blurred via CSS)
-      setChartData({dates, actual, best}){
-        const html = renderChart({dates, actual, best});
-        const box = $('chart-plot'); if (!box) return;
-        box.innerHTML = html;
-      }
-    };
-
-    /* -------- Live pull from your site --------
-       Expected JSON fields (any subset ok):
-       {
-         latestForecast, issuancesInline,
-         actualHigh, highSoFar, highSoFarTimeET, station, currentTemp,
-         tomorrowForecast,
-         nowcastToday, nowcastTodayMeta,
-         nowcastTomorrow, nowcastTomorrowMeta,
-         stats: {daysTracked, daysWithActual, avgAbsError, avgBestError},
-         series: {dates:[], actual:[], best:[]}
-       }
-    */
-    async function tryFetch(url){
-      const res = await fetch(url, {cache:'no-store', credentials:'omit', mode:'cors'});
-      const ct = res.headers.get('content-type') || '';
-      if(!res.ok || !ct.includes('application/json')) throw new Error('No JSON at ' + url);
-      return res.json();
-    }
-
-    async function bootstrap() {
-      let data = null;
-      for (const url of AUTOFETCH_CANDIDATES){
-        try{ data = await tryFetch(url); break; } catch(e){ /* keep trying */ }
-      }
-      if (!data){
-        // demo fallback
-        const dates = Array.from({length: 26}, (_,i)=>{const d=new Date(); d.setDate(d.getDate()-(25-i)); return d.toLocaleDateString(undefined,{month:'short',day:'numeric'});});
-        const actual = [84,88,83,84,87,93,90,83,86,87,80,80,87,96,85,83,80,81,85,90,91,89,88,74,83,87];
-        const best   = actual.map((v,i)=> +(v + (Math.random()*2-1)).toFixed(1));
-        DDP.setLatestForecast('85.0°F');
-        DDP.setIssuancesInline('04:40 84° • 04:54 85° • 06:12 85°');
-        DDP.setActualHigh('—');
-        DDP.setHighSoFar('82.9°F', '12:51 PM', 'KNYC');
-        DDP.setCurrentTemp('82.9°F');
-        DDP.setTomorrowForecast('80.0°F');
-        DDP.setNowcastToday('85.4°F','Historical bias: +0.89°F (36 days)');
-        DDP.setNowcastTomorrow('80.9°F','For 2025-08-26 • Historical bias: +0.89°F (36 days)');
-        DDP.setStats({daysTracked:55, daysWithActual:46, avgAbsError:'2.12°F', avgBestError:'1.05°F'});
-        DDP.setChartData({dates, actual, best});
-        return;
-      }
-
-      // Map whatever fields are present
-      if (data.latestForecast) DDP.setLatestForecast(data.latestForecast);
-      if (data.issuancesInline) DDP.setIssuancesInline(data.issuancesInline);
-      if (data.actualHigh != null) DDP.setActualHigh(data.actualHigh);
-      if (data.highSoFar || data.highSoFarTimeET || data.station) {
-        DDP.setHighSoFar(data.highSoFar ?? '—', data.highSoFarTimeET ?? '—', data.station ?? '—');
-      }
-      if (data.currentTemp) DDP.setCurrentTemp(data.currentTemp);
-      if (data.tomorrowForecast) DDP.setTomorrowForecast(data.tomorrowForecast);
-      if (data.nowcastToday) DDP.setNowcastToday(data.nowcastToday, data.nowcastTodayMeta);
-      if (data.nowcastTomorrow) DDP.setNowcastTomorrow(data.nowcastTomorrow, data.nowcastTomorrowMeta);
-      if (data.stats) DDP.setStats(data.stats);
-      if (data.series) DDP.setChartData(data.series);
-    }
-
-    bootstrap();
-    // Optional auto-refresh:
-    // setInterval(bootstrap, 5*60*1000);
-  })();
-  </script>
 </body>
 </html>
