@@ -498,16 +498,18 @@
 <!-- $3/mo -->
 <a class="btn btn-primary"
    href="#"
-   data-ms-modal="signup"
-   data-ms-price:add="prc_monthly-plan-wbc030k">
+   data-ms-price:add="prc_monthly-plan-wbc030k"
+   data-ms-action="checkout"
+   data-ms-modal="signup">
   Start for $3/month
 </a>
 
 <!-- $30/yr -->
 <a class="btn btn-primary"
    href="#"
-   data-ms-modal="signup"
-   data-ms-price:add="prc_yearly-qfd03vv">
+   data-ms-price:add="prc_yearly-qfd03vv"
+   data-ms-action="checkout"
+   data-ms-modal="signup">
   Start for $30/year
 </a>
       </div>
@@ -681,12 +683,13 @@
     "prc_yearly-qfd03vv"
   ];
 
+  // Only require getCurrentMember() to consider MS "ready"
   function waitForMS(tries=60, delay=100){
     return new Promise(resolve=>{
       (function loop(n){
         const ms = window.$memberstackDom;
-        if (ms && typeof ms.getCurrentMember==="function" && typeof ms.addPrice==="function") return resolve(ms);
-        if (n<=0) return resolve(null);
+        if (ms && typeof ms.getCurrentMember === "function") return resolve(ms);
+        if (n <= 0) return resolve(null);
         setTimeout(()=>loop(n-1), delay);
       })(tries);
     });
@@ -716,29 +719,9 @@
       }
     });
   }
-
-  // --- Price CTAs: reliably trigger signup + Stripe checkout
-  function wirePriceButtons(){
-    const priceBtns = document.querySelectorAll('[data-ms-price\\:add]:not([data-ms-action])');
-    priceBtns.forEach(btn=>{
-      btn.addEventListener('click', async (e)=>{
-        e.preventDefault();
-        const priceId = btn.getAttribute('data-ms-price:add');
-        const ms = await waitForMS();
-        if(!ms){ location.href = DASHBOARD; return; }
-        try{
-          await ms.addPrice(priceId);
-        }catch{
-          try { await ms.openModal("SIGNUP"); } catch { location.href = DASHBOARD; }
-        }
-      }, { passive:false });
-    });
-  }
-
-  wirePriceButtons();
-  window.addEventListener('msready', wirePriceButtons);
 })();
 </script>
+
   <noscript>
     <div style="max-width:1140px;margin:16px auto;padding:12px 16px;background:#331c1c;border:1px solid #7f3b3b;border-radius:8px;color:#ffd9d9">
       JavaScript is required to load live data and handle sign-up/checkout.
