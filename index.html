@@ -477,24 +477,26 @@
       <p style="color:#cfe2ff; margin-top:8px">Only <b>$3/month</b> or <b>$30/year</b>. Get in early.</p>
       <div class="cta-row" style="justify-content:center">
     
-        <!-- Pricing CTAs: Memberstack signup + checkout -->
-     <button class="btn btn-primary"
-        id="cta-monthly"
-        type="button"
-        aria-label="Start monthly plan"
-        data-ms-modal="signup"
-        data-ms-price:add="prc_monthly-plan-wbc030k">
-      Start for $3/month
-        </button>
+<!-- Pricing CTAs: Memberstack signup → Stripe checkout -->
+<a class="btn btn-primary"
+   id="cta-monthly"
+   href="#signup-monthly"
+   role="button"
+   aria-label="Start monthly plan"
+   data-ms-action="signup"
+   data-ms-price:add="prc_monthly-plan-wbc030k">
+  Start for $3/month
+</a>
 
-    <button class="btn btn-primary"
-        id="cta-yearly"
-        type="button"
-        aria-label="Start yearly plan"
-        data-ms-modal="signup"
-        data-ms-price:add="prc_yearly-qfd03vv">
-        Start for $30/year
-        </button>
+<a class="btn btn-primary"
+   id="cta-yearly"
+   href="#signup-yearly"
+   role="button"
+   aria-label="Start yearly plan"
+   data-ms-action="signup"
+   data-ms-price:add="prc_yearly-qfd03vv">
+  Start for $30/year
+</a>
       </div>
     </div>
   </section>
@@ -691,7 +693,7 @@
     // Handle price buttons reliably (prevents hash jump)
     function wirePriceButtons(){
       // Attribute selector needs escaping for colon
-      const priceBtns = document.querySelectorAll('[data-ms-price\\:add]');
+     const priceBtns = document.querySelectorAll('[data-ms-price\\:add]:not([data-ms-action])');
       priceBtns.forEach(btn=>{
         btn.addEventListener('click', async (e)=>{
           e.preventDefault();
