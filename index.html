@@ -248,13 +248,17 @@
     line-height:inherit;
     letter-spacing:inherit;
   }
-  .cta-row .btn { cursor: pointer; }
+  .cta-row .btn {
+  cursor: pointer;
+}
 </style>
 
-<!-- ✅ Memberstack v1 Webflow package -->
-<script data-memberstack-app="app_cmervlzlv00070wtm9ptvetm4"
-        src="https://static.memberstack.com/scripts/v1/memberstack.js"
-        type="text/javascript"></script>
+<!-- Memberstack webflow package -->
+<script
+  src="https://static.memberstack.com/scripts/v1/memberstack.js"
+  data-memberstack-app="app_cmervlzlv00070wtm9ptvetm4"
+  data-memberstack-use-cookies="true">
+</script>
 </head>
 
 <body class="ddp-page">
@@ -281,15 +285,17 @@
       <p class="h-sub">We capture every issuance, match to the official daily high, and surface a bias-corrected <b>nowcast</b> that improves as the day evolves.</p>
       
       <div class="cta-row">
-  <!-- Explore CTA --> 
-<a class="btn btn-primary"
-   data-ms-membership="prc_monthly-plan-wbc030k,prc_yearly-qfd03vv"
-   data-ms-modal="signup"
-   data-ms-redirect="https://waheedweather.dewdropventures.com/"
-   style="cursor:pointer;">
-  Explore the live log
-</a>
-
+        <!-- Explore (auth-gated) -->
+        <a class="btn btn-primary"
+           href="#"
+           id="cta-explore"
+           role="button"
+           aria-label="Explore the live log">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5 12h14M13 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Explore the live log
+        </a>
 
         <!-- Why it’s different -->
         <a class="btn btn-ghost"
@@ -305,33 +311,36 @@
     </div>
 
     <!-- product mock (with IDs) -->
-    <div class="mock" aria-label="Product preview">
-      <div class="frame">
-        <div class="bar" aria-hidden="true"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
-        <h4>Central Park, NY — Today</h4>
-        <div class="kpis">
-          <div class="kpi">
-            <h5>Latest forecast</h5>
-            <div class="val" id="v-latest">—</div>
-            <div class="muted"><b>Today’s Forecasts</b> <span class="badge-members">MEMBERS</span></div>
-            <div class="muted blurred" id="list-today-issuances">—</div>
+
+
+      <!-- product mock (with IDs) -->
+      <div class="mock" aria-label="Product preview">
+        <div class="frame">
+          <div class="bar" aria-hidden="true"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+          <h4>Central Park, NY — Today</h4>
+          <div class="kpis">
+            <div class="kpi">
+              <h5>Latest forecast</h5>
+              <div class="val" id="v-latest">—</div>
+              <div class="muted"><b>Today’s Forecasts</b> <span class="badge-members">MEMBERS</span></div>
+              <div class="muted blurred" id="list-today-issuances">—</div>
+            </div>
+            <div class="kpi">
+              <h5>Nowcast <span class="badge-members">MEMBERS</span></h5>
+              <div class="val blurred" id="v-nowcast-today">—</div>
+              <div class="muted blurred" id="v-nowcast-today-meta">—</div>
+            </div>
           </div>
-          <div class="kpi">
-            <h5>Nowcast <span class="badge-members">MEMBERS</span></h5>
-            <div class="val blurred" id="v-nowcast-today">—</div>
-            <div class="muted blurred" id="v-nowcast-today-meta">—</div>
-          </div>
+          <svg class="spark" viewBox="0 0 320 80" aria-hidden="true">
+            <defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#2aa6ff" stop-opacity=".28"/><stop offset="100%" stop-color="#2aa6ff" stop-opacity="0"/></linearGradient></defs>
+            <path d="M8 60L48 58L88 50L128 36L168 42L208 48L248 52L288 54" stroke="#2aa6ff" stroke-width="3" fill="none"/>
+            <path d="M8 60L48 58L88 50L128 36L168 42L208 48L248 52L288 54L288 80L8 80Z" fill="url(#sg)"/>
+          </svg>
         </div>
-        <svg class="spark" viewBox="0 0 320 80" aria-hidden="true">
-          <defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#2aa6ff" stop-opacity=".28"/><stop offset="100%" stop-color="#2aa6ff" stop-opacity="0"/></linearGradient></defs>
-          <path d="M8 60L48 58L88 50L128 36L168 42L208 48L248 52L288 54" stroke="#2aa6ff" stroke-width="3" fill="none"/>
-          <path d="M8 60L48 58L88 50L128 36L168 42L208 48L248 52L288 54L288 80L8 80Z" fill="url(#sg)"/>
-        </svg>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
   <!-- outcomes -->
   <section id="outcomes" class="section container" aria-labelledby="outcomes-title">
@@ -484,24 +493,23 @@
       <p style="margin:0; font-weight:800; font-size:clamp(16px,3.6vw,18px)" id="cta-title">Unlock the full intraday trail — accuracy rankings, nowcasts, and more.</p>
       <p style="color:#cfe2ff; margin-top:8px">Only <b>$3/month</b> or <b>$30/year</b>. Get in early.</p>
       <div class="cta-row" style="justify-content:center">
-        <!-- Pricing CTAs: Memberstack signup → Stripe checkout -->
-  <a class="btn btn-primary"
-   href="https://waheedweather.dewdropventures.com"
-   data-ms-price:add="prc_monthly-plan-wbc030k"
-   data-ms-checkout="true"
-   data-ms-modal="signup">
+    
+<!-- Pricing CTAs: Memberstack signup → Stripe checkout -->
+<!-- $3/mo -->
+<a class="btn btn-primary"
+   href="#"
+   data-ms-modal="signup"
+   data-ms-price:add="prc_monthly-plan-wbc030k">
   Start for $3/month
 </a>
-  
-    <a class="btn btn-primary"
-      href="https://waheedweather.dewdropventures.com"
-       data-ms-price:add="prc_yearly-qfd03vv"
-       data-ms-checkout="true"
-       data-ms-modal="signup"
-       data-ms-redirect="https://waheedweather.dewdropventures.com/">
-      Start for $30/year
-    </a>
 
+<!-- $30/yr -->
+<a class="btn btn-primary"
+   href="#"
+   data-ms-modal="signup"
+   data-ms-price:add="prc_yearly-qfd03vv">
+  Start for $30/year
+</a>
       </div>
     </div>
   </section>
@@ -664,12 +672,77 @@
   })();
   </script>
 
+<!-- ===== Robust CTA wiring (top + bottom) ===== -->
+<script>
+(function(){
+  const DASHBOARD = "https://waheedweather.dewdropventures.com/";
+  const REQUIRED_PRICE_IDS = [
+    "prc_monthly-plan-wbc030k",
+    "prc_yearly-qfd03vv"
+  ];
+
+  function waitForMS(tries=60, delay=100){
+    return new Promise(resolve=>{
+      (function loop(n){
+        const ms = window.$memberstackDom;
+        if (ms && typeof ms.getCurrentMember==="function" && typeof ms.addPrice==="function") return resolve(ms);
+        if (n<=0) return resolve(null);
+        setTimeout(()=>loop(n-1), delay);
+      })(tries);
+    });
+  }
+
+  // --- Explore CTA: require active subscription
+  const exploreBtn = document.getElementById("cta-explore");
+  if (exploreBtn){
+    exploreBtn.addEventListener("click", async (e)=>{
+      e.preventDefault();
+      const ms = await waitForMS();
+      if(!ms){ location.href = DASHBOARD; return; }
+
+      try{
+        const { data: member } = await ms.getCurrentMember();
+        const hasActiveSub = !!member?.planConnections?.some(pc =>
+          REQUIRED_PRICE_IDS.includes(pc.priceId) && pc.status === "active"
+        );
+
+        if (hasActiveSub) {
+          location.href = DASHBOARD;
+        } else {
+          await ms.openModal("SIGNUP");
+        }
+      } catch {
+        location.href = DASHBOARD;
+      }
+    });
+  }
+
+  // --- Price CTAs: reliably trigger signup + Stripe checkout
+  function wirePriceButtons(){
+    const priceBtns = document.querySelectorAll('[data-ms-price\\:add]:not([data-ms-action])');
+    priceBtns.forEach(btn=>{
+      btn.addEventListener('click', async (e)=>{
+        e.preventDefault();
+        const priceId = btn.getAttribute('data-ms-price:add');
+        const ms = await waitForMS();
+        if(!ms){ location.href = DASHBOARD; return; }
+        try{
+          await ms.addPrice(priceId);
+        }catch{
+          try { await ms.openModal("SIGNUP"); } catch { location.href = DASHBOARD; }
+        }
+      }, { passive:false });
+    });
+  }
+
+  wirePriceButtons();
+  window.addEventListener('msready', wirePriceButtons);
+})();
+</script>
   <noscript>
     <div style="max-width:1140px;margin:16px auto;padding:12px 16px;background:#331c1c;border:1px solid #7f3b3b;border-radius:8px;color:#ffd9d9">
       JavaScript is required to load live data and handle sign-up/checkout.
     </div>
   </noscript>
- <a data-ms-modal="login" style="cursor:pointer;">Test Login Modal</a>
-
 </body>
 </html>
