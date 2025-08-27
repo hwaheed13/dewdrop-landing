@@ -251,22 +251,12 @@
   .cta-row .btn { cursor: pointer; }
 </style>
 
-<!-- ✅ Memberstack 2.0 DOM/Webflow package -->
-<script
-  data-memberstack-app="app_cmervlzlv00070wtm9ptvetm4"
-  src="https://static.memberstack.com/scripts/memberstack.js">
-</script>
+<!-- ✅ Memberstack v1 Webflow package -->
+<script data-memberstack-app="app_cmervlzlv00070wtm9ptvetm4"
+        src="https://static.memberstack.com/scripts/v1/memberstack.js"
+        type="text/javascript"></script>
 
-<!-- Auto-close modal + redirect after login/signup -->
-<script>
-(async () => {
-  const ms = await window.$memberstackDom;  // resolves when v2 is ready
-  if (!ms) return;
-  const DASHBOARD = "https://waheedweather.dewdropventures.com/";
-  const go = () => { ms.hideModal?.(); location.href = DASHBOARD; };
-  ms.on?.("member:login", go);
-  ms.on?.("member:signup", go);
-})();
+
 </script>
 </head>
 
@@ -295,16 +285,19 @@
       
       <div class="cta-row">
         <!-- Explore (auth-gated) -->
-        <a class="btn btn-primary"
-           href="#"
-           id="cta-explore"
-           role="button"
-           aria-label="Explore the live log">
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M5 12h14M13 5l7 7-7 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          Explore the live log
-        </a>
+      <a class="btn btn-primary"
+   href="https://waheedweather.dewdropventures.com/"
+   role="button"
+   aria-label="Explore the live log"
+   data-ms-membership="prc_monthly-plan-wbc030k,prc_yearly-qfd03vv">
+  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <path d="M5 12h14M13 5l7 7-7 7"
+          stroke="white" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  Explore the live log
+</a>
+
 
         <!-- Why it’s different -->
         <a class="btn btn-ghost"
@@ -500,21 +493,21 @@
       <p style="color:#cfe2ff; margin-top:8px">Only <b>$3/month</b> or <b>$30/year</b>. Get in early.</p>
       <div class="cta-row" style="justify-content:center">
         <!-- Pricing CTAs: Memberstack signup → Stripe checkout -->
-        <a class="btn btn-primary"
-           href="#"
-           data-ms-price:add="prc_monthly-plan-wbc030k"
-           data-ms-checkout="true"
-           data-ms-modal="signup">
-          Start for $3/month
-        </a>
-
-        <a class="btn btn-primary"
-           href="#"
-           data-ms-price:add="prc_yearly-qfd03vv"
-           data-ms-checkout="true"
-           data-ms-modal="signup">
-          Start for $30/year
-        </a>
+    <a class="btn btn-primary"
+       href="#"
+       data-ms-price:add="prc_monthly-plan-wbc030k"
+       data-ms-checkout="true"
+       data-ms-modal="signup">
+      Start for $3/month
+    </a>
+    
+    <a class="btn btn-primary"
+       href="#"
+       data-ms-price:add="prc_yearly-qfd03vv"
+       data-ms-checkout="true"
+       data-ms-modal="signup">
+      Start for $30/year
+    </a>
       </div>
     </div>
   </section>
@@ -674,56 +667,6 @@
 
     bootstrap();
     // setInterval(bootstrap, 5*60*1000);
-  })();
-  </script>
-
-  <!-- ===== Explore CTA (require subscription) ===== -->
-  <script>
-  (function(){
-    const DASHBOARD = "https://waheedweather.dewdropventures.com/";
-    const REQUIRED_PRICE_IDS = [
-      "prc_monthly-plan-wbc030k",
-      "prc_yearly-qfd03vv"
-    ];
-
-    // v2-aware wait helper
-    function waitForMS(tries=60, delay=100){
-      return new Promise(resolve=>{
-        (async function loop(n){
-          try {
-            const ms = await window.$memberstackDom; // resolves when ready
-            if (ms && typeof ms.getCurrentMember === "function") return resolve(ms);
-          } catch {}
-          if (n <= 0) return resolve(null);
-          setTimeout(()=>loop(n-1), delay);
-        })(tries);
-      });
-    }
-
-    // Explore CTA
-    const exploreBtn = document.getElementById("cta-explore");
-    if (exploreBtn){
-      exploreBtn.addEventListener("click", async (e)=>{
-        e.preventDefault();
-        const ms = await waitForMS();
-        if (!ms) { location.href = DASHBOARD; return; }
-
-        try {
-          const { data: member } = await ms.getCurrentMember();
-          const hasActiveSub = !!member?.planConnections?.some(pc =>
-            REQUIRED_PRICE_IDS.includes(pc.priceId) && pc.status === "active"
-          );
-
-          if (hasActiveSub) {
-            location.href = DASHBOARD;   // already subscribed
-          } else {
-            await ms.openModal("SIGNUP"); // trigger signup/checkout
-          }
-        } catch {
-          location.href = DASHBOARD;     // fallback
-        }
-      });
-    }
   })();
   </script>
 
