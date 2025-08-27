@@ -248,16 +248,16 @@
     line-height:inherit;
     letter-spacing:inherit;
   }
-  .cta-row .btn { cursor: pointer; }
+  .cta-row .btn {
+  cursor: pointer;
+}
 </style>
 
-<!-- Memberstack v2 + root-domain cookies -->
-<script>
-  window.memberstackConfig = { useCookies: true, setCookieOnRootDomain: true };
-</script>
+<!-- Memberstack webflow package -->
 <script
-  src="https://static.memberstack.com/scripts/v2/memberstack.js"
-  data-memberstack-app="app_cmervlzlv00070wtm9ptvetm4">
+  src="https://static.memberstack.com/scripts/v1/memberstack.js"
+  data-memberstack-app="app_cmervlzlv00070wtm9ptvetm4"
+  data-memberstack-use-cookies="true">
 </script>
 </head>
 
@@ -310,34 +310,37 @@
       </div>
     </div>
 
-    <!-- product mock -->
-    <div class="mock" aria-label="Product preview">
-      <div class="frame">
-        <div class="bar" aria-hidden="true"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
-        <h4>Central Park, NY — Today</h4>
-        <div class="kpis">
-          <div class="kpi">
-            <h5>Latest forecast</h5>
-            <div class="val" id="v-latest">—</div>
-            <div class="muted"><b>Today’s Forecasts</b> <span class="badge-members">MEMBERS</span></div>
-            <div class="muted blurred" id="list-today-issuances">—</div>
+    <!-- product mock (with IDs) -->
+
+
+      <!-- product mock (with IDs) -->
+      <div class="mock" aria-label="Product preview">
+        <div class="frame">
+          <div class="bar" aria-hidden="true"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+          <h4>Central Park, NY — Today</h4>
+          <div class="kpis">
+            <div class="kpi">
+              <h5>Latest forecast</h5>
+              <div class="val" id="v-latest">—</div>
+              <div class="muted"><b>Today’s Forecasts</b> <span class="badge-members">MEMBERS</span></div>
+              <div class="muted blurred" id="list-today-issuances">—</div>
+            </div>
+            <div class="kpi">
+              <h5>Nowcast <span class="badge-members">MEMBERS</span></h5>
+              <div class="val blurred" id="v-nowcast-today">—</div>
+              <div class="muted blurred" id="v-nowcast-today-meta">—</div>
+            </div>
           </div>
-          <div class="kpi">
-            <h5>Nowcast <span class="badge-members">MEMBERS</span></h5>
-            <div class="val blurred" id="v-nowcast-today">—</div>
-            <div class="muted blurred" id="v-nowcast-today-meta">—</div>
-          </div>
+          <svg class="spark" viewBox="0 0 320 80" aria-hidden="true">
+            <defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#2aa6ff" stop-opacity=".28"/><stop offset="100%" stop-color="#2aa6ff" stop-opacity="0"/></linearGradient></defs>
+            <path d="M8 60L48 58L88 50L128 36L168 42L208 48L248 52L288 54" stroke="#2aa6ff" stroke-width="3" fill="none"/>
+            <path d="M8 60L48 58L88 50L128 36L168 42L208 48L248 52L288 54L288 80L8 80Z" fill="url(#sg)"/>
+          </svg>
         </div>
-        <svg class="spark" viewBox="0 0 320 80" aria-hidden="true">
-          <defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#2aa6ff" stop-opacity=".28"/><stop offset="100%" stop-color="#2aa6ff" stop-opacity="0"/></linearGradient></defs>
-          <path d="M8 60L48 58L88 50L128 36L168 42L208 48L248 52L288 54" stroke="#2aa6ff" stroke-width="3" fill="none"/>
-          <path d="M8 60L48 58L88 50L128 36L168 42L208 48L248 52L288 54L288 80L8 80Z" fill="url(#sg)"/>
-        </svg>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
   <!-- outcomes -->
   <section id="outcomes" class="section container" aria-labelledby="outcomes-title">
@@ -491,23 +494,23 @@
       <p style="color:#cfe2ff; margin-top:8px">Only <b>$3/month</b> or <b>$30/year</b>. Get in early.</p>
       <div class="cta-row" style="justify-content:center">
     
-        <!-- Pricing CTAs: Memberstack signup → Stripe checkout -->
-        <!-- $3/mo -->
-        <a id="buy-monthly" class="btn btn-primary"
-           href="#!"
-           data-ms-price:add="prc_monthly-plan-wbc030k"
-           data-ms-redirect="https://waheedweather.dewdropventures.com/">
-          Start for $3/month
-        </a>
-        
-        <!-- $30/yr -->
-        <a id="buy-yearly" class="btn btn-primary"
-           href="#!"
-           data-ms-price:add="prc_yearly-qfd03vv"
-           data-ms-redirect="https://waheedweather.dewdropventures.com/">
-          Start for $30/year
-        </a>
+<!-- Pricing CTAs: Memberstack signup → Stripe checkout -->
+<!-- $3/mo -->
+<a class="btn btn-primary"
+   href="#"
+   data-ms-price:add="prc_monthly-plan-wbc030k"
+   data-ms-checkout="true"
+   data-ms-modal="signup">
+  Start for $3/month
+</a>
 
+<a class="btn btn-primary"
+   href="#"
+   data-ms-price:add="prc_yearly-qfd03vv"
+   data-ms-checkout="true"
+   data-ms-modal="signup">
+  Start for $30/year
+</a>
       </div>
     </div>
   </section>
@@ -670,22 +673,8 @@
   })();
   </script>
 
-<!-- ===== Memberstack helpers (define once) ===== -->
-<script>
-  // v2: wait until key methods exist
-  window.waitForMS = function(tries = 60, delay = 100) {
-    return new Promise(resolve => {
-      (function loop(n){
-        const ms = window.$memberstackDom;
-        if (ms && (typeof ms.getCurrentMember === "function" || typeof ms.purchasePlansWithCheckout === "function")) return resolve(ms);
-        if (n <= 0) return resolve(null);
-        setTimeout(() => loop(n - 1), delay);
-      })(tries);
-    });
-  };
-</script>
 
-<!-- ===== Explore CTA (requires active subscription) ===== -->
+<!-- ===== Explore CTA (require subscription) ===== -->
 <script>
 (function(){
   const DASHBOARD = "https://waheedweather.dewdropventures.com/";
@@ -694,63 +683,44 @@
     "prc_yearly-qfd03vv"
   ];
 
+  function waitForMS(tries=60, delay=100){
+    return new Promise(resolve=>{
+      (function loop(n){
+        const ms = window.$memberstackDom;
+        if (ms && typeof ms.getCurrentMember === "function") return resolve(ms);
+        if (n <= 0) return resolve(null);
+        setTimeout(()=>loop(n-1), delay);
+      })(tries);
+    });
+  }
+
+  // Explore CTA
   const exploreBtn = document.getElementById("cta-explore");
-  if (!exploreBtn) return;
-
-  exploreBtn.addEventListener("click", async (e)=>{
-    e.preventDefault();
-    const ms = await window.waitForMS();
-    if (!ms) { location.href = DASHBOARD; return; }
-
-    try {
-      const { data: member } = await ms.getCurrentMember();
-      const hasActiveSub = !!member?.planConnections?.some(pc =>
-        REQUIRED_PRICE_IDS.includes(pc.priceId) && pc.status === "active"
-      );
-      if (hasActiveSub) {
-        location.href = DASHBOARD;
-      } else {
-        await ms.openModal("SIGNUP"); // v2 still supports this
-      }
-    } catch {
-      location.href = DASHBOARD; // fallback
-    }
-  });
-})();
-</script>
-
-<!-- ===== Pricing CTAs (Stripe checkout via v2) ===== -->
-<script>
-(async function attachCheckout(){
-  const ms = await window.waitForMS();
-  const links = [document.getElementById('buy-monthly'), document.getElementById('buy-yearly')].filter(Boolean);
-  if (!links.length) return;
-
-  links.forEach(link => {
-    link.addEventListener('click', async (e) => {
+  if (exploreBtn){
+    exploreBtn.addEventListener("click", async (e)=>{
       e.preventDefault();
-
-      const m = await window.waitForMS();
-      const priceId    = link.getAttribute('data-ms-price:add');
-      const successUrl = link.getAttribute('data-ms-redirect') || window.location.href;
-
-      if (!m || !priceId) { location.href = successUrl; return; }
+      const ms = await waitForMS();
+      if (!ms) { location.href = DASHBOARD; return; }
 
       try {
-        // v2 method:
-        await m.purchasePlansWithCheckout({
-          priceId,
-          successUrl,
-          cancelUrl: window.location.href
-        });
+        const { data: member } = await ms.getCurrentMember();
+        const hasActiveSub = !!member?.planConnections?.some(pc =>
+          REQUIRED_PRICE_IDS.includes(pc.priceId) && pc.status === "active"
+        );
+
+        if (hasActiveSub) {
+          location.href = DASHBOARD;   // already subscribed
+        } else {
+          await ms.openModal("SIGNUP"); // trigger signup/checkout
+        }
       } catch {
-        // If checkout can't open (e.g. not logged in), open signup
-        try { await m.openModal('SIGNUP'); } catch {}
+        location.href = DASHBOARD;     // fallback
       }
-    }, { capture: true });
-  });
+    });
+  }
 })();
 </script>
+
 
   <noscript>
     <div style="max-width:1140px;margin:16px auto;padding:12px 16px;background:#331c1c;border:1px solid #7f3b3b;border-radius:8px;color:#ffd9d9">
