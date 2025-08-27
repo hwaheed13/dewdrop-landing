@@ -248,16 +248,25 @@
     line-height:inherit;
     letter-spacing:inherit;
   }
-  .cta-row .btn {
-  cursor: pointer;
-}
+  .cta-row .btn { cursor: pointer; }
 </style>
 
-<!-- Memberstack webflow package -->
+<!-- ✅ Memberstack 2.0 DOM/Webflow package -->
 <script
-  src="https://static.memberstack.com/scripts/v1/memberstack.js"
   data-memberstack-app="app_cmervlzlv00070wtm9ptvetm4"
-  data-memberstack-use-cookies="true">
+  src="https://static.memberstack.com/scripts/memberstack.js">
+</script>
+
+<!-- Auto-close modal + redirect after login/signup -->
+<script>
+(async () => {
+  const ms = await window.$memberstackDom;  // resolves when v2 is ready
+  if (!ms) return;
+  const DASHBOARD = "https://waheedweather.dewdropventures.com/";
+  const go = () => { ms.hideModal?.(); location.href = DASHBOARD; };
+  ms.on?.("member:login", go);
+  ms.on?.("member:signup", go);
+})();
 </script>
 </head>
 
@@ -311,36 +320,33 @@
     </div>
 
     <!-- product mock (with IDs) -->
-
-
-      <!-- product mock (with IDs) -->
-      <div class="mock" aria-label="Product preview">
-        <div class="frame">
-          <div class="bar" aria-hidden="true"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
-          <h4>Central Park, NY — Today</h4>
-          <div class="kpis">
-            <div class="kpi">
-              <h5>Latest forecast</h5>
-              <div class="val" id="v-latest">—</div>
-              <div class="muted"><b>Today’s Forecasts</b> <span class="badge-members">MEMBERS</span></div>
-              <div class="muted blurred" id="list-today-issuances">—</div>
-            </div>
-            <div class="kpi">
-              <h5>Nowcast <span class="badge-members">MEMBERS</span></h5>
-              <div class="val blurred" id="v-nowcast-today">—</div>
-              <div class="muted blurred" id="v-nowcast-today-meta">—</div>
-            </div>
+    <div class="mock" aria-label="Product preview">
+      <div class="frame">
+        <div class="bar" aria-hidden="true"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+        <h4>Central Park, NY — Today</h4>
+        <div class="kpis">
+          <div class="kpi">
+            <h5>Latest forecast</h5>
+            <div class="val" id="v-latest">—</div>
+            <div class="muted"><b>Today’s Forecasts</b> <span class="badge-members">MEMBERS</span></div>
+            <div class="muted blurred" id="list-today-issuances">—</div>
           </div>
-          <svg class="spark" viewBox="0 0 320 80" aria-hidden="true">
-            <defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#2aa6ff" stop-opacity=".28"/><stop offset="100%" stop-color="#2aa6ff" stop-opacity="0"/></linearGradient></defs>
-            <path d="M8 60L48 58L88 50L128 36L168 42L208 48L248 52L288 54" stroke="#2aa6ff" stroke-width="3" fill="none"/>
-            <path d="M8 60L48 58L88 50L128 36L168 42L208 48L248 52L288 54L288 80L8 80Z" fill="url(#sg)"/>
-          </svg>
+          <div class="kpi">
+            <h5>Nowcast <span class="badge-members">MEMBERS</span></h5>
+            <div class="val blurred" id="v-nowcast-today">—</div>
+            <div class="muted blurred" id="v-nowcast-today-meta">—</div>
+          </div>
         </div>
+        <svg class="spark" viewBox="0 0 320 80" aria-hidden="true">
+          <defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#2aa6ff" stop-opacity=".28"/><stop offset="100%" stop-color="#2aa6ff" stop-opacity="0"/></linearGradient></defs>
+          <path d="M8 60L48 58L88 50L128 36L168 42L208 48L248 52L288 54" stroke="#2aa6ff" stroke-width="3" fill="none"/>
+          <path d="M8 60L48 58L88 50L128 36L168 42L208 48L248 52L288 54L288 80L8 80Z" fill="url(#sg)"/>
+        </svg>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
   <!-- outcomes -->
   <section id="outcomes" class="section container" aria-labelledby="outcomes-title">
@@ -493,24 +499,22 @@
       <p style="margin:0; font-weight:800; font-size:clamp(16px,3.6vw,18px)" id="cta-title">Unlock the full intraday trail — accuracy rankings, nowcasts, and more.</p>
       <p style="color:#cfe2ff; margin-top:8px">Only <b>$3/month</b> or <b>$30/year</b>. Get in early.</p>
       <div class="cta-row" style="justify-content:center">
-    
-<!-- Pricing CTAs: Memberstack signup → Stripe checkout -->
-<!-- $3/mo -->
-<a class="btn btn-primary"
-   href="#"
-   data-ms-price:add="prc_monthly-plan-wbc030k"
-   data-ms-checkout="true"
-   data-ms-modal="signup">
-  Start for $3/month
-</a>
+        <!-- Pricing CTAs: Memberstack signup → Stripe checkout -->
+        <a class="btn btn-primary"
+           href="#"
+           data-ms-price:add="prc_monthly-plan-wbc030k"
+           data-ms-checkout="true"
+           data-ms-modal="signup">
+          Start for $3/month
+        </a>
 
-<a class="btn btn-primary"
-   href="#"
-   data-ms-price:add="prc_yearly-qfd03vv"
-   data-ms-checkout="true"
-   data-ms-modal="signup">
-  Start for $30/year
-</a>
+        <a class="btn btn-primary"
+           href="#"
+           data-ms-price:add="prc_yearly-qfd03vv"
+           data-ms-checkout="true"
+           data-ms-modal="signup">
+          Start for $30/year
+        </a>
       </div>
     </div>
   </section>
@@ -673,54 +677,55 @@
   })();
   </script>
 
+  <!-- ===== Explore CTA (require subscription) ===== -->
+  <script>
+  (function(){
+    const DASHBOARD = "https://waheedweather.dewdropventures.com/";
+    const REQUIRED_PRICE_IDS = [
+      "prc_monthly-plan-wbc030k",
+      "prc_yearly-qfd03vv"
+    ];
 
-<!-- ===== Explore CTA (require subscription) ===== -->
-<script>
-(function(){
-  const DASHBOARD = "https://waheedweather.dewdropventures.com/";
-  const REQUIRED_PRICE_IDS = [
-    "prc_monthly-plan-wbc030k",
-    "prc_yearly-qfd03vv"
-  ];
+    // v2-aware wait helper
+    function waitForMS(tries=60, delay=100){
+      return new Promise(resolve=>{
+        (async function loop(n){
+          try {
+            const ms = await window.$memberstackDom; // resolves when ready
+            if (ms && typeof ms.getCurrentMember === "function") return resolve(ms);
+          } catch {}
+          if (n <= 0) return resolve(null);
+          setTimeout(()=>loop(n-1), delay);
+        })(tries);
+      });
+    }
 
-  function waitForMS(tries=60, delay=100){
-    return new Promise(resolve=>{
-      (function loop(n){
-        const ms = window.$memberstackDom;
-        if (ms && typeof ms.getCurrentMember === "function") return resolve(ms);
-        if (n <= 0) return resolve(null);
-        setTimeout(()=>loop(n-1), delay);
-      })(tries);
-    });
-  }
+    // Explore CTA
+    const exploreBtn = document.getElementById("cta-explore");
+    if (exploreBtn){
+      exploreBtn.addEventListener("click", async (e)=>{
+        e.preventDefault();
+        const ms = await waitForMS();
+        if (!ms) { location.href = DASHBOARD; return; }
 
-  // Explore CTA
-  const exploreBtn = document.getElementById("cta-explore");
-  if (exploreBtn){
-    exploreBtn.addEventListener("click", async (e)=>{
-      e.preventDefault();
-      const ms = await waitForMS();
-      if (!ms) { location.href = DASHBOARD; return; }
+        try {
+          const { data: member } = await ms.getCurrentMember();
+          const hasActiveSub = !!member?.planConnections?.some(pc =>
+            REQUIRED_PRICE_IDS.includes(pc.priceId) && pc.status === "active"
+          );
 
-      try {
-        const { data: member } = await ms.getCurrentMember();
-        const hasActiveSub = !!member?.planConnections?.some(pc =>
-          REQUIRED_PRICE_IDS.includes(pc.priceId) && pc.status === "active"
-        );
-
-        if (hasActiveSub) {
-          location.href = DASHBOARD;   // already subscribed
-        } else {
-          await ms.openModal("SIGNUP"); // trigger signup/checkout
+          if (hasActiveSub) {
+            location.href = DASHBOARD;   // already subscribed
+          } else {
+            await ms.openModal("SIGNUP"); // trigger signup/checkout
+          }
+        } catch {
+          location.href = DASHBOARD;     // fallback
         }
-      } catch {
-        location.href = DASHBOARD;     // fallback
-      }
-    });
-  }
-})();
-</script>
-
+      });
+    }
+  })();
+  </script>
 
   <noscript>
     <div style="max-width:1140px;margin:16px auto;padding:12px 16px;background:#331c1c;border:1px solid #7f3b3b;border-radius:8px;color:#ffd9d9">
