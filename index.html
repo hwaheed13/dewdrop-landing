@@ -281,7 +281,7 @@
   <div class="hero-grid">
     <div>
       <div class="h-eyebrow"><span class="tick" aria-hidden="true"></span> Forecast history you can audit</div>
-      <h1 class="h-title">The intraday forecast log NWS doesn’t keep.</h1>
+      <h1 class="h-title">The intraday forecast log NWS doesn't keep.</h1>
       <p class="h-sub">We capture every issuance, match to the official daily high, and surface a bias-corrected <b>nowcast</b> that improves as the day evolves.</p>
       
       <div class="cta-row">
@@ -297,15 +297,15 @@
           Explore the live log
         </a>
 
-        <!-- Why it’s different -->
+        <!-- Why it's different -->
         <a class="btn btn-ghost"
            href="#outcomes"
            role="button"
-           aria-label="Why it’s different">
+           aria-label="Why it's different">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="M12 5v14M5 12h14" stroke="#cfe2ff" stroke-width="2" stroke-linecap="round"/>
           </svg>
-          Why it’s different
+          Why it's different
         </a>
       </div>
     </div>
@@ -322,7 +322,7 @@
             <div class="kpi">
               <h5>Latest forecast</h5>
               <div class="val" id="v-latest">—</div>
-              <div class="muted"><b>Today’s Forecasts</b> <span class="badge-members">MEMBERS</span></div>
+              <div class="muted"><b>Today's Forecasts</b> <span class="badge-members">MEMBERS</span></div>
               <div class="muted blurred" id="list-today-issuances">—</div>
             </div>
             <div class="kpi">
@@ -368,7 +368,7 @@
         </div>
         <div>
           <h3>Higher right-first-try picks</h3>
-          <p>Outcome-based scoring shows which issuance historically nails the day’s high.</p>
+          <p>Outcome-based scoring shows which issuance historically nails the day's high.</p>
         </div>
       </article>
 
@@ -517,7 +517,7 @@
   <section class="section container">
     <h2 class="sh">Who built this?</h2>
     <div class="card" style="max-width:980px; margin:0 auto">
-      <p><b>Hyder</b> — data guy who traded Kalshi’s NYC daily high. I wanted to see every update, test accuracy, and (eventually) predict the high in advance. Built for me; shared because it’s useful — and fun.</p>
+      <p><b>Hyder</b> — data guy who traded Kalshi's NYC daily high. I wanted to see every update, test accuracy, and (eventually) predict the high in advance. Built for me; shared because it's useful — and fun.</p>
     </div>
   </section>
 
@@ -672,7 +672,7 @@
   })();
   </script>
 
-<!-- ===== Robust CTA wiring (top + bottom) ===== -->
+<!-- ===== Updated CTA Logic ===== -->
 <script>
 (function(){
   const DASHBOARD = "https://waheedweather.dewdropventures.com/";
@@ -681,7 +681,7 @@
     "prc_yearly-qfd03vv"
   ];
 
-  function waitForMS(tries=60, delay=100){
+  function waitForMS(tries=30, delay=50){
     return new Promise(resolve=>{
       (function loop(n){
         const ms = window.$memberstackDom;
@@ -692,51 +692,142 @@
     });
   }
 
-  // --- Explore CTA: require active subscription
+  // Check if user has active subscription (with caching to avoid repeated calls)
+  let membershipCheckCache = null;
+  let membershipCheckTime = 0;
+  const CACHE_DURATION = 30000; // 30 seconds
+
+  async function hasActiveSubscription() {
+    const now = Date.now();
+    if (membershipCheckCache !== null && (now - membershipCheckTime) < CACHE_DURATION) {
+      return membershipCheckCache;
+    }
+
+    const ms = await waitForMS();
+    if (!ms) {
+      membershipCheckCache = false;
+      membershipCheckTime = now;
+      return false;
+    }
+
+    try {
+      const { data: member } = await ms.getCurrentMember();
+      const hasActiveSub = !!member?.planConnections?.some(pc =>
+        REQUIRED_PRICE_IDS.includes(pc.priceId) && pc.status === "active"
+      );
+      
+      membershipCheckCache = hasActiveSub;
+      membershipCheckTime = now;
+      return hasActiveSub;
+    } catch {
+      membershipCheckCache = false;
+      membershipCheckTime = now;
+      return false;
+    }
+  }
+
+  // --- Explore CTA: Fast response with immediate signup modal for non-subscribers
   const exploreBtn = document.getElementById("cta-explore");
   if (exploreBtn){
     exploreBtn.addEventListener("click", async (e)=>{
       e.preventDefault();
-      const ms = await waitForMS();
-      if(!ms){ location.href = DASHBOARD; return; }
-
-      try{
-        const { data: member } = await ms.getCurrentMember();
-        const hasActiveSub = !!member?.planConnections?.some(pc =>
-          REQUIRED_PRICE_IDS.includes(pc.priceId) && pc.status === "active"
-        );
-
+      
+      // Show immediate feedback
+      const originalText = exploreBtn.innerHTML;
+      exploreBtn.innerHTML = exploreBtn.innerHTML.replace(/Explore.*/, 'Loading...');
+      exploreBtn.style.opacity = '0.7';
+      
+      try {
+        const hasActiveSub = await hasActiveSubscription();
+        
         if (hasActiveSub) {
           location.href = DASHBOARD;
         } else {
-          await ms.openModal("SIGNUP");
+          // Reset button appearance
+          exploreBtn.innerHTML = originalText;
+          exploreBtn.style.opacity = '1';
+          
+          const ms = await waitForMS();
+          if (ms) {
+            try {
+              await ms.openModal("SIGNUP");
+            } catch {
+              location.href = DASHBOARD;
+            }
+          } else {
+            location.href = DASHBOARD;
+          }
         }
       } catch {
+        // Reset button appearance and fallback
+        exploreBtn.innerHTML = originalText;
+        exploreBtn.style.opacity = '1';
         location.href = DASHBOARD;
       }
     });
   }
 
-  // --- Price CTAs: reliably trigger signup + Stripe checkout
+  // --- Price CTAs: Consistent behavior - always show signup modal first
   function wirePriceButtons(){
     const priceBtns = document.querySelectorAll('[data-ms-price\\:add]:not([data-ms-action])');
     priceBtns.forEach(btn=>{
       btn.addEventListener('click', async (e)=>{
         e.preventDefault();
+        
         const priceId = btn.getAttribute('data-ms-price:add');
         const ms = await waitForMS();
-        if(!ms){ location.href = DASHBOARD; return; }
-        try{
-          await ms.addPrice(priceId);
-        }catch{
-          try { await ms.openModal("SIGNUP"); } catch { location.href = DASHBOARD; }
+        
+        if (!ms) {
+          location.href = DASHBOARD;
+          return;
         }
-      }, { passive:false });
+
+        try {
+          // Check if user is already logged in and has active subscription
+          const hasActiveSub = await hasActiveSubscription();
+          
+          if (hasActiveSub) {
+            // Already subscribed, go to dashboard
+            location.href = DASHBOARD;
+            return;
+          }
+
+          // Try to add price (this will trigger signup if not logged in)
+          await ms.addPrice(priceId);
+          
+        } catch (error) {
+          // If addPrice fails, show signup modal
+          try {
+            await ms.openModal("SIGNUP");
+          } catch {
+            // Final fallback
+            location.href = DASHBOARD;
+          }
+        }
+      }, { passive: false });
     });
   }
 
+  // Enhanced modal event handling to prevent unwanted redirects
+  window.addEventListener('msready', () => {
+    wirePriceButtons();
+    
+    // Listen for modal events to handle auto-redirects
+    const ms = window.$memberstackDom;
+    if (ms && typeof ms.on === 'function') {
+      // Prevent auto-redirect when modal is dismissed without action
+      ms.on('MODAL_CLOSED', (data) => {
+        if (data.modal === 'SIGNUP' && !data.success) {
+          // Modal was closed without completing signup
+          // Don't redirect to dashboard
+          console.log('Signup modal closed without completion');
+        }
+      });
+    }
+  });
+
+  // Initial wire-up
   wirePriceButtons();
-  window.addEventListener('msready', wirePriceButtons);
 })();
 </script>
   <noscript>
