@@ -664,7 +664,16 @@
     //   e.preventDefault();
     //   location.href = 'https://waheedweather.dewdropventures.com/';
     // });
-  </script>
+
+    <script type="module">
+  import { createClient } from "https://esm.sh/@supabase/supabase-js";
+
+ const supabase = createClient(
+  "https://ztjtuhkjkqchsiuuvmzs.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp0anR1aGtqa3FjaHNpdXV2bXpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMTUwODIsImV4cCI6MjA3MTg5MTA4Mn0.g7Zq-YbHxBzw732PhVfTf7XGiR080gRndsrzc0YPHfw"
+);
+  window.supabase = supabase; // make it available everywhere
+</script>
 
   <noscript>
     <div style="max-width:1140px;margin:16px auto;padding:12px 16px;background:#331c1c;border:1px solid #7f3b3b;border-radius:8px;color:#ffd9d9">
@@ -673,3 +682,5 @@
   </noscript>
 </body>
 </html>
+
+
