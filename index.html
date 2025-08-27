@@ -498,16 +498,16 @@
 <!-- $3/mo -->
 <a class="btn btn-primary"
    href="#"
-   data-ms-modal="signup"
-   data-ms-price:add="prc_monthly-plan-wbc030k">
+   data-ms-action="signup"
+   data-ms-plan="prc_monthly-plan-wbc030k">
   Start for $3/month
 </a>
 
 <!-- $30/yr -->
 <a class="btn btn-primary"
    href="#"
-   data-ms-modal="signup"
-   data-ms-price:add="prc_yearly-qfd03vv">
+   data-ms-action="signup"
+   data-ms-plan="prc_yearly-qfd03vv">
   Start for $30/year
 </a>
       </div>
@@ -769,12 +769,12 @@
 
   // --- Price CTAs: Consistent behavior - always show signup modal first
   function wirePriceButtons(){
-    const priceBtns = document.querySelectorAll('[data-ms-price\\:add]:not([data-ms-action])');
+    const priceBtns = document.querySelectorAll('[data-ms-plan]');
     priceBtns.forEach(btn=>{
       btn.addEventListener('click', async (e)=>{
         e.preventDefault();
         
-        const priceId = btn.getAttribute('data-ms-price:add');
+        const priceId = btn.getAttribute('data-ms-plan');
         const ms = await waitForMS();
         
         if (!ms) {
@@ -792,15 +792,20 @@
             return;
           }
 
-          // Try to add price (this will trigger signup if not logged in)
-          await ms.addPrice(priceId);
+          // For non-subscribers, try to add the price and trigger checkout
+          try {
+            await ms.addPrice(priceId);
+            // If successful, this should redirect to checkout
+          } catch (addPriceError) {
+            // If addPrice fails, fall back to signup modal
+            await ms.openModal("SIGNUP");
+          }
           
         } catch (error) {
-          // If addPrice fails, show signup modal
+          // Final fallback - show signup modal
           try {
             await ms.openModal("SIGNUP");
           } catch {
-            // Final fallback
             location.href = DASHBOARD;
           }
         }
