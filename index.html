@@ -103,12 +103,18 @@
   .spark{display:block; width:100%; height:80px}
   .badge-members{font-size:10px; font-weight:800; color:#2a3e58; background:#eef5ff; border:1px solid #d7e6fb; border-radius:999px; padding:2px 6px}
 
-  /* Section headers */
-  .section{padding:48px 0 34px}
+  /* Section headers (UPDATED) */
+  .section{padding:40px 0 28px}
+  .section.section--tight{padding-top:20px}
   .sh{
-    margin:0 0 12px; text-align:center; font-weight:900; letter-spacing:.18em; text-transform:uppercase;
-    font-size:clamp(16px,3.6vw,24px);
-    background:linear-gradient(90deg,#9fd1ff, #a8a3ff 50%, #8ff2ca); -webkit-background-clip:text; background-clip:text; color:transparent;
+    margin:0 0 14px;
+    text-align:center;
+    font-weight:900;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-size:clamp(18px,4.2vw,28px);
+    background:linear-gradient(90deg,#9fd1ff, #a8a3ff 50%, #8ff2ca);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
   }
 
   /* Outcomes (light) */
@@ -165,7 +171,7 @@
   footer{border-top:1px solid var(--ring); color:#c1d6f1; text-align:center; padding:28px 16px 40px; font-size:13px; margin-top:48px}
   footer a{color:#9fbeff; text-decoration:underline}
 
-  /* ===== MOBILE POLISH ===== */
+  /* ===== MOBILE POLISH (UPDATED) ===== */
   html, body { max-width:100%; overflow-x:hidden; -webkit-text-size-adjust:100%; }
 
   @media (max-width: 900px){
@@ -196,8 +202,12 @@
     .kpi .val{font-size:20px}
     .kpi .muted{font-size:11.5px}
 
-    .card{padding:16px}
-    .val{font-size:clamp(22px, 7.8vw, 28px)}
+    .card{padding:20px}                           /* more breathing room */
+    .out-card p, .muted{font-size:16px}           /* raise supporting text */
+    .val{font-size:clamp(24px,8.4vw,30px)}        /* raise metric min/max */
+
+    .section{padding:34px 0 24px}                 /* tighter section stack */
+    .sh{font-size:clamp(18px,5.4vw,24px); letter-spacing:.1em}
   }
 
   @media (max-width: 560px){
@@ -387,7 +397,7 @@
   </section>
 
   <!-- live preview cards -->
-  <section class="section container" aria-labelledby="demo-title">
+  <section class="section container section--tight" aria-labelledby="demo-title">
     <h2 class="sh" id="demo-title">Demo Preview</h2>
 
     <div class="cards">
