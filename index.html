@@ -486,11 +486,19 @@
   <!-- CTA ribbon -->
   <section class="container" aria-labelledby="cta-title">
     <div class="card" style="margin:40px 0 0; text-align:center">
-      <p style="margin:0; font-weight:800; font-size:clamp(16px,3.6vw,18px)" id="cta-title">Unlock the full intraday trail — accuracy rankings, nowcasts, and more.</p>
+      <p style="margin:0; font-weight:800; font-size:clamp(16px,3.6vw,18px)" id="cta-title">
+        Unlock the full intraday trail — accuracy rankings, nowcasts, and more.
+      </p>
       <p style="color:#cfe2ff; margin-top:8px">Only <b>$3/month</b> or <b>$30/year</b>. Get in early.</p>
+  
       <div class="cta-row" style="justify-content:center">
-       <a href="https://app.dailydewpoint.com/login.html?mode=signup&plan=3">Try for $3</a>
-      <a href="https://app.dailydewpoint.com/login.html?mode=signup&plan=30">Try for $30</a>
+        <!-- no plan during account creation -->
+        <a class="btn btn-primary" href="https://app.dailydewpoint.com/login.html?mode=signup" role="button" aria-label="Sign up free">
+          Sign up free
+        </a>
+        <a class="btn btn-ghost" href="https://app.dailydewpoint.com/login.html?mode=login" role="button" aria-label="Already have an account? Log in">
+          I already have an account
+        </a>
       </div>
     </div>
   </section>
