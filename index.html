@@ -75,21 +75,33 @@
   .chip{font-size:12px; font-weight:800; color:#d2e8ff; padding:7px 10px; border-radius:999px;
         border:1px solid var(--ring); background:rgba(42,166,255,.12)}
 
-  /* Hero */
-  .hero{padding:48px 0}
-  .hero-grid{display:grid; gap:28px; grid-template-columns:1fr}
-  @media (min-width:980px){ .hero-grid{grid-template-columns:1.2fr .9fr; align-items:center} }
-  .h-eyebrow{display:inline-flex; align-items:center; gap:8px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#cfe2ff}
-  .h-eyebrow .tick{width:8px; height:8px; border-radius:50%; background:var(--warn)}
-  .h-title{margin:.1em 0 .2em; font-weight:900; letter-spacing:-.02em; line-height:1.15; font-size:clamp(28px,7vw,56px)}
-  .h-sub{color:var(--muted); font-size:clamp(15px,3.8vw,18px); max-width:48ch}
- .cta-row {
-  display: flex;
-  flex-wrap: wrap;            /* allows wrapping only on very small screens */
-  justify-content: center;    /* keep centered */
-  align-items: center;        /* vertical alignment */
-  gap: 12px;                  /* consistent spacing */
-}
+    /* Hero */
+    .hero{padding:48px 0}
+    .hero-grid{display:grid; gap:28px; grid-template-columns:1fr}
+    @media (min-width:980px){ .hero-grid{grid-template-columns:1.2fr .9fr; align-items:center} }
+    .h-eyebrow{display:inline-flex; align-items:center; gap:8px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#cfe2ff}
+    .h-eyebrow .tick{width:8px; height:8px; border-radius:50%; background:var(--warn)}
+    .h-title{margin:.1em 0 .2em; font-weight:900; letter-spacing:-.02em; line-height:1.15; font-size:clamp(28px,7vw,56px)}
+    .h-sub{color:var(--muted); font-size:clamp(15px,3.8vw,18px); max-width:48ch}
+    
+    /* CTA rows */
+    .cta-row{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      gap:12px;
+    }
+    /* TOP hero row = left-aligned (back to original) */
+    .hero .cta-row{ justify-content:flex-start; }
+    @media (max-width:700px){
+      .hero .cta-row .btn{ flex:1 1 100%; justify-content:center; }
+    }
+    /* Bottom ribbon row = centered */
+    .cta-row--bottom{ justify-content:center; }
+    @media (max-width:700px){
+      .cta-row--bottom .btn{ flex:1 1 100%; justify-content:center; }
+    }
+
   .btn{display:inline-flex; align-items:center; gap:10px; padding:14px 18px; border-radius:14px; font-weight:800; border:1px solid transparent; text-decoration:none}
   .btn[role="button"]{cursor:pointer}
   .btn-primary{background:linear-gradient(135deg,var(--brand),var(--brand-2)); color:#fff; box-shadow:var(--shadow)}
@@ -336,10 +348,10 @@
             <stop offset="0%" stop-color="#2aa6ff" stop-opacity=".28"/><stop offset="100%" stop-color="#2aa6ff" stop-opacity="0"/></linearGradient></defs>
           <path d="M8 60L48 58L88 50L128 36L168 42L208 48L248 52L288 54" stroke="#2aa6ff" stroke-width="3" fill="none"/>
           <path d="M8 60L48 58L88 50L128 36L168 42L208 48L248 52L288 54L288 80L8 80Z" fill="url(#sg)"/>
-        </svg>
+      </svg>
       </div>
-    </div>
-  </div>
+    </div>  <!-- closes inner column -->
+  </div>    <!-- ✅ INSERT THIS: closes .hero-grid -->
 </section>
 
   <!-- outcomes -->
@@ -495,7 +507,7 @@
       </p>
       <p style="color:#cfe2ff; margin-top:8px">Only <b>$3/month</b> or <b>$30/year</b>. Get in early.</p>
 
-    <div class="cta-row" style="justify-content:center">
+   <div class="cta-row cta-row--bottom">
       <!-- NEW: Free trial CTA -->
       <a class="btn btn-ghost" href="https://app.dailydewpoint.com/login.html?mode=signup&prefplan=trial" role="button" aria-label="Start free 3-day trial">
         Try Free for 3 Days
@@ -508,7 +520,7 @@
         Try for $30 Yearly
       </a>
     </div>
-
+   </div>
   </section>
 
   <section class="section container">
