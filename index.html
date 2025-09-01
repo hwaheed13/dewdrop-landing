@@ -83,7 +83,13 @@
   .h-eyebrow .tick{width:8px; height:8px; border-radius:50%; background:var(--warn)}
   .h-title{margin:.1em 0 .2em; font-weight:900; letter-spacing:-.02em; line-height:1.15; font-size:clamp(28px,7vw,56px)}
   .h-sub{color:var(--muted); font-size:clamp(15px,3.8vw,18px); max-width:48ch}
-  .cta-row{display:flex; gap:12px; flex-wrap:wrap; margin-top:18px}
+ .cta-row {
+  display: flex;
+  flex-wrap: wrap;            /* allows wrapping only on very small screens */
+  justify-content: center;    /* keep centered */
+  align-items: center;        /* vertical alignment */
+  gap: 12px;                  /* consistent spacing */
+}
   .btn{display:inline-flex; align-items:center; gap:10px; padding:14px 18px; border-radius:14px; font-weight:800; border:1px solid transparent; text-decoration:none}
   .btn[role="button"]{cursor:pointer}
   .btn-primary{background:linear-gradient(135deg,var(--brand),var(--brand-2)); color:#fff; box-shadow:var(--shadow)}
