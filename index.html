@@ -202,11 +202,11 @@
     .kpi .val{font-size:20px}
     .kpi .muted{font-size:11.5px}
 
-    .card{padding:20px}                           /* more breathing room */
-    .out-card p, .muted{font-size:16px}           /* raise supporting text */
-    .val{font-size:clamp(24px,8.4vw,30px)}        /* raise metric min/max */
+    .card{padding:20px}
+    .out-card p, .muted{font-size:16px}
+    .val{font-size:clamp(24px,8.4vw,30px)}
 
-    .section{padding:34px 0 24px}                 /* tighter section stack */
+    .section{padding:34px 0 24px}
     .sh{font-size:clamp(18px,5.4vw,24px); letter-spacing:.1em}
   }
 
@@ -231,7 +231,7 @@
     .hero.container{ padding-left:26px; padding-right:26px; }
   }
 
-  /* ===== PAGE-SCOPED OVERRIDES to defeat host/site constraints ===== */
+  /* ===== PAGE-SCOPED OVERRIDES ===== */
   body.ddp-page html,
   body.ddp-page{
     font-size:16px !important;
@@ -284,16 +284,16 @@
       <div class="h-eyebrow"><span class="tick" aria-hidden="true"></span> Forecast history you can audit</div>
       <h1 class="h-title">The intraday forecast log NWS doesn't keep.</h1>
       <p class="h-sub">We capture every issuance, match to the official daily high, and surface a bias-corrected <b>nowcast</b> that improves as the day evolves.</p>
-      
+
       <div class="cta-row">
-        <!-- Explore (go to dashboard; dashboard will enforce login + sub later) -->
-      <a class="btn btn-primary"
-   href="https://waheedweather.dewdropventures.com/login.html"
-   id="cta-explore"
-   role="button"
-   aria-label="Explore the live log">
-  Explore the live log
-</a>
+        <!-- Explore: send to dashboard home (app will enforce auth/subscription) -->
+        <a class="btn btn-primary"
+           href="/dashboard"
+           id="cta-explore"
+           role="button"
+           aria-label="Explore the live log">
+          Explore the live log
+        </a>
 
         <!-- Why it's different -->
         <a class="btn btn-ghost"
@@ -488,9 +488,9 @@
       <p style="margin:0; font-weight:800; font-size:clamp(16px,3.6vw,18px)" id="cta-title">Unlock the full intraday trail — accuracy rankings, nowcasts, and more.</p>
       <p style="color:#cfe2ff; margin-top:8px">Only <b>$3/month</b> or <b>$30/year</b>. Get in early.</p>
       <div class="cta-row" style="justify-content:center">
-   <!-- Neutral buttons (no Memberstack). Point to login page on dashboard domain -->
-<a class="btn btn-primary" href="https://waheedweather.dewdropventures.com/login.html">Start for $3/month</a>
-<a class="btn btn-primary" href="https://waheedweather.dewdropventures.com/login.html">Start for $30/year</a>
+        <!-- Send both pricing CTAs to the same login page under /dashboard -->
+        <a class="btn btn-primary" href="/dashboard/login.html">Start for $3/month</a>
+        <a class="btn btn-primary" href="/dashboard/login.html">Start for $30/year</a>
       </div>
     </div>
   </section>
@@ -502,17 +502,18 @@
     </div>
   </section>
 
- <footer>
-  © 2025 Dewdrop Ventures, LLC ·
-  <a href="https://waheedweather.dewdropventures.com/terms.html" target="_blank" rel="noopener">Terms</a> ·
-  <a href="https://waheedweather.dewdropventures.com/privacy.html" target="_blank" rel="noopener">Privacy</a> ·
-  Informational only — not financial advice. Not affiliated with NWS, Kalshi, or Polymarket.
-</footer>
+  <footer>
+    © 2025 Dewdrop Ventures, LLC ·
+    <a href="/dashboard/terms.html" target="_blank" rel="noopener">Terms</a> ·
+    <a href="/dashboard/privacy.html" target="_blank" rel="noopener">Privacy</a> ·
+    Informational only — not financial advice. Not affiliated with NWS, Kalshi, or Polymarket.
+  </footer>
 
   <!-- ===== JS API + Live pull ===== -->
   <script>
   (function () {
-    const API_BASE = 'https://waheedweather.dewdropventures.com';
+    // Same-origin API base: Worker proxies /api/* → upstream
+    const API_BASE = '';
     const AUTOFETCH_CANDIDATES = [
       `${API_BASE}/api/summary`,
       `${API_BASE}/api/live`,
@@ -654,23 +655,16 @@
   })();
   </script>
 
-  <!-- Simple, no-Memberstack CTA helper (optional; links already work if JS blocked) -->
-  <script>
-    // If you prefer JS-driven routing, uncomment:
-    // document.getElementById('cta-explore')?.addEventListener('click', (e) => {
-    //   e.preventDefault();
-    //   location.href = 'https://waheedweather.dewdropventures.com/';
-    // });
-
-    <script type="module">
-  import { createClient } from "https://esm.sh/@supabase/supabase-js";
-
- const supabase = createClient(
-  "https://ztjtuhkjkqchsiuuvmzs.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp0anR1aGtqa3FjaHNpdXV2bXpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMTUwODIsImV4cCI6MjA3MTg5MTA4Mn0.g7Zq-YbHxBzw732PhVfTf7XGiR080gRndsrzc0YPHfw"
-);
-  window.supabase = supabase; // make it available everywhere
-</script>
+  <!-- Optional: Supabase on landing (not required for static landing) -->
+  <!-- If you keep it, at least fix the tag and scope properly -->
+  <script type="module">
+    import { createClient } from "https://esm.sh/@supabase/supabase-js";
+    const supabase = createClient(
+      "https://ztjtuhkjkqchsiuuvmzs.supabase.co",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp0anR1aGtqa3FjaHNpdXV2bXpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMTUwODIsImV4cCI6MjA3MTg5MTA4Mn0.g7Zq-YbHxBzw732PhVfTf7XGiR080gRndsrzc0YPHfw"
+    );
+    window.supabase = supabase;
+  </script>
 
   <noscript>
     <div style="max-width:1140px;margin:16px auto;padding:12px 16px;background:#331c1c;border:1px solid #7f3b3b;border-radius:8px;color:#ffd9d9">
@@ -679,5 +673,3 @@
   </noscript>
 </body>
 </html>
-
-
