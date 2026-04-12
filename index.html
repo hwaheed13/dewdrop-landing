@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Daily Dew Point — Forecast Log & Nowcast</title>
-<meta name="description" content="Every NWS forecast update logged and matched to the official high, with a bias-corrected nowcast for today and tomorrow." />
+<title>Daily Dew Point — ML Predictions & Kalshi Bet Signals</title>
+<meta name="description" content="Machine learning predictions for the NYC and LA daily high temperature, with live Kalshi bucket signals, atmospheric data, and WIN/MISS tracking." />
 <meta name="theme-color" content="#0b1524" />
 <link rel="icon" href="/favicon.ico" />
 
@@ -113,6 +113,14 @@
   .spark{display:block; width:100%; height:80px}
   .badge-members{font-size:10px; font-weight:800; color:#2a3e58; background:#eef5ff; border:1px solid #d7e6fb; border-radius:999px; padding:2px 6px}
 
+  /* Signal badges in mock */
+  .sig-badge{
+    display:inline-block; font-size:11px; font-weight:900; padding:3px 9px; border-radius:999px; letter-spacing:.04em;
+  }
+  .sig-strong{background:#d1fae5; color:#065f46; border:1px solid #a7f3d0}
+  .sig-lean{background:#fef3c7; color:#92400e; border:1px solid #fde68a}
+  .sig-skip{background:#f3f4f6; color:#374151; border:1px solid #d1d5db}
+
   /* Section headers */
   .section{padding:40px 0 28px}
   .section.section--tight{padding-top:20px}
@@ -139,7 +147,7 @@
   }
   .ico-wrap{width:58px; height:58px; border-radius:14px; background:#fff; border:1px solid #d6e6fa; display:grid; place-items:center}
   .ico{width:28px; height:28px; stroke:#2b3f57; stroke-width:1.8; fill:none}
-  .tick{fill:var(--warn); stroke:none}
+  .tick-dot{fill:var(--warn); stroke:none}
   .out-card h3{margin:0 0 6px; font-size:18px; font-weight:800}
   .out-card p{margin:0; color:#3b516b; font-size:15px}
 
@@ -158,6 +166,40 @@
   .stats{display:grid; gap:16px; grid-template-columns:1fr}
   @media(min-width:900px){ .stats{grid-template-columns:repeat(4,1fr)} }
 
+  /* Feature strip (dark cards) */
+  .feat-grid{display:grid; gap:16px; grid-template-columns:1fr}
+  @media(min-width:680px){ .feat-grid{grid-template-columns:1fr 1fr} }
+  @media(min-width:980px){ .feat-grid{grid-template-columns:repeat(3,1fr)} }
+  .feat-card{
+    background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+    border:1px solid var(--ring); border-radius:var(--radius); padding:22px; box-shadow:var(--shadow);
+  }
+  .feat-card .feat-icon{font-size:26px; margin-bottom:10px}
+  .feat-card h4{margin:0 0 6px; font-size:16px; font-weight:800; color:#e9f2ff}
+  .feat-card p{margin:0; color:var(--muted); font-size:14px; line-height:1.5}
+
+  /* Atm signals mock strip */
+  .atm-strip{
+    display:grid; gap:10px; grid-template-columns:repeat(2,1fr); margin-top:12px;
+  }
+  @media(min-width:700px){ .atm-strip{grid-template-columns:repeat(4,1fr)} }
+  .atm-cell{background:rgba(255,255,255,.06); border:1px solid var(--ring); border-radius:12px; padding:10px 12px}
+  .atm-cell .alabel{font-size:11px; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:.06em}
+  .atm-cell .aval{font-size:18px; font-weight:900; color:#e9f2ff; margin-top:2px}
+  .atm-cell .adesc{font-size:11px; color:var(--muted); margin-top:1px}
+
+  /* Reversal risk mock */
+  .rev-box{
+    margin-top:12px; border:1px solid var(--ring); border-radius:14px; padding:14px 16px;
+    background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+  }
+  .rev-row{display:flex; justify-content:space-between; align-items:center; margin-bottom:8px}
+  .rev-label{font-size:13px; font-weight:700; color:var(--muted)}
+  .rev-badge{font-size:12px; font-weight:900; padding:3px 10px; border-radius:999px}
+  .rev-low{background:rgba(51,232,169,.15); color:#33e8a9; border:1px solid rgba(51,232,169,.3)}
+  .rev-med{background:rgba(255,138,52,.15); color:#ff8a34; border:1px solid rgba(255,138,52,.3)}
+  .rev-signal{font-size:12px; color:var(--muted); line-height:1.45; margin-top:2px}
+
   /* Chart (dark + smaller; blurred plot only) */
   .chart-card{
     margin-top:16px;
@@ -173,9 +215,15 @@
   .legend-dot{width:12px; height:12px; border-radius:50%}
   .dot-green{background:var(--green)}
   .dot-purple{background:var(--purple)}
+  .dot-brand{background:var(--brand)}
   .chart-inner{position:relative; border-radius:12px; overflow:hidden; background:linear-gradient(180deg, #0f1f35, #0c1a2c)}
   .chart-blur{filter:blur(6px)}
   .members-overlay{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#bfd7f6; font-weight:900; mix-blend-mode:screen}
+
+  /* Pill row */
+  .pill-row{display:flex; flex-wrap:wrap; gap:8px; margin:0 0 20px}
+  .pill{display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:700; padding:5px 12px; border-radius:999px; border:1px solid var(--ring); color:#cfe2ff; background:rgba(255,255,255,.04)}
+  .pill-dot{width:7px; height:7px; border-radius:50%}
 
   /* Footer */
   footer{border-top:1px solid var(--ring); color:#c1d6f1; text-align:center; padding:28px 16px 40px; font-size:13px; margin-top:48px}
@@ -273,7 +321,7 @@
         <div class="drop" aria-hidden="true"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 6c6 10 16 18 16 30 0 9.94-8.06 18-18 18s-18-8.06-18-18C12 24 26 16 32 6z"/></svg></div>
         <div class="word" aria-label="Daily Dew Point">Daily Dew Point</div>
       </div>
-      <span class="chip">Built on official NWS data</span>
+      <span class="chip">NYC · LA · Live ML Predictions</span>
     </div>
   </div>
 
@@ -282,27 +330,27 @@
     <div class="hero-grid">
       <!-- LEFT: text + CTAs -->
       <div>
-        <div class="h-eyebrow"><span class="tick" aria-hidden="true"></span> Forecast history you can audit</div>
-        <h1 class="h-title">The intraday forecast log NWS doesn't keep.</h1>
-        <p class="h-sub">We capture every issuance, match to the official daily high, and surface a bias-corrected <b>nowcast</b> that improves as the day evolves.</p>
+        <div class="h-eyebrow"><span class="tick" aria-hidden="true"></span> Kalshi Daily High · NYC &amp; LA</div>
+        <h1 class="h-title">The ML edge for Kalshi's daily high markets.</h1>
+        <p class="h-sub">A machine learning model predicts the most likely 2-degree temperature bucket, scores it <b>STRONG BET</b>, <b>LEAN</b>, or <b>SKIP</b>, and backs it with live atmospheric signals and a reversal-risk panel — updated throughout the day.</p>
 
         <div class="cta-row">
           <a class="btn btn-primary"
-             href="https://app.dailydewpoint.com/login.html"
+             href="https://app.dailydewpoint.com"
              id="cta-explore"
              role="button"
-             aria-label="Explore the live log">
-            Explore the live log
+             aria-label="Open the dashboard">
+            Open the Dashboard
           </a>
 
           <a class="btn btn-ghost"
              href="#outcomes"
              role="button"
-             aria-label="Why it's different">
+             aria-label="How it works">
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M12 5v14M5 12h14" stroke="#cfe2ff" stroke-width="2" stroke-linecap="round"/>
             </svg>
-            Why it's different
+            How it works
           </a>
         </div>
       </div>
@@ -312,26 +360,45 @@
         <div class="mock" aria-label="Product preview">
           <div class="frame">
             <div class="bar" aria-hidden="true"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
-            <h4>Central Park, NY — Today</h4>
+            <h4>New York City — Today</h4>
             <div class="kpis">
               <div class="kpi">
-                <h5>Latest forecast</h5>
-                <div class="val" id="v-latest">—</div>
-                <div class="muted"><b>Today's Forecasts</b> <span class="badge-members">MEMBERS</span></div>
-                <div class="muted blurred" id="list-today-issuances">—</div>
+                <h5>ML Prediction</h5>
+                <div class="val">56–57°F</div>
+                <div class="muted" style="margin-top:4px">
+                  <span class="sig-badge sig-strong">STRONG BET</span>
+                </div>
+                <div class="muted" style="margin-top:4px; font-size:11px">62% confidence · top bucket</div>
               </div>
               <div class="kpi">
-                <h5>Nowcast <span class="badge-members">MEMBERS</span></h5>
-                <div class="val blurred" id="v-nowcast-today">—</div>
-                <div class="muted blurred" id="v-nowcast-today-meta">—</div>
+                <h5>Kalshi Market</h5>
+                <div class="val">18¢</div>
+                <div class="muted" style="margin-top:4px; font-size:11px">56 or less leading<br>Last settled: WIN ✓</div>
               </div>
             </div>
-            <svg class="spark" viewBox="0 0 320 80" aria-hidden="true">
-              <defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#2aa6ff" stop-opacity=".28"/><stop offset="100%" stop-color="#2aa6ff" stop-opacity="0"/></linearGradient></defs>
-              <path d="M8 60L48 58L88 50L128 36L168 42L208 48L248 52L288 54" stroke="#2aa6ff" stroke-width="3" fill="none"/>
-              <path d="M8 60L48 58L88 50L128 36L168 42L208 48L248 52L288 54L288 80L8 80Z" fill="url(#sg)"/>
-            </svg>
+
+            <!-- reversal risk mini preview -->
+            <div class="rev-box">
+              <div class="rev-row">
+                <span class="rev-label">Reversal Risk</span>
+                <span class="rev-badge rev-low">LOW</span>
+              </div>
+              <div class="rev-signal">Canonical holding — NNE flow &amp; cold 925mb suppress upside flips</div>
+            </div>
+
+            <!-- mini atm strip -->
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px">
+              <div style="background:#f0f6ff; border:1px solid #d4e4f7; border-radius:10px; padding:8px 10px; font-size:12px; color:#2a4a6b">
+                <div style="font-weight:700; color:#0f2236">925mb Temp</div>
+                <div style="font-size:16px; font-weight:900; color:#0f2236">34.8°F</div>
+                <div style="color:#3b516b">Cold near-surface air</div>
+              </div>
+              <div style="background:#f0f6ff; border:1px solid #d4e4f7; border-radius:10px; padding:8px 10px; font-size:12px; color:#2a4a6b">
+                <div style="font-weight:700; color:#0f2236">Surface Wind</div>
+                <div style="font-size:16px; font-weight:900; color:#0f2236">8 mph NNE</div>
+                <div style="color:#3b516b">Suppressing direction</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -340,146 +407,236 @@
 
   <!-- outcomes -->
   <section id="outcomes" class="section container" aria-labelledby="outcomes-title">
-    <h2 class="sh" id="outcomes-title">Outstanding results and outcomes</h2>
-    <p style="text-align:center; color:#cfe2ff; margin:6px 0 22px">We meet traders and weather nerds where they are — with history, accuracy, and full visibility.</p>
+    <h2 class="sh" id="outcomes-title">What makes it different</h2>
+    <p style="text-align:center; color:#cfe2ff; margin:6px 0 22px">Built around one question: <em>which bucket should I bet, and how confident should I be?</em></p>
 
     <div class="out-grid">
       <article class="out-card">
         <div class="ico-wrap">
-          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L5 14h6l-1 8 8-12h-6l1-8z"></path><circle class="tick" cx="19" cy="20" r="2.2"/></svg>
+          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 3h18v4H3zM3 10h12v4H3zM3 17h8v4H3z"/>
+            <circle class="tick-dot" cx="19" cy="19" r="2.5"/>
+          </svg>
         </div>
         <div>
-          <h3>Faster intraday clarity</h3>
-          <p>Every update logged and ranked so you spot the most accurate pre-high issuance in seconds.</p>
+          <h3>ML bucket predictions with bet signals</h3>
+          <p>A machine learning model trained on historical NWS, AccuWeather, and atmospheric data predicts today's and tomorrow's most likely 2-degree Kalshi bucket. Each prediction is labeled <strong>STRONG BET</strong>, <strong>LEAN</strong>, or <strong>SKIP</strong> based on model confidence.</p>
         </div>
       </article>
 
       <article class="out-card">
         <div class="ico-wrap">
           <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M3 12a7 7 0 0 1 11.5-5.3M21 12a7 7 0 0 1-11.5 5.3"></path>
-            <path d="M8 4H4V8"></path><path d="M16 20h4v-4"></path>
-            <circle class="tick" cx="16.8" cy="6.2" r="2"/>
+            <path d="M12 2a10 10 0 0 1 10 10 10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2z"/>
+            <path d="M12 8v4l3 3"/>
           </svg>
         </div>
         <div>
-          <h3>Higher right-first-try picks</h3>
-          <p>Outcome-based scoring shows which issuance historically nails the day's high.</p>
-        </div>
-      </article>
-
-      <article class="out-card">
-        <div class="ico-wrap">
-          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 10V4a3 3 0 0 0-3-3l-1 6-4 5v9h9l4-9v-2h-5zM3 10h3v11H3z"></path></svg>
-        </div>
-        <div>
-          <h3>Cleaner decisions, less noise</h3>
-          <p>Bias-corrected nowcast reduces the guesswork while the day is still unfolding.</p>
+          <h3>Live atmospheric signals — updated every 15 min</h3>
+          <p>Solar irradiance, cloud cover, 850mb and 925mb temperatures, and surface wind direction update in real time throughout the day — not just the overnight forecast. See what the atmosphere is actually doing right now, not what was predicted at 5 AM.</p>
         </div>
       </article>
 
       <article class="out-card">
         <div class="ico-wrap">
           <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="11" cy="11" r="6.5"></circle><path d="M20 20l-3.5-3.5"></path>
-            <path d="M9.2 11.1l1.6 1.6 3-3"></path>
-            <circle class="tick" cx="18.8" cy="18.8" r="2.1"/>
+            <path d="M3 18l9-14 9 14"/>
+            <path d="M9 14l3-4 3 4"/>
           </svg>
         </div>
         <div>
-          <h3>Closed-loop visibility</h3>
-          <p>Full trail from issuance → official high, so you can audit every move end-to-end.</p>
+          <h3>Reversal Risk panel</h3>
+          <p>A dedicated panel below each prediction scores how likely the current bucket pick is to shift before settlement — and whether conditions support a blow-past of all model forecasts. Backed by historical data from similar setups and updated throughout the day.</p>
+        </div>
+      </article>
+
+      <article class="out-card">
+        <div class="ico-wrap">
+          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M9 11l3 3 7-7"/>
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+          </svg>
+        </div>
+        <div>
+          <h3>WIN/MISS tracking with a real track record</h3>
+          <p>Every prediction is scored against the official daily high. WIN/MISS history is stored in a database and shown transparently — so you can see exactly how the model has performed over time, not just marketing claims.</p>
         </div>
       </article>
     </div>
   </section>
 
-  <!-- live preview cards -->
+  <!-- Features strip (dark) -->
+  <section class="section container section--tight" aria-labelledby="features-title">
+    <h2 class="sh" id="features-title">Everything in the dashboard</h2>
+
+    <div class="feat-grid">
+      <div class="feat-card">
+        <div class="feat-icon">🎯</div>
+        <h4>Two-bucket display</h4>
+        <p>Top-1 and Top-2 most likely buckets shown with confidence percentages, so you see the full probability picture — not just one call.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🕐</div>
+        <h4>Heating window mode</h4>
+        <p>Between 10 AM and 3 PM local time, the dashboard automatically increases its refresh rate and signals that it's watching closely. Observations update every 2 minutes during this window.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">📡</div>
+        <h4>Live Kalshi market data</h4>
+        <p>Current market leaders, prices, and settlement results pulled directly — so you can compare the model's call against what the market is actually pricing.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🔄</div>
+        <h4>Intraday model updates</h4>
+        <p>Predictions refresh throughout the day as observed temperatures and atmospheric conditions change — not just once in the morning. The model triggers a fresh run when conditions run warmer or colder than expected.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🌇</div>
+        <h4>NYC + Los Angeles</h4>
+        <p>Full ML predictions, atmospheric signals, and Kalshi bet signals for both New York City and Los Angeles — two of the most actively traded daily high markets.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">📊</div>
+        <h4>Ensemble forecast tracking</h4>
+        <p>NWS and AccuWeather forecasts are logged every update, bias-corrected against historical accuracy, and weighted into the ensemble — building a forecast audit trail you can actually inspect.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="section container" aria-labelledby="how-title">
+    <h2 class="sh" id="how-title">How it works</h2>
+    <div class="card" style="max-width:980px; margin:0 auto">
+      <ul style="list-style:none; margin:0; padding:0; display:grid; gap:20px">
+        <li style="display:flex; gap:14px; align-items:flex-start">
+          <span style="display:inline-flex; align-items:center; justify-content:center; min-width:28px; height:28px; border-radius:50%; background:rgba(42,166,255,.18); border:1px solid rgba(42,166,255,.35); font-weight:900; font-size:13px; color:#2aa6ff; margin-top:2px">1</span>
+          <div><b>Log every forecast update</b> — NWS and AccuWeather forecasted highs are captured throughout the day, timestamped, and stored in a database. Over time this builds a bias profile for each source.</div>
+        </li>
+        <li style="display:flex; gap:14px; align-items:flex-start">
+          <span style="display:inline-flex; align-items:center; justify-content:center; min-width:28px; height:28px; border-radius:50%; background:rgba(42,166,255,.18); border:1px solid rgba(42,166,255,.35); font-weight:900; font-size:13px; color:#2aa6ff; margin-top:2px">2</span>
+          <div><b>Fetch real-time atmospheric data</b> — Solar irradiance, cloud cover, 850mb and 925mb temperatures, wind speed and direction are pulled from Open-Meteo every 15 minutes and included as live model features.</div>
+        </li>
+        <li style="display:flex; gap:14px; align-items:flex-start">
+          <span style="display:inline-flex; align-items:center; justify-content:center; min-width:28px; height:28px; border-radius:50%; background:rgba(42,166,255,.18); border:1px solid rgba(42,166,255,.35); font-weight:900; font-size:13px; color:#2aa6ff; margin-top:2px">3</span>
+          <div><b>Run the ML model</b> — A gradient boosting model retrained daily on all available historical data predicts the probability of each 2-degree Kalshi bucket. The top prediction gets a <b>STRONG BET</b>, <b>LEAN</b>, or <b>SKIP</b> label based on confidence and probability gap to the next bucket.</div>
+        </li>
+        <li style="display:flex; gap:14px; align-items:flex-start">
+          <span style="display:inline-flex; align-items:center; justify-content:center; min-width:28px; height:28px; border-radius:50%; background:rgba(42,166,255,.18); border:1px solid rgba(42,166,255,.35); font-weight:900; font-size:13px; color:#2aa6ff; margin-top:2px">4</span>
+          <div><b>Score reversal risk</b> — The Reversal Risk panel checks six signals (probability gap, model spread, observed temperature trajectory, 925mb temperature, wind direction, and agency divergence) and compares them against historical flip rates for similar setups.</div>
+        </li>
+        <li style="display:flex; gap:14px; align-items:flex-start">
+          <span style="display:inline-flex; align-items:center; justify-content:center; min-width:28px; height:28px; border-radius:50%; background:rgba(42,166,255,.18); border:1px solid rgba(42,166,255,.35); font-weight:900; font-size:13px; color:#2aa6ff; margin-top:2px">5</span>
+          <div><b>Score and learn</b> — After settlement, every prediction is scored WIN or MISS against the official daily high. Results are stored transparently. The model retrains each morning incorporating the previous day's outcome.</div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Live preview section -->
   <section class="section container section--tight" aria-labelledby="demo-title">
-    <h2 class="sh" id="demo-title">Demo Preview</h2>
+    <h2 class="sh" id="demo-title">Live Data Preview</h2>
+    <p style="text-align:center; color:#cfe2ff; margin:0 0 18px">A glimpse of what's in the dashboard right now.</p>
 
     <div class="cards">
       <article class="card">
-        <h5>Today's Latest Forecast</h5>
-        <div class="val" id="v-latest-2">—</div>
-        <div class="muted"><strong>Today's Forecasts</strong> <span class="badge-members">MEMBERS</span></div>
-        <div class="muted blurred" id="list-today-issuances-2">—</div>
+        <h5>ML Prediction — NYC Today</h5>
+        <div class="val blurred" id="v-ml-bucket">56–57°F</div>
+        <div class="muted blurred" id="v-ml-signal">STRONG BET · 62%</div>
       </article>
       <article class="card">
-        <h5>Today's Actual High</h5>
-        <div class="val" id="v-actual">86</div>
-        <div class="muted">NWS daily CLI report</div>
-      </article>
-      <article class="card">
-        <h5>Today's High So Far / Current</h5>
+        <h5>Today's High So Far</h5>
         <div class="val" id="v-highsofar">—</div>
-        <div class="muted">as of <span id="v-highsofar-time">—</span> ET • station <span id="v-station">—</span></div>
-        <div class="muted" style="margin-top:8px">Current: <span id="v-current">—</span></div>
+        <div class="muted">as of <span id="v-highsofar-time">—</span> ET</div>
       </article>
       <article class="card">
-        <h5>Tomorrow's Forecast</h5>
-        <div class="val" id="v-tomorrow">—</div>
+        <h5>Reversal Risk</h5>
+        <div class="val blurred" id="v-flip-risk">LOW</div>
+        <div class="muted blurred" id="v-flip-summary">Canonical holding</div>
+      </article>
+      <article class="card">
+        <h5>ML Track Record</h5>
+        <div class="val blurred" id="v-win-rate">—</div>
+        <div class="muted blurred" id="v-win-meta">WIN rate · all predictions</div>
       </article>
     </div>
 
-    <!-- stats row (blurred numbers) -->
+    <!-- Atmospheric signals mock -->
+    <div class="chart-card" style="margin-top:16px">
+      <h3 class="chart-title">Atmospheric Signals Panel</h3>
+      <p style="color:var(--muted); font-size:14px; margin:0 0 10px">Live conditions updated every 15 minutes — what's actually happening, not just the overnight forecast.</p>
+      <div class="atm-strip">
+        <div class="atm-cell">
+          <div class="alabel">Solar Now</div>
+          <div class="aval blurred">389 W/m²</div>
+          <div class="adesc blurred">Moderate heating</div>
+        </div>
+        <div class="atm-cell">
+          <div class="alabel">Cloud Cover</div>
+          <div class="aval blurred">12%</div>
+          <div class="adesc blurred">Mostly clear</div>
+        </div>
+        <div class="atm-cell">
+          <div class="alabel">925mb Temp</div>
+          <div class="aval blurred">34.8°F (live)</div>
+          <div class="adesc blurred">Cold near-surface air</div>
+        </div>
+        <div class="atm-cell">
+          <div class="alabel">Surface Wind</div>
+          <div class="aval blurred">8 mph NNE</div>
+          <div class="adesc blurred">Suppressing direction</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WIN/MISS chart (blurred) -->
+    <div class="chart-card">
+      <h3 class="chart-title">WIN/MISS History</h3>
+      <div class="chart-legend">
+        <span class="legend-item"><span class="legend-dot dot-green"></span>WIN — prediction correct</span>
+        <span class="legend-item"><span class="legend-dot dot-purple"></span>MISS — off by one bucket</span>
+      </div>
+      <div class="chart-inner">
+        <div class="chart-blur" id="chart-plot" style="height:200px">
+          <!-- Static blurred demo bars -->
+          <svg width="100%" height="200" viewBox="0 0 600 200" preserveAspectRatio="none" aria-hidden="true">
+            <rect x="10"  y="60"  width="28" height="130" rx="4" fill="#3dd06e" opacity=".8"/>
+            <rect x="50"  y="80"  width="28" height="110" rx="4" fill="#3dd06e" opacity=".8"/>
+            <rect x="90"  y="100" width="28" height="90"  rx="4" fill="#a88cff" opacity=".8"/>
+            <rect x="130" y="50"  width="28" height="140" rx="4" fill="#3dd06e" opacity=".8"/>
+            <rect x="170" y="70"  width="28" height="120" rx="4" fill="#3dd06e" opacity=".8"/>
+            <rect x="210" y="90"  width="28" height="100" rx="4" fill="#3dd06e" opacity=".8"/>
+            <rect x="250" y="110" width="28" height="80"  rx="4" fill="#a88cff" opacity=".8"/>
+            <rect x="290" y="55"  width="28" height="135" rx="4" fill="#3dd06e" opacity=".8"/>
+            <rect x="330" y="75"  width="28" height="115" rx="4" fill="#3dd06e" opacity=".8"/>
+            <rect x="370" y="95"  width="28" height="95"  rx="4" fill="#3dd06e" opacity=".8"/>
+            <rect x="410" y="65"  width="28" height="125" rx="4" fill="#a88cff" opacity=".8"/>
+            <rect x="450" y="85"  width="28" height="105" rx="4" fill="#3dd06e" opacity=".8"/>
+            <rect x="490" y="45"  width="28" height="145" rx="4" fill="#3dd06e" opacity=".8"/>
+            <rect x="530" y="70"  width="28" height="120" rx="4" fill="#3dd06e" opacity=".8"/>
+          </svg>
+        </div>
+        <div class="members-overlay">MEMBERS</div>
+      </div>
+    </div>
+
+    <!-- Stats row -->
     <div class="stats" style="margin-top:16px">
       <article class="card" style="text-align:center">
         <h5>Days Tracked</h5>
         <div class="val blurred" id="v-days-tracked">—</div>
       </article>
       <article class="card" style="text-align:center">
-        <h5>Days With Actual</h5>
+        <h5>ML Predictions Scored</h5>
         <div class="val blurred" id="v-days-actual">—</div>
       </article>
       <article class="card" style="text-align:center">
-        <h5>Average Absolute Error</h5>
+        <h5>Canonical WIN Rate</h5>
         <div class="val blurred" id="v-aae">—</div>
       </article>
       <article class="card" style="text-align:center">
-        <h5>Average Best Error</h5>
+        <h5>Average Forecast Error</h5>
         <div class="val blurred" id="v-abe">—</div>
       </article>
-    </div>
-
-    <!-- CHART -->
-    <div class="chart-card" id="chart-card">
-      <h3 class="chart-title">Temperature Trends: Actual vs Predicted</h3>
-      <div class="chart-legend">
-        <span class="legend-item"><span class="legend-dot dot-green"></span>Actual High</span>
-        <span class="legend-item"><span class="legend-dot dot-purple"></span>Best Forecast (pre-high)</span>
-      </div>
-      <div class="chart-inner">
-        <div class="chart-blur" id="chart-plot" style="height:280px"><!-- SVG injected here --></div>
-        <div class="members-overlay">MEMBERS</div>
-      </div>
-    </div>
-
-    <!-- Nowcasts (kept blurred) -->
-    <div class="cards" style="grid-template-columns:repeat(2,1fr); margin-top:16px">
-      <article class="card">
-        <h5>Today's Bias-Corrected Nowcast <span class="badge-members">MEMBERS</span></h5>
-        <div class="val blurred" id="v-nowcast-today-2">—</div>
-        <div class="muted blurred" id="v-nowcast-today-meta-2">—</div>
-      </article>
-      <article class="card">
-        <h5>Tomorrow's Bias-Corrected Nowcast <span class="badge-members">MEMBERS</span></h5>
-        <div class="val blurred" id="v-nowcast-tomorrow">—</div>
-        <div class="muted blurred" id="v-nowcast-tomorrow-meta">—</div>
-      </article>
-    </div>
-  </section>
-
-  <!-- how it works -->
-  <section class="section container" aria-labelledby="how-title">
-    <h2 class="sh" id="how-title">How it works</h2>
-    <div class="card" style="max-width:980px; margin:0 auto">
-      <ul style="list-style:none; margin:0; padding:0; display:grid; gap:18px">
-        <li><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 6px rgba(51,232,169,.12);margin-right:12px;vertical-align:middle"></span><b>Auto-log</b> every NWS forecasted high throughout the day.</li>
-        <li><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 6px rgba(51,232,169,.12);margin-right:12px;vertical-align:middle"></span><b>Capture</b> the official daily high once published.</li>
-        <li><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 6px rgba(51,232,169,.12);margin-right:12px;vertical-align:middle"></span><b>Compare</b> each issuance vs the outcome and rank accuracy.</li>
-        <li><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 6px rgba(51,232,169,.12);margin-right:12px;vertical-align:middle"></span><b>Predict</b> bias-corrected daily prediction that updates as the day evolves.</li>
-      </ul>
     </div>
   </section>
 
@@ -487,7 +644,7 @@
   <section class="container" aria-labelledby="cta-title">
     <div class="card" style="margin:40px 0 0; text-align:center">
       <p style="margin:0; font-weight:800; font-size:clamp(16px,3.6vw,18px)" id="cta-title">
-        Unlock the full intraday trail — accuracy rankings, nowcasts, and more.
+        Get the ML prediction, live signals, and reversal risk — every day.
       </p>
       <p style="color:#cfe2ff; margin-top:8px">Only <b>$5/month</b> or <b>$50/year</b>.</p>
 
@@ -508,167 +665,42 @@
   <section class="section container">
     <h2 class="sh">Who built this?</h2>
     <div class="card" style="max-width:980px; margin:0 auto">
-      <p>A data guy who traded Kalshi's NYC daily high. I wanted to see every update, test accuracy, and predict the high in advance. Built for me; shared because it's useful — and fun.</p>
+      <p>A data guy who traded Kalshi's NYC daily high. I wanted a real edge: not just a weather app, but a purpose-built system that tracks every forecast issuance, trains a model on historical outcomes, incorporates live atmospheric conditions, and tells me whether to bet — and how confidently. Built for me; shared because it keeps getting better and others find it useful.</p>
     </div>
   </section>
 
   <footer>
-    © 2025 Daily Dew Point ·
-    <a href="https://app.dailydewpoint.com/terms.html" target="_blank">Terms</a> · 
-    <a href="https://app.dailydewpoint.com/privacy.html" target="_blank">Privacy</a>
-    Informational only, not financial advice. Not affiliated with NWS, Kalshi, or Polymarket.
+    © 2026 Daily Dew Point ·
+    <a href="https://app.dailydewpoint.com/terms.html" target="_blank">Terms</a> ·
+    <a href="https://app.dailydewpoint.com/privacy.html" target="_blank">Privacy</a> ·
+    <a href="/changelog.html">Release Notes</a>
+    <br>Informational only, not financial advice. Not affiliated with NWS, Kalshi, or Polymarket.
   </footer>
 
-  <!-- ===== JS API + Live pull ===== -->
+  <!-- ===== JS: pull live preview data ===== -->
   <script>
   (function () {
-    // Same-origin API base: Worker proxies /api/* → upstream
-    const API_BASE = '';
-    const AUTOFETCH_CANDIDATES = [
-      `${API_BASE}/api/summary`,
-      `${API_BASE}/api/live`,
-      `${API_BASE}/api/today`,
-      `${API_BASE}/api/status`
-    ];
-
     const $ = (id) => document.getElementById(id);
-    const setText = (id, v) => { const el = $(id); if (el && v!=null && v!=='') el.textContent = v; };
 
-    /* -------- DARK SVG chart (responsive) -------- */
-    function renderChart({dates, actual, best}, {w, h=280} = {}) {
-      if (!dates || !actual || !best || !dates.length) return '';
-      const pad = {l:56, r:20, t:8, b:34};
-      const iw = w - pad.l - pad.r, ih = h - pad.t - pad.b;
-      const n = dates.length, x = (i) => pad.l + (iw * i) / Math.max(1, n - 1);
-
-      const vals = actual.concat(best).map(v => +v).filter(Number.isFinite);
-      const min = Math.floor(Math.min(...vals) - 2), max = Math.ceil(Math.max(...vals) + 2);
-      const y = (v) => pad.t + ih - ((v - min) / (max - min)) * ih;
-
-      const line = (arr) => arr.map((v,i)=>`${i===0?'M':'L'}${x(i)},${y(v)}`).join(' ');
-      const dot = (cx,cy,c,s=2)=>`<circle cx="${cx}" cy="${cy}" r="4.5" fill="${c}" stroke="${s? 'white':''}" stroke-width="${s}"/>`;
-
-      const ySteps = 5, gy=[];
-      for(let k=0;k<=ySteps;k++){ const vv=min+(k*(max-min))/ySteps, yy=y(vv);
-        gy.push(`<path d="M${pad.l} ${yy} H ${w-pad.r}" stroke="var(--grid-dark)"/>`);
-        gy.push(`<text x="${pad.l-8}" y="${yy+4}" text-anchor="end" fill="var(--axis-dark)" font-size="12">${Math.round(vv)}</text>`);
-      }
-      const xt=[], labelCount=Math.min(6,n), step=Math.max(1,Math.floor(n/labelCount));
-      for(let i=0;i<n;i+=step){ xt.push(`<text x="${x(i)}" y="${h-10}" text-anchor="middle" fill="var(--axis-dark)" font-size="12">${dates[i]}</text>`); }
-
-      const actualPath = `<path d="${line(actual)}" fill="none" stroke="var(--green)" stroke-width="3"/>`;
-      const bestPath   = `<path d="${line(best)}"   fill="none" stroke="var(--purple)" stroke-width="3"/>`;
-
-      const actualDots = actual.map((v,i)=>dot(x(i),y(v),'var(--green)')).join('');
-      const bestDots   = best.map((v,i)=>`<circle cx="${x(i)}" cy="${y(v)}" r="4.5" fill="white" stroke="var(--purple)" stroke-width="3"/>`).join('');
-
-      return `
-        <svg viewBox="0 0 ${w} ${h}" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-label="Actual vs Predicted (blurred)">
-          <g>
-            ${gy.join('')}
-            <path d="M${pad.l} ${pad.t} V ${h-pad.b}" stroke="var(--axis-dark)"/>
-            <path d="M${pad.l} ${h-pad.b} H ${w-pad.r}" stroke="var(--axis-dark)"/>
-            ${xt.join('')}
-          </g>
-          <g>
-            ${actualPath}
-            ${bestPath}
-            ${actualDots}
-            ${bestDots}
-          </g>
-        </svg>`;
-    }
-
-    window.DDP = {
-      setLatestForecast(v){ setText('v-latest', v); setText('v-latest-2', v); },
-      setIssuancesInline(text){ setText('list-today-issuances', text); setText('list-today-issuances-2', text); },
-      setActualHigh(v){ setText('v-actual', v ?? '—'); },
-      setHighSoFar(v, timeET, station){ setText('v-highsofar', v); setText('v-highsofar-time', timeET); setText('v-station', station); },
-      setCurrentTemp(v){ setText('v-current', v); },
-      setTomorrowForecast(v){ setText('v-tomorrow', v); },
-      setNowcastToday(v, meta){ setText('v-nowcast-today', v); setText('v-nowcast-today-2', v);
-        if(meta){ setText('v-nowcast-today-meta', meta); setText('v-nowcast-today-meta-2', meta); } },
-      setNowcastTomorrow(v, meta){ setText('v-nowcast-tomorrow', v); if(meta) setText('v-nowcast-tomorrow-meta', meta); },
-      setStats({daysTracked, daysWithActual, avgAbsError, avgBestError}={}){
-        if(daysTracked!=null) setText('v-days-tracked', daysTracked);
-        if(daysWithActual!=null) setText('v-days-actual', daysWithActual);
-        if(avgAbsError!=null) setText('v-aae', avgAbsError);
-        if(avgBestError!=null) setText('v-abe', avgBestError);
-      },
-      setChartData(series){
-        lastSeries = series;
-        renderChartIntoBox();
-      }
-    };
-
-    let lastSeries = null;
-    function renderChartIntoBox(){
-      const box = document.getElementById('chart-plot'); if (!box || !lastSeries) return;
-      const w = Math.max(320, box.clientWidth || 1000);
-      box.innerHTML = renderChart(lastSeries, {w, h:280});
-    }
-
-    async function tryFetch(url){
-      const res = await fetch(url, {cache:'no-store', credentials:'omit', mode:'cors'});
-      const ct = res.headers.get('content-type') || '';
-      if(!res.ok || !ct.includes('application/json')) throw new Error('No JSON at ' + url);
-      return res.json();
-    }
-
-    async function bootstrap() {
-      let data = null;
-      for (const url of AUTOFETCH_CANDIDATES){
-        try{ data = await tryFetch(url); break; } catch(e){ /* keep trying */ }
-      }
-      if (!data){
-        const dates = Array.from({length: 26}, (_,i)=>{const d=new Date(); d.setDate(d.getDate()-(25-i)); return d.toLocaleDateString(undefined,{month:'short',day:'numeric'});});
-        const actual = [84,88,83,84,87,93,90,83,86,87,80,80,87,96,85,83,80,81,85,90,91,89,88,74,83,87];
-        const best   = actual.map((v)=> +(v + (Math.random()*2-1)).toFixed(1));
-        DDP.setLatestForecast('85.0°F');
-        DDP.setIssuancesInline('04:40 84° • 04:54 85° • 06:12 85°');
-        DDP.setActualHigh('86');
-        DDP.setHighSoFar('82.9°F', '12:51 PM', 'KNYC');
-        DDP.setCurrentTemp('82.9°F');
-        DDP.setTomorrowForecast('80.0°F');
-        DDP.setNowcastToday('85.4°F','Historical bias: +0.89°F (36 days)');
-        DDP.setNowcastTomorrow('80.9°F','For 2025-08-26 • Historical bias: +0.89°F (36 days)');
-        DDP.setStats({daysTracked:55, daysWithActual:46, avgAbsError:'2.12°F', avgBestError:'1.05°F'});
-        DDP.setChartData({dates, actual, best});
-      } else {
-        if (data.latestForecast) DDP.setLatestForecast(data.latestForecast);
-        if (data.issuancesInline) DDP.setIssuancesInline(data.issuancesInline);
-        if (data.actualHigh != null) DDP.setActualHigh(data.actualHigh);
-        if (data.highSoFar || data.highSoFarTimeET || data.station) {
-          DDP.setHighSoFar(data.highSoFar ?? '—', data.highSoFarTimeET ?? '—', data.station ?? '—');
+    // Try to populate the "high so far" from the live API
+    async function loadLiveData() {
+      try {
+        const r = await fetch('https://app.dailydewpoint.com/api/live-obs?city=nyc', {signal: AbortSignal.timeout(6000)});
+        if (!r.ok) return;
+        const d = await r.json();
+        if (d.high_so_far != null) {
+          const el = $('v-highsofar');
+          if (el) { el.textContent = d.high_so_far + '°F'; el.classList.remove('blurred'); }
         }
-        if (data.currentTemp) DDP.setCurrentTemp(data.currentTemp);
-        if (data.tomorrowForecast) DDP.setTomorrowForecast(data.tomorrowForecast);
-        if (data.nowcastToday) DDP.setNowcastToday(data.nowcastToday, data.nowcastTodayMeta);
-        if (data.nowcastTomorrow) DDP.setNowcastTomorrow(data.nowcastTomorrow, data.nowcastTomorrowMeta);
-        if (data.stats) DDP.setStats(data.stats);
-        if (data.series) DDP.setChartData(data.series);
-      }
-      renderChartIntoBox();
+        if (d.obs_time) {
+          const t = $('v-highsofar-time');
+          if (t) t.textContent = d.obs_time;
+        }
+      } catch (_) { /* silent */ }
     }
 
-    let resizeTO=null;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTO);
-      resizeTO = setTimeout(renderChartIntoBox, 120);
-    });
-    window.addEventListener('orientationchange', () => {
-      setTimeout(renderChartIntoBox, 200);
-    });
-
-    bootstrap();
-    // setInterval(bootstrap, 5*60*1000);
+    loadLiveData();
   })();
   </script>
-
-  <noscript>
-    <div style="max-width:1140px;margin:16px auto;padding:12px 16px;background:#331c1c;border:1px solid #7f3b3b;border-radius:8px;color:#ffd9d9">
-      JavaScript is required to load live data.
-    </div>
-  </noscript>
 </body>
 </html>
